@@ -18,11 +18,17 @@ export const getCohortDataTool = createTool({
 });
 
 const getCohortData = async () => {
-  if (!process.env.AIRTABLE_API_KEY || !process.env.AIRTABLE_BASE_ID || !process.env.AIRTABLE_COHORT_TABLE_ID) {
+  if (
+    !process.env.AIRTABLE_API_KEY ||
+    !process.env.SU_2025_BASE_ID ||
+    !process.env.SU_2025_TABLE_ID
+  ) {
     throw new Error('Missing Airtable environment variables');
   }
-  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-  const records = await base(process.env.AIRTABLE_COHORT_TABLE_ID).select({}).all();
+  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+    process.env.SU_2025_BASE_ID,
+  );
+  const records = await base(process.env.SU_2025_TABLE_ID).select({}).all();
   return {
     data: records.map((record) => ({
       id: record.id,
