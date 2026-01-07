@@ -28,13 +28,8 @@ Create `.env`:
 
 ```bash
 OPENAI_API_KEY=sk-your-key
-
-# Each Slack app needs its own credentials
-SLACK_REVERSE_BOT_TOKEN=xoxb-...
-SLACK_REVERSE_SIGNING_SECRET=...
-
-SLACK_CAPS_BOT_TOKEN=xoxb-...
-SLACK_CAPS_SIGNING_SECRET=...
+SLACK_BOT_TOKEN=xoxb-...
+SLACK_SIGNING_SECRET=...
 ```
 
 ### 3. Create Slack Apps
@@ -97,10 +92,10 @@ export const mastra = new Mastra({
 // src/mastra/slack/routes.ts
 const slackApps: SlackAppConfig[] = [
   {
-    name: 'my-agent', // Route: /slack/my-agent/events
-    botToken: process.env.SLACK_MY_AGENT_BOT_TOKEN!,
-    signingSecret: process.env.SLACK_MY_AGENT_SIGNING_SECRET!,
-    agentName: 'myAgent', // Must match key in mastra.agents
+    name: 'agent-name', // Route: /slack/my-agent/events
+    botToken: process.env.SLACK_BOT_TOKEN!,
+    signingSecret: process.env.SLACK_SIGNING_SECRET!,
+    agentName: 'agent-name', // Must match key in mastra.agents
   },
 ];
 ```
@@ -114,8 +109,7 @@ Follow the Slack app setup above, then add the credentials to `.env`.
 ```
 src/mastra/
 ├── agents/
-│   ├── caps-agent.ts       # Simple text transformation agent
-│   └── reverse-agent.ts    # Agent with tool + workflow capabilities
+│   ├── lucie-agent.ts      # Pioneer's ai agent
 ├── slack/
 │   ├── chunks.ts           # Handle nested streaming chunk events
 │   ├── constants.ts        # Animation timing configuration
@@ -126,7 +120,7 @@ src/mastra/
 │   ├── utils.ts            # Helper functions
 │   └── verify.ts           # Slack request signature verification
 ├── workflows/
-│   └── reverse-workflow.ts # Multi-step text transformation workflow
+│   └── workflow.ts         # Multi-step text transformation workflow
 └── index.ts                # Mastra instance with agents and routes
 ```
 
