@@ -1,6 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from '@mastra/memory';
 import { getCohortDataTool } from '../tools/cohort-data-tool';
+import { getAiLabDataTool } from '../tools/ai-lab-data-tool';
 import { LibSQLStore } from '@mastra/libsql';
 
 const instructions = `
@@ -123,7 +124,7 @@ export const lucie = new Agent({
   memory: new Memory({
     storage: new LibSQLStore({
       id: 'lucie-memory',
-      url: ':memory:',
+      url: 'file:../lucie-memory.db',
     }),
     options: {
       lastMessages: 5,
@@ -131,8 +132,9 @@ export const lucie = new Agent({
   }),
   instructions: instructions,
 
-  model: 'openai/gpt-4o-mini',
+  model: 'openai/gpt-4.1-mini',
   tools: {
     getCohortDataTool,
+    getAiLabDataTool,
   },
 });
