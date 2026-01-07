@@ -1,9 +1,7 @@
 import { Agent } from "@mastra/core/agent";
-import { Memory } from "@mastra/memory";
-// import { generalQuestionsQuery } from "../tools/general-questions-query";
-// import { sessionEventGridQuery } from "../tools/session-event-grid-query";
-// import { pioneerProfileBookQuery } from "../tools/pioneer-profile-book-query";
+import { Memory } from '@mastra/memory';
 import { getCohortDataTool } from '../tools/cohort-data-tool';
+import { LibSQLStore } from '@mastra/libsql';
 
 const instructions = `
 You are Lucie, the Pioneers Program Manager.
@@ -123,17 +121,18 @@ export const lucie = new Agent({
   name: 'lucie-agent',
   description: 'Lucie is the Pioneers Program Manager',
   memory: new Memory({
+    storage: new LibSQLStore({
+      id: 'lucie-memory',
+      url: ':memory:',
+    }),
     options: {
-      lastMessages: 20,
+      lastMessages: 5,
     },
   }),
   instructions: instructions,
 
   model: 'openai/gpt-4o-mini',
   tools: {
-    // generalQuestionsQuery,
-    // sessionEventGridQuery,
-    // pioneerProfileBookQuery,
     getCohortDataTool,
   },
 });

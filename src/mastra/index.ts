@@ -18,13 +18,13 @@ export const mastra = new Mastra({
     translationScorer,
   },
   storage: new LibSQLStore({
-    id: "mastra-storage",
+    id: 'mastra-storage',
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
-    url: ":memory:",
+    url: 'file:../mastra.db',
   }),
   logger: new PinoLogger({
-    name: "Mastra",
-    level: "info",
+    name: 'Mastra',
+    level: 'info',
   }),
   // observability: new Observability({
   //   // Enables DefaultExporter and CloudExporter for tracing
