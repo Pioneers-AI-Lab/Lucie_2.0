@@ -1,7 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import { loadJsonData, searchInText } from './data-helpers';
-import { log } from '@/lib/print-helpers';
+import { log } from '../../../lib/print-helpers';
 export const generalQuestionsQuery = createTool({
   id: 'general-questions-query',
   description:
