@@ -118,16 +118,12 @@ Do NOT:
 Always prioritize accuracy, helpfulness, and BREVITY in your responses.`;
 
 export const lucie = new Agent({
-  id: 'lucie-agent',
-  name: 'lucie-agent',
+  id: 'lucie',
+  name: 'lucie',
   description: 'Lucie is the Pioneers Program Manager',
   memory: new Memory({
-    storage: new LibSQLStore({
-      id: 'lucie-memory',
-      url: 'file:../lucie-memory.db',
-    }),
     options: {
-      lastMessages: 5,
+      lastMessages: 20,
     },
   }),
   instructions: instructions,
