@@ -1,6 +1,6 @@
 import { Mastra } from "@mastra/core/mastra";
 import { PinoLogger } from "@mastra/loggers";
-import { Observability } from "@mastra/observability";
+// import { Observability } from "@mastra/observability";
 import { lucie } from './agents/lucie-agents';
 
 export const mastra = new Mastra({
@@ -10,8 +10,8 @@ export const mastra = new Mastra({
     name: 'Mastra',
     level: 'info',
   }),
-  observability: new Observability({
-    // Enables DefaultExporter and CloudExporter for tracing
-    default: { enabled: true },
-  }),
+  // observability: new Observability({
+  //   // Enables DefaultExporter and CloudExporter for tracing
+  //   default: { enabled: true },
+  // }),
 });
