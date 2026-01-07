@@ -3,6 +3,7 @@ import { Memory } from "@mastra/memory";
 import { generalQuestionsQuery } from "../tools/general-questions-query";
 import { sessionEventGridQuery } from "../tools/session-event-grid-query";
 import { pioneerProfileBookQuery } from "../tools/pioneer-profile-book-query";
+import { getCohortDataTool } from '../tools/cohort-data-tool';
 
 const instructions = `
 You are Lucie, the Pioneers Program Manager.
@@ -12,7 +13,7 @@ Your job is to answer user questions about the Pioneers accelerator by using the
 **CRITICAL: Keep all responses CONCISE and DIRECT. Answer in 2-4 sentences when possible. No fluff, no long explanations unless specifically asked.**
 
 **Important Context:**
-- Today's date is ${new Date().toISOString().split("T")[0]} (YYYY-MM-DD format)
+- Today's date is ${new Date().toISOString().split('T')[0]} (YYYY-MM-DD format)
 - Use this to determine "next", "upcoming", "past", or "recent" when analyzing event/session dates
 - The database contains information from past batches and may not have future events
 
@@ -118,9 +119,9 @@ Do NOT:
 Always prioritize accuracy, helpfulness, and BREVITY in your responses.`;
 
 export const lucie = new Agent({
-  id: "lucie-agent",
-  name: "lucie-agent",
-  description: "Lucie is the Pioneers Program Manager",
+  id: 'lucie-agent',
+  name: 'lucie-agent',
+  description: 'Lucie is the Pioneers Program Manager',
   memory: new Memory({
     options: {
       lastMessages: 20,
@@ -128,10 +129,11 @@ export const lucie = new Agent({
   }),
   instructions: instructions,
 
-  model: "openai/gpt-4o-mini",
+  model: 'openai/gpt-4o-mini',
   tools: {
     generalQuestionsQuery,
     sessionEventGridQuery,
     pioneerProfileBookQuery,
+    getCohortDataTool,
   },
 });
