@@ -46,7 +46,7 @@ export async function streamToTerminal(
 
   try {
     // Display initial thinking indicator
-    // process.stdout.write('\n🤔 Thinking...\n\n');
+    process.stdout.write('\n🤔 Thinking...\n\n');
 
     // Get agent and start streaming
     const agent = mastra.getAgent(agentName);
@@ -77,16 +77,14 @@ export async function streamToTerminal(
 
         case 'tool-call':
           state.toolName = formatName(chunk.payload.toolName);
-          // process.stdout.write(
-          //   `\n🔧 Using tool: ${state.toolName}\n`,
-          // );
+          process.stdout.write(`\n🔧 Using tool: ${state.toolName}\n`);
           break;
 
         case 'tool-output':
           // Workflow events come wrapped in tool-output chunks
           if (
             chunk.payload.output &&
-              typeof chunk.payload.output === 'object'
+            typeof chunk.payload.output === 'object'
           ) {
             const output = chunk.payload.output as {
               type?: string;
@@ -102,13 +100,9 @@ export async function streamToTerminal(
             }
             if (output.type === 'workflow-step-start') {
               state.stepName = formatName(
-                output.payload?.id ||
-                  output.payload?.stepId ||
-                  'step',
+                output.payload?.id || output.payload?.stepId || 'step',
               );
-              // process.stdout.write(
-              //   `\n⚙️  Workflow step: ${state.stepName}\n`,
-              // );
+              process.stdout.write(`\n⚙️  Workflow step: ${state.stepName}\n`);
             }
           }
           break;
@@ -118,9 +112,9 @@ export async function streamToTerminal(
             chunk.payload.name || chunk.payload.workflowId,
           );
           state.stepName = 'Starting';
-          // process.stdout.write(
-          //   `\n🔄 Starting workflow: ${state.workflowName}\n`,
-          // );
+          process.stdout.write(
+            `\n🔄 Starting workflow: ${state.workflowName}\n`,
+          );
           break;
       }
     }
@@ -131,7 +125,7 @@ export async function streamToTerminal(
     } else {
       process.stdout.write('\n');
     }
-    // console.log('\n✅ Response complete\n');
+    console.log('\n✅ Response complete\n');
   } catch (error) {
     console.error(
       '\n❌ Error:',
