@@ -128,7 +128,9 @@ export const lucie = new Agent({
   }),
   instructions: instructions,
 
-  model: 'openai/gpt-4.1-mini',
+  // todo: change the anthropic env to use the one max gets
+  // model: 'openai/gpt-4.1-mini',
+  model: 'anthropic/claude-3-haiku-20240307',
   tools: {
     getCohortDataTool,
     getAiLabDataTool,
