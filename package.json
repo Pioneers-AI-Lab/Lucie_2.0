@@ -23,6 +23,7 @@
     "@mastra/evals": "1.0.0-beta.3",
     "@mastra/libsql": "1.0.0-beta.10",
     "@mastra/loggers": "1.0.0-beta.3",
+    "@mastra/mcp": "1.0.0-beta.8",
     "@mastra/memory": "1.0.0-beta.10",
     "@mastra/observability": "1.0.0-beta.9",
     "@slack/web-api": "^7.13.0",

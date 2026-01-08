@@ -5,6 +5,7 @@ import { Observability } from '@mastra/observability';
 import { lucie } from './agents/lucie-agents';
 import { slackRoutes } from './slack/routes';
 
+
 export const mastra = new Mastra({
   agents: { lucie },
   storage: new LibSQLStore({
