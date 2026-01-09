@@ -10,9 +10,7 @@ import Airtable from "airtable";
 export const getAiLabDataTool = createTool({
   id: "ai-lab-data-tool",
   description: "Get data about the AI Lab from Airtable",
-  // No input parameters required - fetches all records
   inputSchema: z.object({}),
-  // Output schema: array of records with id and fields
   outputSchema: z.object({
     data: z
       .array(
@@ -25,7 +23,6 @@ export const getAiLabDataTool = createTool({
       )
       .describe("The data about the AI Lab"),
   }),
-  // Execute handler: delegates to helper function
   execute: async () => {
     const data = await getAiLabData();
     log("AI Lab data", data);
@@ -38,7 +35,6 @@ export const getAiLabDataTool = createTool({
  * Validates required environment variables before making API calls.
  */
 const getAiLabData = async () => {
-  // Validate required environment variables
   if (
     !process.env.AIRTABLE_API_KEY ||
     !process.env.AI_LAB_BASE_ID ||

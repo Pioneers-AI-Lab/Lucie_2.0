@@ -32,23 +32,20 @@ Required environment variables (see `.env`):
 - `SLACK_BOT_TOKEN` - Slack bot token for the Lucie app
 - `SLACK_SIGNING_SECRET` - Slack signing secret for request verification
 
-**Composio Integration (Airtable access via dynamic tools):**
-- `COMPOSIO_API_KEY` - API key for Composio platform
-- `COMPOSIO_USER_ID` - User ID for Composio connection
-- `COMPOSIO_PROJECT_ID` - Composio project identifier
-- `COMPOSIO_AIRTABLE_AUTH_CONFIG_ID` - Authentication config ID for Airtable toolkit
-- `COMPOSIO_TOOLKIT_SLUG` - Toolkit slug (e.g., "AIRTABLE")
-- `COMPOSIO_LUCIE_MCP_CONFIG_ID` - MCP configuration ID for Lucie agent
-- `HTTP_MCP_ENDPOINT` - HTTP endpoint for MCP server
-
-**Airtable (Legacy - now accessed via Composio):**
+**Airtable:**
 - `AIRTABLE_API_KEY` - API key for Airtable access
-- `SU_2025_BASE_ID` - Airtable base ID for the cohort data
+- `SU_2025_BASE_ID` - Airtable base ID for the cohort data (Pioneers program data)
 - `SU_2025_TABLE_ID` - Airtable table ID for the cohort data
+- `AI_LAB_BASE_ID` - Airtable base ID for the AI Lab data
+- `AI_LAB_TABLE_ID` - Airtable table ID for the AI Lab data
 
 **AI Models:**
-- `ANTHROPIC_API_KEY` - Anthropic API key (current model: `claude-3-haiku-20240307`)
-- `OPENAI_API_KEY` - OpenAI API key (for potential model switching)
+- `MODEL` - Model identifier (default: `anthropic/claude-3-haiku-20240307`, configurable to `openai/gpt-4.1-nano` or other models)
+- `ANTHROPIC_API_KEY` - Anthropic API key (required if using Anthropic models)
+- `OPENAI_API_KEY` - OpenAI API key (required if using OpenAI models)
+
+**MCP Integration:**
+- `HTTP_MCP_ENDPOINT` - HTTP endpoint for MCP server (provides additional tools via Model Context Protocol)
 
 **Observability:**
 - `MASTRA_CLOUD_ACCESS_TOKEN` - Token for Mastra Cloud observability platform
@@ -71,49 +68,53 @@ The codebase follows Mastra's agent framework conventions:
 ### Agent Architecture
 
 **Lucie Agent** (`src/mastra/agents/lucie-agents.ts`):
-- Uses `anthropic/claude-3-haiku-20240307` model (configurable, can switch to OpenAI)
-- Has Memory configured to retain last 20 messages
-- Detailed system instructions emphasize:
+- Uses configurable model via `MODEL` env variable (default: `anthropic/claude-3-haiku-20240307`)
+- Supports both Anthropic and OpenAI models (prefix: `anthropic/*` or `openai/*`)
+- Memory configured to retain last 20 messages
+- Detailed system instructions (`lucie-instructions.ts`) emphasize:
   - Concise, direct responses (2-4 sentences)
   - Greeting message handling (don't use tools for greetings)
   - Broad query strategy: query for "all" data, then filter intelligently with LLM reasoning
   - Slack-friendly formatting (bold, bullets, emoji)
   - Date-aware responses using current date
-- **Dynamic Tool Loading**: Tools are loaded at runtime via Composio based on authenticated toolkit connections
-- **MCP Integration**: Initializes MCP client with custom servers for extended tool capabilities
+- **Static Tools**: Two Airtable data fetching tools (cohort and AI Lab)
+- **MCP Integration**: MCP client (`lucieMcpClient`) configured with HTTP endpoint for additional tools
 
 ### Tool Architecture
 
-**Dynamic Composio Tools** (loaded at runtime):
-- Tools are no longer statically defined in the codebase
-- Agent's `tools` function receives `requestContext` and dynamically fetches tools from Composio
-- Tools are fetched based on the authenticated user's connected toolkits (e.g., Airtable)
-- The active account's toolkit slug determines which tools are available
-- Typical tools include: `AIRTABLE_FETCH_RECORDS`, `AIRTABLE_CREATE_RECORD`, `AIRTABLE_UPDATE_RECORD`, `AIRTABLE_DELETE_RECORD`
+**Static Airtable Tools**:
+- **getCohortDataTool** (`src/mastra/tools/cohort-data-tool.ts`):
+  - Fetches all records from the Pioneers cohort Airtable base
+  - Uses `SU_2025_BASE_ID` and `SU_2025_TABLE_ID` environment variables
+  - Returns array of records with `id` and `fields` properties
+  - No input parameters - fetches all data for LLM to filter
+
+- **getAiLabDataTool** (`src/mastra/tools/ai-lab-data-tool.ts`):
+  - Fetches all records from the AI Lab Airtable base
+  - Uses `AI_LAB_BASE_ID` and `AI_LAB_TABLE_ID` environment variables
+  - Returns array of records with `id` and `fields` properties
+  - Field mapping reference available in `data/ai-lab-table-ref.json`
 
 **MCP (Model Context Protocol) Tools**:
-- MCP client initialized in agent definition with configurable servers
-- MCP servers can be configured via HTTP endpoints or local server processes
-- Tools from MCP servers are merged with Composio tools via spread operator
+- MCP client configured in `src/mastra/mcp/mcp-servers.ts` with HTTP endpoint
+- Provides additional tools beyond the static Airtable tools
+- Tools are loaded from the configured MCP server at runtime
+- The MCP endpoint is specified via `HTTP_MCP_ENDPOINT` environment variable
 
-**Legacy: getCohortDataTool** (`src/mastra/tools/cohort-data-tool.ts`):
-- Static tool that fetches all records from Airtable base/table
-- No longer actively used (replaced by Composio dynamic tools)
-- Kept for reference or potential fallback
+### Data Sources
 
-### Composio Middleware and Authentication
+**Airtable Bases**:
+The agent accesses two Airtable bases:
+1. **Pioneers Cohort Data** (`SU_2025_BASE_ID`/`SU_2025_TABLE_ID`):
+   - Contains information about the Pioneers accelerator program
+   - Includes pioneer profiles, sessions, events, general Q&A
+   - Accessed via `getCohortDataTool`
 
-**Middleware** (`src/mastra/index.ts`):
-- Mastra server includes custom middleware that runs before all requests
-- Initializes Composio client with MastraProvider for each request
-- Stores `userId` and connection status in request context for agent access
-- **Connection Flow**:
-  1. Checks for existing connected accounts matching the auth config ID and user ID
-  2. If an ACTIVE connection exists, stores it in request context and proceeds
-  3. If an INITIATED connection exists, stores the redirect URL in request context
-  4. If no connection exists, initiates a new connection and stores the redirect URL
-- **Important**: Agent tools return empty if no active account is found (prevents errors when user hasn't authenticated)
-- Uses `COMPOSIO_AUTH_CONFIG_ID` environment variable (note: typo in code, should be `COMPOSIO_AIRTABLE_AUTH_CONFIG_ID`)
+2. **AI Lab Data** (`AI_LAB_BASE_ID`/`AI_LAB_TABLE_ID`):
+   - Contains AI Lab participant information and feedback
+   - Field structure documented in `data/ai-lab-table-ref.json`
+   - Includes fields: first_name, last_name, email, skills, problem, notes, decision, etc.
+   - Accessed via `getAiLabDataTool`
 
 ### Slack Integration
 
@@ -152,18 +153,17 @@ The codebase follows Mastra's agent framework conventions:
 ### Data Flow
 
 1. User sends message via Slack or terminal CLI
-2. **[Server only]** Composio middleware runs, checking/establishing toolkit connections
-3. **[Server only]** Request context populated with `userId`, `activeAccount`, or `redirectUrl`
-4. Route handler/CLI parses message and initiates agent streaming
-5. Agent's `tools` function called with request context
-6. **[Server only]** If active account exists, Composio tools fetched dynamically for the user's toolkit
-7. **[Always]** MCP tools loaded from configured servers
-8. Agent processes message using instructions, memory, and dynamically loaded tools
-9. Agent may call Composio tools (e.g., `AIRTABLE_FETCH_RECORDS`) or MCP tools to fetch data
-10. Agent analyzes data and generates response
-11. Response streams back to Slack (with animation) or terminal (real-time text)
-
-**Note**: Terminal CLI bypasses middleware, so Composio tools may not be available unless manually configured
+2. Route handler/CLI parses message and initiates agent streaming
+3. Agent retrieves conversation context from Memory (last 20 messages)
+4. Agent processes message using instructions, memory, and available tools
+5. Agent may call Airtable tools (`getCohortDataTool`, `getAiLabDataTool`) or MCP tools to fetch data
+6. For Airtable queries:
+   - Tool fetches ALL records from the specified base/table (no filtering at DB level)
+   - Agent's LLM analyzes returned data to answer the specific question
+   - This "broad query, intelligent filtering" approach leverages LLM reasoning
+7. Agent generates response based on retrieved data
+8. Response streams back to Slack (with animation) or terminal (real-time text)
+9. Conversation context saved to Memory for future turns
 
 ### Storage and Observability
 
@@ -173,23 +173,27 @@ The codebase follows Mastra's agent framework conventions:
 
 ## Development Workflow
 
-### Adding a New Static Tool
-
-**Note**: Most tools are now dynamically loaded via Composio. Only add static tools if they're framework-specific or not available through Composio.
+### Adding a New Tool
 
 1. Create tool in `src/mastra/tools/` using `createTool` from `@mastra/core/tools`
-2. Define input schema with Zod
+2. Define input schema with Zod (use empty object if no inputs needed)
 3. Define output schema with Zod
-4. Implement `execute` function
-5. Export tool and merge it with dynamic tools in agent's `tools` function in `src/mastra/agents/`
+4. Implement `execute` function (typically an async API call)
+5. Export tool and add it to agent's `tools` object in `src/mastra/agents/lucie-agents.ts`
 
-### Adding a New Composio Toolkit
-
-1. Ensure toolkit is available in Composio (check Composio documentation)
-2. Create authentication configuration in Composio platform for the toolkit
-3. Add auth config ID to environment variables (e.g., `COMPOSIO_{TOOLKIT}_AUTH_CONFIG_ID`)
-4. Update middleware in `src/mastra/index.ts` to check for the new toolkit connection
-5. Agent will automatically receive toolkit tools once connection is authenticated
+Example structure:
+```typescript
+export const myTool = createTool({
+  id: 'my-tool',
+  description: 'What the tool does',
+  inputSchema: z.object({}),
+  outputSchema: z.object({ data: z.array(...) }),
+  execute: async () => {
+    // Fetch data
+    return { data: [...] };
+  },
+});
+```
 
 ### Adding a New Agent
 
@@ -210,42 +214,34 @@ The codebase follows Mastra's agent framework conventions:
 
 ### Configuring MCP Servers
 
-1. Update the `servers` object in the MCP client initialization (in agent file)
+1. Update the `servers` object in `src/mastra/mcp/mcp-servers.ts`
 2. Servers can be configured as:
-   - **HTTP endpoints**: `{ url: process.env.HTTP_MCP_ENDPOINT }`
+   - **HTTP endpoints**: `{ url: new URL(process.env.HTTP_MCP_ENDPOINT) }`
    - **Local server processes**: `{ command: "node", args: ["path/to/server.js"] }`
-3. MCP tools are automatically loaded via `await mcp.listTools()` and spread into agent tools
-4. See `src/mastra/mcp/mcp.ts` for Composio MCP server creation example
+3. MCP tools are automatically discovered and loaded when the MCP client initializes
+4. The MCP client is then referenced in the agent definition to provide additional tools
 
 ## Key Implementation Details
 
 ### Mastra Framework
 
 This project uses Mastra (v1.0.0-beta), an AI agent framework. Key concepts:
-- **Agents**: Autonomous entities with instructions, tools, memory, and model
-- **Tools**: Functions agents can call (defined with Zod schemas) - can be static or dynamically loaded
+- **Agents**: Autonomous entities with instructions, tools, memory, and model configuration
+- **Tools**: Functions agents can call (defined with Zod schemas for inputs/outputs)
 - **Workflows**: Multi-step processes (not currently used in this project)
-- **Scorers**: Evaluation functions for agent performance
-- **Memory**: Conversation history management
+- **Scorers**: Evaluation functions for agent performance (defined but not actively used)
+- **Memory**: Conversation history management (configured per agent)
 - **Streaming**: Real-time response generation with chunk types (text-delta, tool-call, tool-output, workflow-*)
-- **Request Context**: Middleware-accessible state storage for passing data to agents (used for Composio authentication)
-
-### Composio Integration
-
-This project uses Composio for dynamic tool provisioning:
-- **MastraProvider**: Bridges Composio with Mastra framework
-- **Connected Accounts**: User-specific authenticated connections to external services (e.g., Airtable)
-- **Toolkits**: Collections of tools for specific services (e.g., AIRTABLE toolkit has FETCH/CREATE/UPDATE/DELETE tools)
-- **Authentication Flow**: Handled via middleware, supports INITIATED/ACTIVE connection states
-- **MCP Support**: Composio can create MCP servers that expose toolkit tools via Model Context Protocol
+- **Storage**: LibSQL for persisting observability data and scores
 
 ### Model Context Protocol (MCP)
 
 MCP provides a standardized way to connect LLMs to external tools and data sources:
 - **MCPClient** (`@mastra/mcp`): Client for connecting to MCP servers
 - **Servers**: Can be HTTP endpoints or local processes that expose tools/resources/prompts
-- **Tool Discovery**: `mcp.listTools()` retrieves all tools from configured servers
-- **Integration**: MCP tools are merged with agent tools using spread operator
+- **Configuration**: MCP servers defined in `src/mastra/mcp/mcp-servers.ts`
+- **Integration**: MCP client provides tools to agents beyond the static Airtable tools
+- Current setup uses HTTP MCP endpoint for additional tool capabilities
 
 ### Agent Instructions Philosophy
 
@@ -277,20 +273,24 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - The `.mastra` directory is gitignored and contains build artifacts
 - Mastra CLI handles bundling via Rollup (see `.mastra/bundler-config.mjs` and `.mastra/.build/`)
 - Node.js version required: `>=22.13.0` (specified in package.json engines)
+- Package manager: pnpm (v10.27.0)
 
 ### Agent Configuration
 - Agent instructions are lengthy but critical - they define the agent's behavior, response style, and tool usage patterns
-- Model can be switched by updating the `model` field in agent definition (supports `openai/*` and `anthropic/*` prefixes)
-- MCP client initialization is asynchronous (`await mcp.listTools()`), so agent definitions use top-level await
+- Instructions stored in separate file (`lucie-instructions.ts`) for better maintainability
+- Model is configurable via `MODEL` environment variable (supports `openai/*` and `anthropic/*` prefixes)
+- Instructions are date-aware: they inject current date for handling temporal queries ("next session", "upcoming events")
 
 ### Development Best Practices
-- **Terminal CLI is preferred for rapid iteration** - avoids Slack rate limits and middleware complexity
-- However, Composio tools won't work in terminal CLI without additional configuration
+- **Terminal CLI is preferred for rapid iteration** - avoids Slack rate limits and provides cleaner debugging experience
+- Run `pnpm dev:cli` for local testing with interactive agent interface
+- Use `log()` helper from `lib/print-helpers` for debugging (visible in terminal output)
 - Slack streaming uses rate limit-tolerant animation (errors during animation updates are ignored)
-- Use `log()` helper from `lib/print-helpers` for debugging (will be visible in terminal)
+- All Airtable tools fetch complete datasets - filtering/analysis happens at LLM level, not query level
 
-### Known Issues and TODOs
-- **TODO in agent**: Change Anthropic env variable to use the one "max gets" (comment in lucie-agents.ts:27)
-- **Environment variable mismatch**: Middleware checks `COMPOSIO_AUTH_CONFIG_ID` but `.env` uses `COMPOSIO_AIRTABLE_AUTH_CONFIG_ID`
-- **User ID hardcoded**: Middleware uses static `COMPOSIO_USER_ID` env var; should be extracted from authentication headers (see TODO in src/mastra/index.ts:39-42)
-- **MCP servers empty**: Currently initialized with `servers: {}`, needs configuration if MCP tools are required
+### Project Structure Notes
+- `data/` directory contains reference files like AI Lab table field mappings
+- `lib/` contains shared utilities (print helpers, Airtable client, utils)
+- `ai/` directory has documentation about Mastra and Composio frameworks
+- `bff/` directory contains AI Lab related files
+- Agent instructions emphasize concise responses (2-4 sentences) with Slack-friendly formatting
