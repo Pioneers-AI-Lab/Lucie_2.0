@@ -127,11 +127,16 @@ export const getAiLabDataTool = createTool({
 
 Available fields: first_name, last_name, email, linkedin_url, whatsapp_number, skills, problem, first_users, favorite_startup, about_us, refer, solo_team, availability, apply_accelerator, notes, notes_2, yes_no_feedback, maxime_coments, other, entry, decision.
 
+Field names are case-insensitive (e.g., "Notes", "NOTES", or "notes" all work).
+
 Common use cases:
 - Filter by decision: {fieldName: "decision", fieldValue: "Accepted"}
 - Search skills: {searchField: "skills", searchText: "ML"}
 - Search problems: {searchField: "problem", searchText: "healthcare"}
-- Complex filters: {filterFormula: "AND({decision} = 'Accepted', {apply_accelerator} = 'Yes')"}`,
+- Search in notes (e.g., for "onboarded"): {searchField: "notes", searchText: "onboarded"}
+- Complex filters: {filterFormula: "AND({decision} = 'Accepted', {apply_accelerator} = 'Yes')"}
+
+Note: For text fields like notes, use searchField + searchText for partial matches rather than fieldName + fieldValue for exact matches.`,
   inputSchema: filterSchema,
   outputSchema: z.object({
     data: z
@@ -169,30 +174,50 @@ const buildFilterFormula = (
   const conditions: string[] = [];
 
   if (input.searchField && input.searchText) {
-    // Validate field name exists in table reference
+    // Normalize field name to lowercase for case-insensitive matching
+    const normalizedField = input.searchField.toLowerCase();
     const availableFields = getAvailableFieldNames();
-    if (!availableFields.includes(input.searchField)) {
+
+    // Find matching field (case-insensitive)
+    const matchingField = availableFields.find(
+      (field) => field.toLowerCase() === normalizedField,
+    );
+
+    if (!matchingField) {
       throw new Error(
-        `Invalid searchField: "${input.searchField}". Available fields: ${availableFields.join(', ')}`,
+        `Invalid searchField: "${
+          input.searchField
+        }". Available fields: ${availableFields.join(', ')}`,
       );
     }
+
     // Use SEARCH for case-insensitive text matching
     // Escape single quotes in search text
     const escapedText = input.searchText.replace(/'/g, "''");
-    conditions.push(`SEARCH('${escapedText}', {${input.searchField}})`);
+    conditions.push(`SEARCH('${escapedText}', {${matchingField}})`);
   }
 
   if (input.fieldName && input.fieldValue) {
-    // Validate field name exists in table reference
+    // Normalize field name to lowercase for case-insensitive matching
+    const normalizedField = input.fieldName.toLowerCase();
     const availableFields = getAvailableFieldNames();
-    if (!availableFields.includes(input.fieldName)) {
+
+    // Find matching field (case-insensitive)
+    const matchingField = availableFields.find(
+      (field) => field.toLowerCase() === normalizedField,
+    );
+
+    if (!matchingField) {
       throw new Error(
-        `Invalid fieldName: "${input.fieldName}". Available fields: ${availableFields.join(', ')}`,
+        `Invalid fieldName: "${
+          input.fieldName
+        }". Available fields: ${availableFields.join(', ')}`,
       );
     }
+
     // Exact match - escape single quotes in value
     const escapedValue = input.fieldValue.replace(/'/g, "''");
-    conditions.push(`{${input.fieldName}} = '${escapedValue}'`);
+    conditions.push(`{${matchingField}} = '${escapedValue}'`);
   }
 
   if (conditions.length === 0) {
