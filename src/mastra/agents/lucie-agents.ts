@@ -4,12 +4,14 @@ import { MCPClient } from '@mastra/mcp';
 import { Composio } from '@composio/core';
 import { MastraProvider } from '@composio/mastra';
 import { lucieInstructions } from './lucie-instructions';
+import { log } from '../../../lib/print-helpers';
 
 const mcp = new MCPClient({
   servers: {},
 });
 
 const mcpTools = await mcp.listTools();
+log('mcpTools', mcpTools);
 
 export const lucie = new Agent({
   id: 'lucie',

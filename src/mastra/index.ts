@@ -40,13 +40,13 @@ export const mastra = new Mastra({
         // Consider using Authentication headers for user identification
         // e.g const bearerToken = c.get('Authorization')
         // https://mastra.ai/en/docs/server-db/middleware#common-examples
-        const userId = 'unique-user-id';
-        requestContext.set('userId', userId);
+        const userId = process.env.COMPOSIO_USER_ID;
+        requestContext.set('userId', userId as string);
 
         // check for active/intiated connection or initiate a new connection to composio
         const connectedAccounts = await composio.connectedAccounts.list({
           authConfigIds: [process.env.COMPOSIO_AUTH_CONFIG_ID],
-          userIds: [userId],
+          userIds: [userId as string],
         });
 
         // active connection
@@ -69,7 +69,7 @@ export const mastra = new Mastra({
 
         // initiate a new connection to composio
         const connectionRequest = await composio.connectedAccounts.initiate(
-          userId,
+          userId as string,
           process.env.COMPOSIO_AUTH_CONFIG_ID,
         );
         if (connectionRequest.redirectUrl) {
