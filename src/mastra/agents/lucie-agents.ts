@@ -6,8 +6,9 @@ import { lucieInstructions } from './lucie-instructions';
 import { log } from '../../../lib/print-helpers';
 import { lucieMcpClient } from '../mcp/mcp-servers';
 
+
 const mcpTools = await lucieMcpClient.listTools();
-log('mcpTools', mcpTools);
+// log('mcpTools', mcpTools);
 
 export const lucie = new Agent({
   id: 'lucie',
