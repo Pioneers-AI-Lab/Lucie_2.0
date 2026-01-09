@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "key": "name",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "event",
+      "type": "string",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "name_from_event",
+      "type": "string",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "notes",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "name_from_notes",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "some_notes",
+      "type": "string",
+      "id": null,
+      "index": 5
+    }
+  ]
+}

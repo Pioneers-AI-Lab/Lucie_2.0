@@ -1,0 +1,82 @@
+{
+  "fields": [
+    {
+      "key": "name",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "overall_satisfaction",
+      "type": "number",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "recommendation_likelihood",
+      "type": "number",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "top_3_improvements",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "traction_satisfaction",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "cofounder_finding_ease",
+      "type": "number",
+      "id": null,
+      "index": 5
+    },
+    {
+      "key": "top_3_learnings",
+      "type": "string",
+      "id": null,
+      "index": 6
+    },
+    {
+      "key": "next_steps",
+      "type": "string",
+      "id": null,
+      "index": 7
+    },
+    {
+      "key": "decision_agreement",
+      "type": "string",
+      "id": null,
+      "index": 8
+    },
+    {
+      "key": "reapply_consideration",
+      "type": "string",
+      "id": null,
+      "index": 9
+    },
+    {
+      "key": "final_feedback",
+      "type": "string",
+      "id": null,
+      "index": 10
+    },
+    {
+      "key": "how_do_you_feel",
+      "type": "string",
+      "id": null,
+      "index": 11
+    },
+    {
+      "key": "activities_achieved",
+      "type": "string",
+      "id": null,
+      "index": 12
+    }
+  ]
+}

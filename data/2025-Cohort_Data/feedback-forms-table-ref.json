@@ -1,0 +1,136 @@
+{
+  "fields": [
+    {
+      "key": "feedback_week_1",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "worst_startup_idea_event",
+      "type": "string",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "worst_idea_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "basecamp_event",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "basecamp_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "masterclass_1_cofounder",
+      "type": "string",
+      "id": null,
+      "index": 5
+    },
+    {
+      "key": "masterclass_1_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 6
+    },
+    {
+      "key": "customer_discovery_challenge",
+      "type": "string",
+      "id": null,
+      "index": 7
+    },
+    {
+      "key": "customer_discovery_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 8
+    },
+    {
+      "key": "attachments",
+      "type": "string",
+      "id": null,
+      "index": 9
+    },
+    {
+      "key": "attachment_summary",
+      "type": "string",
+      "id": null,
+      "index": 10
+    },
+    {
+      "key": "masterclass_2_sales_gtm",
+      "type": "string",
+      "id": null,
+      "index": 11
+    },
+    {
+      "key": "masterclass_2_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 12
+    },
+    {
+      "key": "test_idea_traffic_challenge",
+      "type": "string",
+      "id": null,
+      "index": 13
+    },
+    {
+      "key": "test_idea_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 14
+    },
+    {
+      "key": "startup_challenge",
+      "type": "string",
+      "id": null,
+      "index": 15
+    },
+    {
+      "key": "startup_challenge_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 16
+    },
+    {
+      "key": "google_labs_event",
+      "type": "string",
+      "id": null,
+      "index": 17
+    },
+    {
+      "key": "google_labs_pros_cons",
+      "type": "string",
+      "id": null,
+      "index": 18
+    },
+    {
+      "key": "overall_feedback_week_1",
+      "type": "string",
+      "id": null,
+      "index": 19
+    },
+    {
+      "key": "masterclass_3_zero_to_one",
+      "type": "string",
+      "id": null,
+      "index": 20
+    },
+    {
+      "key": "masterclass_3_remarks",
+      "type": "string",
+      "id": null,
+      "index": 21
+    }
+  ]
+}

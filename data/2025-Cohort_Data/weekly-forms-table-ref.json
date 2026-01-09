@@ -1,0 +1,106 @@
+{
+  "fields": [
+    {
+      "key": "id",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "name",
+      "type": "string",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "name_from_name",
+      "type": "string",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "startup",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "startup_from_startup",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "users_clients_talked_to",
+      "type": "number",
+      "id": null,
+      "index": 5
+    },
+    {
+      "key": "biggest_obstacle",
+      "type": "string",
+      "id": null,
+      "index": 6
+    },
+    {
+      "key": "top_1_3_goals_next_week",
+      "type": "string",
+      "id": null,
+      "index": 7
+    },
+    {
+      "key": "moral_scale_1_10",
+      "type": "number",
+      "id": null,
+      "index": 8
+    },
+    {
+      "key": "active_users",
+      "type": "number",
+      "id": null,
+      "index": 9
+    },
+    {
+      "key": "learned_from_users",
+      "type": "string",
+      "id": null,
+      "index": 10
+    },
+    {
+      "key": "how_can_we_help",
+      "type": "string",
+      "id": null,
+      "index": 11
+    },
+    {
+      "key": "documents_to_share",
+      "type": "string",
+      "id": null,
+      "index": 12
+    },
+    {
+      "key": "revenue",
+      "type": "number",
+      "id": null,
+      "index": 13
+    },
+    {
+      "key": "created",
+      "type": "string",
+      "id": null,
+      "index": 14
+    },
+    {
+      "key": "internal_progress_evaluation",
+      "type": "string",
+      "id": null,
+      "index": 15
+    },
+    {
+      "key": "main_su_2025",
+      "type": "string",
+      "id": null,
+      "index": 16
+    }
+  ]
+}

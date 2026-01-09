@@ -1,0 +1,130 @@
+{
+  "fields": [
+    {
+      "key": "startup",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "pitch_sequence",
+      "type": "number",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "industry",
+      "type": "string",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "startup_in_a_word",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "active_inactive",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "weekly_forms",
+      "type": "string",
+      "id": null,
+      "index": 5
+    },
+    {
+      "key": "main_su_2025",
+      "type": "string",
+      "id": null,
+      "index": 6
+    },
+    {
+      "key": "main_su_2025_2",
+      "type": "string",
+      "id": null,
+      "index": 7
+    },
+    {
+      "key": "team_members",
+      "type": "string",
+      "id": null,
+      "index": 8
+    },
+    {
+      "key": "notes",
+      "type": "string",
+      "id": null,
+      "index": 9
+    },
+    {
+      "key": "traction_summary",
+      "type": "string",
+      "id": null,
+      "index": 10
+    },
+    {
+      "key": "traction_summary_old",
+      "type": "string",
+      "id": null,
+      "index": 11
+    },
+    {
+      "key": "maxime_comment",
+      "type": "string",
+      "id": null,
+      "index": 12
+    },
+    {
+      "key": "detailed_progress",
+      "type": "string",
+      "id": null,
+      "index": 13
+    },
+    {
+      "key": "detailed_progress_old",
+      "type": "string",
+      "id": null,
+      "index": 14
+    },
+    {
+      "key": "full_notes",
+      "type": "string",
+      "id": null,
+      "index": 15
+    },
+    {
+      "key": "previous_decks",
+      "type": "string",
+      "id": null,
+      "index": 16
+    },
+    {
+      "key": "committee",
+      "type": "string",
+      "id": null,
+      "index": 17
+    },
+    {
+      "key": "funding_applications",
+      "type": "string",
+      "id": null,
+      "index": 18
+    },
+    {
+      "key": "startup_evaluation",
+      "type": "string",
+      "id": null,
+      "index": 19
+    },
+    {
+      "key": "startup_evaluation_copy",
+      "type": "string",
+      "id": null,
+      "index": 20
+    }
+  ]
+}
