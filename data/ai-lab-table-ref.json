@@ -1,0 +1,109 @@
+{
+  "fields": [
+    {
+      "key": "first_name",
+      "type": "string",
+      "id": "flduTrHsGEuKGnxT2"
+    },
+    {
+      "key": "last_name",
+      "type": "string",
+      "id": "fldnbYRosFY1vvznq"
+    },
+    {
+      "key": "email",
+      "type": "email",
+      "id": "fldYkJh23h8LhpfyW"
+    },
+    {
+      "key": "notes",
+      "type": "string",
+      "id": "fldEM3IOffRjaxGOe"
+    },
+    {
+      "key": "yes_no_feedback",
+      "type": "string",
+      "id": "fld5FrdTB9lxsHnFh"
+    },
+    {
+      "key": "maxime_coments",
+      "type": "string",
+      "id": "fldP8FpRA9vSOO4Yo"
+    },
+    {
+      "key": "linkedin_url",
+      "type": "string",
+      "id": "fldjvEIEWzGPY1G2D"
+    },
+    {
+      "key": "whatsapp_number",
+      "type": "number",
+      "id": "flds0e3sIO7jMl0Xe"
+    },
+    {
+      "key": "skills",
+      "type": "string",
+      "id": "fldgAJSGIeDuR2hMi"
+    },
+    {
+      "key": "problem",
+      "type": "string",
+      "id": "fldm6wgyWzEq6Tfjy"
+    },
+    {
+      "key": "first_users",
+      "type": "string",
+      "id": "fldZeTQPsJoD7MJ3v"
+    },
+    {
+      "key": "favorite_startup",
+      "type": "string",
+      "id": "fld19lqpbLDYZUlzu"
+    },
+    {
+      "key": "about_us",
+      "type": "string",
+      "id": "fldSozDxPrYxuchnF"
+    },
+    {
+      "key": "refer",
+      "type": "string",
+      "id": "fldezFbSa193BPG3p"
+    },
+    {
+      "key": "solo_team",
+      "type": "string",
+      "id": "fldzWYxd3E6hvpPCi"
+    },
+    {
+      "key": "availability",
+      "type": "string",
+      "id": "fldVHD1HTgFa9pVPf"
+    },
+    {
+      "key": "apply_accelerator",
+      "type": "string",
+      "id": "fldurPIRse31fZcGR"
+    },
+    {
+      "key": "notes_2",
+      "type": "string",
+      "id": "fldx5LwLpLcoVCh7t"
+    },
+    {
+      "key": "other",
+      "type": "string",
+      "id": "fldJsWGIJAuQACcEV"
+    },
+    {
+      "key": "entry",
+      "type": "string",
+      "id": "fldJlCzAYak0oE5b7"
+    },
+    {
+      "key": "decision",
+      "type": "string",
+      "id": "fldLoKoh14FjRw2XH"
+    }
+  ]
+}
