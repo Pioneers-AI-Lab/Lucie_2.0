@@ -19,8 +19,7 @@ export const lucie = new Agent({
   // model: 'openai/gpt-4.1-mini',
   model: 'anthropic/claude-3-haiku-20240307',
   tools: {
-    ...mcpTools,
-    // getCohortDataTool,
-    // getAiLabDataTool,
+    getCohortDataTool,
+    getAiLabDataTool,
   },
 });
