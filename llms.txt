@@ -1,0 +1,15 @@
+# Project: LUCIE_2.0
+
+This repository contains multiple AI workspaces.
+
+Use the following domain files based on what you are working on:
+
+@ai/composio.md   → UI, Next.js, Tailwind, UX flows
+@ai/backend.md    → API, DB, Encore, Drizzle, auth
+@ai/agents.md     → Mastra, workflows, evaluation agents
+@ai/infra.md      → Vercel, CI, Turso, Stripe, DNS
+
+When answering:
+- Load the relevant file
+- Follow its rules strictly
+- Do not hallucinate cross-domain behavior
