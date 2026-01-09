@@ -1,16 +1,12 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from '@mastra/memory';
-import { MCPClient } from '@mastra/mcp';
-import { Composio } from '@composio/core';
-import { MastraProvider } from '@composio/mastra';
+// import { getCohortDataTool } from '../tools/cohort-data-tool';
+// import { getAiLabDataTool } from '../tools/ai-lab-data-tool';
 import { lucieInstructions } from './lucie-instructions';
 import { log } from '../../../lib/print-helpers';
+import { lucieMcpClient } from '../mcp/mcp';
 
-const mcp = new MCPClient({
-  servers: {},
-});
-
-const mcpTools = await mcp.listTools();
+const mcpTools = await lucieMcpClient.listTools();
 log('mcpTools', mcpTools);
 
 export const lucie = new Agent({
@@ -27,29 +23,9 @@ export const lucie = new Agent({
   // todo: change the anthropic env to use the one max gets
   // model: 'openai/gpt-4.1-mini',
   model: 'anthropic/claude-3-haiku-20240307',
-  tools: async ({ requestContext }) => {
-    const composio = new Composio({
-      provider: new MastraProvider(),
-    });
-
-    // retrieve userId and activeAccount from the requestContext
-    const userId = requestContext.get<'userId', string>('userId');
-    const activeAccount = requestContext.get<
-      'activeAccount',
-      Awaited<
-        ReturnType<typeof composio.connectedAccounts.list>
-      >['items'][number]
-    >('activeAccount');
-
-    // return empty set of tools if activeAccount isn't present
-    if (!activeAccount) return {};
-
-    // fetch composio tools and dynamically use them in the agent
-    const composioTools = await composio.tools.get(userId, {
-      toolkits: [activeAccount.toolkit.slug],
-    });
-
-    return composioTools;
+  tools: {
+    ...mcpTools,
+    // getCohortDataTool,
+    // getAiLabDataTool,
   },
-  ...mcpTools,
 });
