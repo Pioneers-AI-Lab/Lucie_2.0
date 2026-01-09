@@ -4,7 +4,7 @@ import { Memory } from '@mastra/memory';
 // import { getAiLabDataTool } from '../tools/ai-lab-data-tool';
 import { lucieInstructions } from './lucie-instructions';
 import { log } from '../../../lib/print-helpers';
-import { lucieMcpClient } from '../mcp/mcp';
+import { lucieMcpClient } from '../mcp/mcp-servers';
 
 const mcpTools = await lucieMcpClient.listTools();
 log('mcpTools', mcpTools);
