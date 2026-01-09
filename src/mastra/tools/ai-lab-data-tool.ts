@@ -1,15 +1,15 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
-import { log } from 'console';
-import Airtable from 'airtable';
+import { log } from "console";
+import Airtable from "airtable";
 
 /**
  * Mastra tool for fetching AI Lab data from Airtable.
  * Returns all records from the configured AI Lab base and table.
  */
 export const getAiLabDataTool = createTool({
-  id: 'ai-lab-data-tool',
-  description: 'Get data about the AI Lab from Airtable',
+  id: "ai-lab-data-tool",
+  description: "Get data about the AI Lab from Airtable",
   // No input parameters required - fetches all records
   inputSchema: z.object({}),
   // Output schema: array of records with id and fields
@@ -17,18 +17,18 @@ export const getAiLabDataTool = createTool({
     data: z
       .array(
         z.object({
-          id: z.string().describe('The ID of the record'),
+          id: z.string().describe("The ID of the record"),
           fields: z
             .record(z.string(), z.any())
-            .describe('The fields of the record'),
+            .describe("The fields of the record"),
         }),
       )
-      .describe('The data about the AI Lab'),
+      .describe("The data about the AI Lab"),
   }),
   // Execute handler: delegates to helper function
   execute: async () => {
     const data = await getAiLabData();
-    log('AI Lab data', data);
+    log("AI Lab data", data);
     return data;
   },
 });
@@ -44,7 +44,7 @@ const getAiLabData = async () => {
     !process.env.AI_LAB_BASE_ID ||
     !process.env.AI_LAB_TABLE_ID
   ) {
-    throw new Error('Missing Airtable environment variables');
+    throw new Error("Missing Airtable environment variables");
   }
 
   // Initialize Airtable client and connect to base
@@ -54,7 +54,6 @@ const getAiLabData = async () => {
 
   // Fetch all records from the table (empty select = all records)
   const records = await base(process.env.AI_LAB_TABLE_ID).select({}).all();
-  log('AI Lab records', records);
 
   // Transform records to simplified format with id and fields
   return {

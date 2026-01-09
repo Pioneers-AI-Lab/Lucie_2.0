@@ -3,107 +3,128 @@
     {
       "key": "first_name",
       "type": "string",
-      "id": "flduTrHsGEuKGnxT2"
+      "id": "flduTrHsGEuKGnxT2",
+      "index": 0
     },
     {
       "key": "last_name",
       "type": "string",
-      "id": "fldnbYRosFY1vvznq"
+      "id": "fldnbYRosFY1vvznq",
+      "index": 1
     },
     {
       "key": "email",
-      "type": "email",
-      "id": "fldYkJh23h8LhpfyW"
+      "type": "string",
+      "id": "fldYkJh23h8LhpfyW",
+      "index": 2
     },
     {
       "key": "notes",
       "type": "string",
-      "id": "fldEM3IOffRjaxGOe"
+      "id": "fldEM3IOffRjaxGOe",
+      "index": 3
     },
     {
       "key": "yes_no_feedback",
       "type": "string",
-      "id": "fld5FrdTB9lxsHnFh"
+      "id": "fld5FrdTB9lxsHnFh",
+      "index": 4
     },
     {
       "key": "maxime_coments",
       "type": "string",
-      "id": "fldP8FpRA9vSOO4Yo"
+      "id": "fldP8FpRA9vSOO4Yo",
+      "index": 5
     },
     {
       "key": "linkedin_url",
       "type": "string",
-      "id": "fldjvEIEWzGPY1G2D"
+      "id": "fldjvEIEWzGPY1G2D",
+      "index": 6
     },
     {
       "key": "whatsapp_number",
-      "type": "number",
-      "id": "flds0e3sIO7jMl0Xe"
+      "type": "string",
+      "id": "flds0e3sIO7jMl0Xe",
+      "index": 7
     },
     {
       "key": "skills",
       "type": "string",
-      "id": "fldgAJSGIeDuR2hMi"
+      "id": "fldgAJSGIeDuR2hMi",
+      "index": 8
     },
     {
       "key": "problem",
       "type": "string",
-      "id": "fldm6wgyWzEq6Tfjy"
+      "id": "fldm6wgyWzEq6Tfjy",
+      "index": 9
     },
     {
       "key": "first_users",
       "type": "string",
-      "id": "fldZeTQPsJoD7MJ3v"
+      "id": "fldZeTQPsJoD7MJ3v",
+      "index": 10
     },
     {
       "key": "favorite_startup",
       "type": "string",
-      "id": "fld19lqpbLDYZUlzu"
+      "id": "fld19lqpbLDYZUlzu",
+      "index": 11
     },
     {
       "key": "about_us",
       "type": "string",
-      "id": "fldSozDxPrYxuchnF"
+      "id": "fldSozDxPrYxuchnF",
+      "index": 12
     },
     {
       "key": "refer",
       "type": "string",
-      "id": "fldezFbSa193BPG3p"
+      "id": "fldezFbSa193BPG3p",
+      "index": 13
     },
     {
       "key": "solo_team",
       "type": "string",
-      "id": "fldzWYxd3E6hvpPCi"
+      "id": "fldzWYxd3E6hvpPCi",
+      "index": 14
     },
     {
       "key": "availability",
       "type": "string",
-      "id": "fldVHD1HTgFa9pVPf"
+      "id": "fldVHD1HTgFa9pVPf",
+      "index": 15
     },
     {
       "key": "apply_accelerator",
       "type": "string",
-      "id": "fldurPIRse31fZcGR"
+      "id": "fldurPIRse31fZcGR",
+      "index": 16
     },
     {
       "key": "notes_2",
       "type": "string",
-      "id": "fldx5LwLpLcoVCh7t"
+      "id": "fldx5LwLpLcoVCh7t",
+      "index": 17
     },
     {
       "key": "other",
       "type": "string",
-      "id": "fldJsWGIJAuQACcEV"
+      "id": "fldJsWGIJAuQACcEV",
+      "index": 18
     },
     {
       "key": "entry",
       "type": "string",
-      "id": "fldJlCzAYak0oE5b7"
+      "id": "fldJlCzAYak0oE5b7",
+      "index": 19
     },
     {
       "key": "decision",
       "type": "string",
-      "id": "fldLoKoh14FjRw2XH"
+      "id": "fldLoKoh14FjRw2XH",
+      "index": 20
     }
   ]
 }
