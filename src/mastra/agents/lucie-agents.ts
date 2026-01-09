@@ -1,14 +1,8 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from '@mastra/memory';
-// import { getCohortDataTool } from '../tools/cohort-data-tool';
-// import { getAiLabDataTool } from '../tools/ai-lab-data-tool';
+import { getCohortDataTool } from '../tools/cohort-data-tool';
+import { getAiLabDataTool } from '../tools/ai-lab-data-tool';
 import { lucieInstructions } from './lucie-instructions';
-import { log } from '../../../lib/print-helpers';
-import { lucieMcpClient } from '../mcp/mcp-servers';
-
-
-const mcpTools = await lucieMcpClient.listTools();
-// log('mcpTools', mcpTools);
 
 export const lucie = new Agent({
   id: 'lucie',
