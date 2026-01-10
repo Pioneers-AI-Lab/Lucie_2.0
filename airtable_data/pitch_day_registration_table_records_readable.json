@@ -1,0 +1,35 @@
+{
+  "recljAzAVJSmxUQGc": {
+    "createdTime": "2026-01-06T11:44:34.000Z",
+    "fields": {
+      "Are you pitching on the 14th of January?": "Yes",
+      "ID": "1",
+      "Libellé": "Building a Gen Z entrepreneur networking map where your work speaks for you.",
+      "Name of each founder": "Pierre Aliaga - Melvin Ducret - Antoine Bizzarri",
+      "Question": "Nation",
+      "Will you be on-site?": "Yes"
+    }
+  },
+  "recm7QSEX9hGDxn6m": {
+    "createdTime": "2026-01-10T11:15:33.000Z",
+    "fields": {
+      "Are you pitching on the 14th of January?": "Yes",
+      "ID": "3",
+      "Libellé": "Arsène fix your bugs while you sleep",
+      "Name of each founder": "Alexis FAURE, Maxime BIRAUD",
+      "Question": "Arsene",
+      "Will you be on-site?": "Yes"
+    }
+  },
+  "recrqCWOv4eBu1My1": {
+    "createdTime": "2026-01-06T16:34:02.000Z",
+    "fields": {
+      "Are you pitching on the 14th of January?": "Yes",
+      "ID": "2",
+      "Libellé": "superior predictive signals for retail investors ",
+      "Name of each founder": "matteo damiani",
+      "Question": "Forekall",
+      "Will you be on-site?": "Yes"
+    }
+  }
+}
