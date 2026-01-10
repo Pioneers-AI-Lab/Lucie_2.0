@@ -44,9 +44,6 @@ Required environment variables (see `.env`):
 - `ANTHROPIC_API_KEY` - Anthropic API key (required if using Anthropic models)
 - `OPENAI_API_KEY` - OpenAI API key (required if using OpenAI models)
 
-**MCP Integration:**
-- `HTTP_MCP_ENDPOINT` - HTTP endpoint for MCP server (provides additional tools via Model Context Protocol)
-
 **Observability:**
 - `MASTRA_CLOUD_ACCESS_TOKEN` - Token for Mastra Cloud observability platform
 
@@ -56,14 +53,14 @@ Required environment variables (see `.env`):
 
 The codebase follows Mastra's agent framework conventions:
 
-- **`src/mastra/index.ts`** - Main Mastra instance initialization. Registers agents, workflows, scorers, storage (LibSQL), and logger (Pino).
+- **`src/mastra/index.ts`** - Main Mastra instance initialization. Registers agents, storage (LibSQL), logger (Pino), and API routes.
 - **`src/mastra/agents/`** - Agent definitions with instructions, tools, memory, and model configuration
 - **`src/mastra/tools/`** - Tool definitions (functions agents can call)
-- **`src/mastra/workflows/`** - Multi-step workflow definitions
-- **`src/mastra/scorers/`** - Evaluation scorers for agent performance
+- **`src/mastra/workflows/`** - Multi-step workflow definitions (not actively used)
+- **`src/mastra/scorers/`** - Evaluation scorers for agent performance (not actively used)
 - **`src/mastra/slack/`** - Slack integration and streaming logic
 - **`src/mastra/terminal/`** - Terminal CLI and streaming logic
-- **`lib/`** - Shared utility functions
+- **`lib/`** - Shared utility functions (Airtable client, print helpers, update scripts)
 
 ### Agent Architecture
 
@@ -74,32 +71,44 @@ The codebase follows Mastra's agent framework conventions:
 - Detailed system instructions (`lucie-instructions.ts`) emphasize:
   - Concise, direct responses (2-4 sentences)
   - Greeting message handling (don't use tools for greetings)
-  - Broad query strategy: query for "all" data, then filter intelligently with LLM reasoning
+  - Optional filtering strategy: supports both filtered queries and fetching all data for LLM analysis
   - Slack-friendly formatting (bold, bullets, emoji)
   - Date-aware responses using current date
-- **Static Tools**: Two Airtable data fetching tools (cohort and AI Lab)
-- **MCP Integration**: MCP client (`lucieMcpClient`) configured with HTTP endpoint for additional tools
+- **Tools**: Two Airtable data fetching tools (cohort and AI Lab)
 
 ### Tool Architecture
 
-**Static Airtable Tools**:
+**Airtable Tools with Optional Filtering**:
+
+Both tools support optional filtering parameters for efficient data retrieval:
+
 - **getCohortDataTool** (`src/mastra/tools/cohort-data-tool.ts`):
-  - Fetches all records from the Pioneers cohort Airtable base
+  - Fetches records from the Pioneers cohort Airtable base
   - Uses `SU_2025_BASE_ID` and `SU_2025_TABLE_ID` environment variables
   - Returns array of records with `id` and `fields` properties
-  - No input parameters - fetches all data for LLM to filter
+  - **Filtering options**:
+    - `filterFormula`: Airtable formula (e.g., `"{Role} = 'CTO'"`)
+    - `searchField` + `searchText`: Text search in specific field (case-insensitive)
+    - `fieldName` + `fieldValue`: Exact match on a field
+  - If no filters provided, fetches all records
 
 - **getAiLabDataTool** (`src/mastra/tools/ai-lab-data-tool.ts`):
-  - Fetches all records from the AI Lab Airtable base
+  - Fetches records from the AI Lab Airtable base
   - Uses `AI_LAB_BASE_ID` and `AI_LAB_TABLE_ID` environment variables
   - Returns array of records with `id` and `fields` properties
   - Field mapping reference available in `data/ai-lab-table-ref.json`
+  - **Filtering options** (same as cohort tool):
+    - `filterFormula`: Airtable formula
+    - `searchField` + `searchText`: Text search (case-insensitive)
+    - `fieldName` + `fieldValue`: Exact match
+  - Case-insensitive field name matching with validation against available fields
+  - If no filters provided, fetches all records
 
-**MCP (Model Context Protocol) Tools**:
-- MCP client configured in `src/mastra/mcp/mcp-servers.ts` with HTTP endpoint
-- Provides additional tools beyond the static Airtable tools
-- Tools are loaded from the configured MCP server at runtime
-- The MCP endpoint is specified via `HTTP_MCP_ENDPOINT` environment variable
+**Filtering Strategy**:
+The agent instructions guide when to use filters vs. fetching all data:
+- Use filters for simple, targeted queries (e.g., "CTOs", "Accepted applicants")
+- Fetch all data when query requires cross-field analysis, date comparisons, or complex reasoning
+- LLM handles final filtering/analysis after data retrieval
 
 ### Data Sources
 
@@ -147,7 +156,7 @@ The agent accesses two Airtable bases:
 
 **Streaming** (`src/mastra/terminal/streaming.ts`):
 - Real-time text streaming to stdout (character by character)
-- Progress indicators for tool calls and workflows (commented out for cleaner output)
+- Progress indicators for tool calls and workflows
 - Similar chunk processing to Slack streaming
 
 ### Data Flow
@@ -156,20 +165,19 @@ The agent accesses two Airtable bases:
 2. Route handler/CLI parses message and initiates agent streaming
 3. Agent retrieves conversation context from Memory (last 20 messages)
 4. Agent processes message using instructions, memory, and available tools
-5. Agent may call Airtable tools (`getCohortDataTool`, `getAiLabDataTool`) or MCP tools to fetch data
-6. For Airtable queries:
-   - Tool fetches ALL records from the specified base/table (no filtering at DB level)
+5. Agent may call Airtable tools with optional filtering:
+   - **With filters**: Specific queries (e.g., "CTOs", "Accepted applicants") are filtered at Airtable level
+   - **Without filters**: Fetch all data for complex queries requiring LLM analysis
    - Agent's LLM analyzes returned data to answer the specific question
-   - This "broad query, intelligent filtering" approach leverages LLM reasoning
-7. Agent generates response based on retrieved data
-8. Response streams back to Slack (with animation) or terminal (real-time text)
-9. Conversation context saved to Memory for future turns
+6. Agent generates response based on retrieved data
+7. Response streams back to Slack (with animation) or terminal (real-time text)
+8. Conversation context saved to Memory for future turns
 
 ### Storage and Observability
 
 - **Storage**: LibSQL in-memory storage (`:memory:`) for observability, scores, and other data. Can be changed to `file:../mastra.db` for persistence.
 - **Logger**: Pino logger at `info` level
-- **Observability**: Enabled with `default` exporter for tracing (DefaultExporter and CloudExporter available)
+- **Observability**: Enabled with `default` exporter for tracing
 
 ## Development Workflow
 
@@ -207,19 +215,10 @@ export const myTool = createTool({
 
 1. Create and configure agent (see above)
 2. Add configuration to `slackApps` array in `src/mastra/slack/routes.ts`
-3. Add environment variables: `SLACK_{APP_NAME}_BOT_TOKEN` and `SLACK_{APP_NAME}_SIGNING_SECRET`
+3. Add environment variables: `SLACK_BOT_TOKEN` and `SLACK_SIGNING_SECRET` (or use naming pattern `SLACK_{APP_NAME}_*` for multiple apps)
 4. Create Slack app at api.slack.com/apps
 5. Configure webhook URL: `https://your-domain.com/slack/{name}/events`
 6. Enable Event Subscriptions and subscribe to `app_mention` and `message.im` events
-
-### Configuring MCP Servers
-
-1. Update the `servers` object in `src/mastra/mcp/mcp-servers.ts`
-2. Servers can be configured as:
-   - **HTTP endpoints**: `{ url: new URL(process.env.HTTP_MCP_ENDPOINT) }`
-   - **Local server processes**: `{ command: "node", args: ["path/to/server.js"] }`
-3. MCP tools are automatically discovered and loaded when the MCP client initializes
-4. The MCP client is then referenced in the agent definition to provide additional tools
 
 ## Key Implementation Details
 
@@ -234,22 +233,13 @@ This project uses Mastra (v1.0.0-beta), an AI agent framework. Key concepts:
 - **Streaming**: Real-time response generation with chunk types (text-delta, tool-call, tool-output, workflow-*)
 - **Storage**: LibSQL for persisting observability data and scores
 
-### Model Context Protocol (MCP)
-
-MCP provides a standardized way to connect LLMs to external tools and data sources:
-- **MCPClient** (`@mastra/mcp`): Client for connecting to MCP servers
-- **Servers**: Can be HTTP endpoints or local processes that expose tools/resources/prompts
-- **Configuration**: MCP servers defined in `src/mastra/mcp/mcp-servers.ts`
-- **Integration**: MCP client provides tools to agents beyond the static Airtable tools
-- Current setup uses HTTP MCP endpoint for additional tool capabilities
-
 ### Agent Instructions Philosophy
 
-The Lucie agent is instructed to use a "broad query, intelligent filtering" strategy:
-- Query tools with broad terms like "all pioneers", "sessions", etc.
-- Let the LLM analyze and filter the returned data
-- Avoid overly specific or complex queries
-- This approach leverages the LLM's intelligence rather than database query complexity
+The Lucie agent supports a flexible querying strategy:
+- **Filtered queries**: For targeted questions with known field values (e.g., "CTOs", "Accepted applicants")
+- **Broad queries**: For complex questions requiring cross-field analysis or date comparisons
+- LLM handles intelligent filtering after data retrieval
+- This approach balances efficiency (filtering at DB level when possible) with flexibility (LLM analysis for complex queries)
 
 ### Message Context
 
@@ -286,11 +276,9 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - Run `pnpm dev:cli` for local testing with interactive agent interface
 - Use `log()` helper from `lib/print-helpers` for debugging (visible in terminal output)
 - Slack streaming uses rate limit-tolerant animation (errors during animation updates are ignored)
-- All Airtable tools fetch complete datasets - filtering/analysis happens at LLM level, not query level
+- Airtable tools support optional filtering - use when appropriate for efficiency
 
 ### Project Structure Notes
-- `data/` directory contains reference files like AI Lab table field mappings
-- `lib/` contains shared utilities (print helpers, Airtable client, utils)
-- `ai/` directory has documentation about Mastra and Composio frameworks
-- `bff/` directory contains AI Lab related files
+- `data/` directory contains reference files like AI Lab table field mappings (`ai-lab-table-ref.json`)
+- `lib/` contains shared utilities (print helpers, Airtable client, update scripts for syncing table references)
 - Agent instructions emphasize concise responses (2-4 sentences) with Slack-friendly formatting

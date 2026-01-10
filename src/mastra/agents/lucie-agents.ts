@@ -1,13 +1,12 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
-import { getCohortDataTool } from "../tools/cohort-data-tool";
-import { getAiLabDataTool } from "../tools/ai-lab-data-tool";
+import { getCohortDataTool } from '../tools/cohort-data-tool';
 import { lucieInstructions } from "./lucie-instructions";
 
 export const lucie = new Agent({
-  id: "lucie",
-  name: "lucie",
-  description: "Lucie is the Pioneers Program Manager",
+  id: 'lucie',
+  name: 'lucie',
+  description: 'Lucie is the Pioneers Program Manager',
   memory: new Memory({
     options: {
       lastMessages: 20,
@@ -15,9 +14,8 @@ export const lucie = new Agent({
   }),
   instructions: lucieInstructions,
 
-  model: process.env.MODEL || "anthropic/claude-3-haiku-20240307",
+  model: process.env.MODEL || 'anthropic/claude-3-haiku-20240307',
   tools: {
     getCohortDataTool,
-    getAiLabDataTool,
   },
 });

@@ -18,20 +18,30 @@ interface AirtableResponse {
 function fixJsonWithEmbeddedNewlines(content: string): string {
   const result: string[] = [];
   let inString = false;
-  let escapeNext = false;
+
+  // Valid JSON escape sequences
+  const validEscapes = new Set(['n', 'r', 't', '"', '\\', '/', 'u', 'b', 'f']);
 
   for (let i = 0; i < content.length; i++) {
     const char = content[i];
 
-    if (escapeNext) {
-      result.push(char);
-      escapeNext = false;
-      continue;
-    }
-
     if (char === '\\') {
-      result.push(char);
-      escapeNext = true;
+      // Check if we're inside a string
+      if (inString) {
+        // Look ahead to see what comes after the backslash
+        const nextChar = i + 1 < content.length ? content[i + 1] : null;
+
+        if (nextChar && validEscapes.has(nextChar)) {
+          // Valid escape sequence - keep as is
+          result.push(char);
+        } else {
+          // Invalid escape sequence - escape the backslash itself
+          result.push('\\\\');
+        }
+      } else {
+        // Outside string - keep as is
+        result.push(char);
+      }
       continue;
     }
 
@@ -85,7 +95,7 @@ function main() {
   try {
     // Get CSV filename from command line arguments
     const csvFileName = process.argv[2];
-    
+
     if (!csvFileName) {
       console.error('Error: Please provide a CSV file name as an argument');
       console.error('Usage: ts-node fix-and-format.ts <csv-file-name>');
@@ -110,7 +120,7 @@ function main() {
     // Collect all unique field names across all records
     const allFieldsSet = new Set<string>();
     for (const record of records) {
-      Object.keys(record.fields).forEach(key => allFieldsSet.add(key));
+      Object.keys(record.fields).forEach((key) => allFieldsSet.add(key));
     }
 
     // Create ordered field list: id, createdTime, then alphabetically sorted fields
@@ -124,7 +134,7 @@ function main() {
 
     // Data rows
     for (const record of records) {
-      const row = allFields.map(field => {
+      const row = allFields.map((field) => {
         if (field === 'id') return escapeCSVField(record.id);
         if (field === 'createdTime') return escapeCSVField(record.createdTime);
         return escapeCSVField(record.fields[field]);
@@ -138,7 +148,9 @@ function main() {
     // Write to CSV file
     writeFileSync(outputFileName, csvRows.join('\n'), 'utf-8');
 
-    console.log(`✓ Successfully converted ${records.length} records to ${outputFileName}`);
+    console.log(
+      `✓ Successfully converted ${records.length} records to ${outputFileName}`,
+    );
     console.log(`\nFound ${allFields.length} columns:`);
 
     const displayFields = allFields.slice(0, 10);
@@ -149,9 +161,11 @@ function main() {
     if (allFields.length > 10) {
       console.log(`  ... and ${allFields.length - 10} more`);
     }
-
   } catch (error) {
-    console.error('Error:', error instanceof Error ? error.message : String(error));
+    console.error(
+      'Error:',
+      error instanceof Error ? error.message : String(error),
+    );
     process.exit(1);
   }
 }
