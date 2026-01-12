@@ -8,7 +8,11 @@
     "dev": "mastra dev",
     "dev:cli": "tsx src/mastra/terminal/cli.ts",
     "build": "mastra build",
-    "start": "mastra start"
+    "start": "mastra start",
+    "dbg": "npx drizzle-kit generate",
+    "dbm": "npx drizzle-kit migrate",
+    "dbp": "npx drizzle-kit push",
+    "dbs": "npx drizzle-kit studio"
   },
   "keywords": [],
   "author": "",

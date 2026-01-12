@@ -55,148 +55,106 @@
       "index": 8
     },
     {
-      "key": "how_did_you_hear",
-      "type": "string",
-      "id": "fldi4hgfTXf1r6GIO",
-      "index": 9
-    },
-    {
-      "key": "referral_source",
-      "type": "string",
-      "id": "fld8w9ZOpS1gsbFW2",
-      "index": 10
-    },
-    {
-      "key": "anything_to_let_us_know",
-      "type": "string",
-      "id": "fldwUAynGMpP8zEBW",
-      "index": 11
-    },
-    {
-      "key": "confirm_enrolment",
-      "type": "string",
-      "id": "fldqAT4ow4jSGCbZe",
-      "index": 12
-    },
-    {
       "key": "joining_with_cofounder",
       "type": "string",
       "id": "fldqRh6cufYTp0FTF",
-      "index": 13
+      "index": 9
     },
     {
       "key": "linkedin",
       "type": "string",
       "id": "fldmOlACIX4XSmGfv",
-      "index": 14
+      "index": 10
     },
     {
       "key": "tech_skills",
       "type": "string",
       "id": "fldJ9yZg6O6kMxJwQ",
-      "index": 15
+      "index": 11
     },
     {
       "key": "industries",
       "type": "string",
       "id": "fld0w3PxAafyQtwDx",
-      "index": 16
+      "index": 12
     },
     {
       "key": "roles_i_could_take",
       "type": "string",
       "id": "fldcASpXNUhURfM3e",
-      "index": 17
+      "index": 13
     },
     {
       "key": "track_record_proud",
       "type": "string",
       "id": "fldxhTo33WQdcwN7W",
-      "index": 18
-    },
-    {
-      "key": "anything_else_worth_mentioning",
-      "type": "string",
-      "id": "fld8VpuxqYSoG7HZc",
-      "index": 19
+      "index": 14
     },
     {
       "key": "interested_in_working_on",
       "type": "string",
       "id": "fld80oQIizX3pqKn8",
-      "index": 20
-    },
-    {
-      "key": "t_shirt_size",
-      "type": "string",
-      "id": "fldgb0RgPtja4aToK",
-      "index": 21
+      "index": 15
     },
     {
       "key": "introduction",
       "type": "string",
       "id": "fld3GPP09YrmwMgSU",
-      "index": 22
-    },
-    {
-      "key": "t_shirt_handed_out",
-      "type": "string",
-      "id": "fldgb0RgPtja4aToK",
-      "index": 23
+      "index": 16
     },
     {
       "key": "companies_worked",
       "type": "string",
       "id": "fldcuBy6DezL26rbs",
-      "index": 24
+      "index": 17
     },
     {
       "key": "education",
       "type": "string",
       "id": "fldwh9kSEbgWYvZwx",
-      "index": 25
+      "index": 18
     },
     {
       "key": "nationality",
       "type": "string",
       "id": "fldb2ZgofUqLgYr9D",
-      "index": 26
+      "index": 19
     },
     {
       "key": "gender",
       "type": "string",
       "id": "fld6sYQmTJAvxxh5Y",
-      "index": 27
+      "index": 20
     },
     {
       "key": "years_of_xp",
       "type": "number",
       "id": "fldNlvxotHY13xj13",
-      "index": 28
+      "index": 21
     },
     {
       "key": "degree",
       "type": "string",
       "id": "fldadoQzo3ag7t8ng",
-      "index": 29
+      "index": 22
     },
     {
       "key": "academic_field",
       "type": "string",
       "id": "fldzTd96TnSJ90VUm",
-      "index": 30
+      "index": 23
     },
     {
       "key": "founder",
       "type": "string",
       "id": "fldPCcEhQefOf94Vz",
-      "index": 31
+      "index": 24
     },
     {
       "key": "left_program",
       "type": "string",
       "id": "fldBepgICe1g9FANb",
-      "index": 32
+      "index": 25
     }
   ]
 }

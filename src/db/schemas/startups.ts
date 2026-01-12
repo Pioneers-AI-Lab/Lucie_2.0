@@ -27,10 +27,6 @@ export const startups = sqliteTable('startups', {
   // Relationships & References
   // Airtable ID: fldzdaRoe75HUWYmh
   weeklyForms: text('weekly_forms'),
-  // Airtable ID: fldSbVdRtv6an2dvj
-  mainSu2025: text('main_su_2025'),
-  // Airtable ID: fldWgXcKYEkhjaKXf
-  mainSu20252: text('main_su_2025_2'),
   // Airtable ID: fldyCgeN9ePx0chyW
   teamMembers: text('team_members'),
   // Airtable ID: fldUCeQYvsu5kiJil

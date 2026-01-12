@@ -7,124 +7,40 @@
       "index": 0
     },
     {
-      "key": "pitch_sequence",
-      "type": "number",
-      "id": "fld6Yx9hCxozMgknD",
-      "index": 1
-    },
-    {
       "key": "industry",
       "type": "string",
       "id": "flduc7bH38SHYwrSG",
-      "index": 2
+      "index": 1
     },
     {
       "key": "startup_in_a_word",
       "type": "string",
       "id": "fld6BW7qxBJ3YE2Wc",
-      "index": 3
-    },
-    {
-      "key": "active_inactive",
-      "type": "string",
-      "id": "fldYpMoV3drUxnfZ8",
-      "index": 4
-    },
-    {
-      "key": "weekly_forms",
-      "type": "string",
-      "id": "fldzdaRoe75HUWYmh",
-      "index": 5
-    },
-    {
-      "key": "main_su_2025",
-      "type": "string",
-      "id": "fldSbVdRtv6an2dvj",
-      "index": 6
-    },
-    {
-      "key": "main_su_2025_2",
-      "type": "string",
-      "id": "fldWgXcKYEkhjaKXf",
-      "index": 7
+      "index": 2
     },
     {
       "key": "team_members",
       "type": "string",
       "id": "fldyCgeN9ePx0chyW",
-      "index": 8
-    },
-    {
-      "key": "notes",
-      "type": "string",
-      "id": "fldhGDTxgl3th6DkL",
-      "index": 9
+      "index": 3
     },
     {
       "key": "traction_summary",
       "type": "string",
       "id": "fldLoDkUtrEVC8VLO",
-      "index": 10
-    },
-    {
-      "key": "traction_summary_old",
-      "type": "string",
-      "id": "fldgcuEeyIKLRg6aT",
-      "index": 11
-    },
-    {
-      "key": "maxime_comment",
-      "type": "string",
-      "id": "fld01lYeq1NrVdCPA",
-      "index": 12
+      "index": 4
     },
     {
       "key": "detailed_progress",
       "type": "string",
       "id": "fld2Arvu7GVTN0phX",
-      "index": 13
-    },
-    {
-      "key": "detailed_progress_old",
-      "type": "string",
-      "id": "fldlhhx2Gk9yHadsF",
-      "index": 14
-    },
-    {
-      "key": "full_notes",
-      "type": "string",
-      "id": "fldgokIMd3VxtBqvm",
-      "index": 15
+      "index": 5
     },
     {
       "key": "previous_decks",
       "type": "string",
       "id": "fldKmiI0gYosRaeh8",
-      "index": 16
-    },
-    {
-      "key": "committee",
-      "type": "string",
-      "id": "fldUCeQYvsu5kiJil",
-      "index": 17
-    },
-    {
-      "key": "funding_applications",
-      "type": "string",
-      "id": "fldTu3HV4il5iwLxT",
-      "index": 18
-    },
-    {
-      "key": "startup_evaluation",
-      "type": "string",
-      "id": "fld6a9TUTUeaNySzd",
-      "index": 19
-    },
-    {
-      "key": "startup_evaluation_copy",
-      "type": "string",
-      "id": "fldv7klSlCJTIp4ZH",
-      "index": 20
+      "index": 6
     }
   ]
 }
