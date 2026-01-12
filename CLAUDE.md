@@ -36,8 +36,8 @@ Required environment variables (see `.env`):
 - `AIRTABLE_API_KEY` - API key for Airtable access
 - `SU_2025_BASE_ID` - Airtable base ID for the cohort data (Pioneers program data)
 - `SU_2025_TABLE_ID` - Airtable table ID for the cohort data
-- `AI_LAB_BASE_ID` - Airtable base ID for the AI Lab data
-- `AI_LAB_TABLE_ID` - Airtable table ID for the AI Lab data
+- `AI_LAB_BASE_ID` - Airtable base ID for AI Lab data (defined but not yet implemented in tools)
+- `AI_LAB_TABLE_ID` - Airtable table ID for AI Lab data (defined but not yet implemented in tools)
 
 **AI Models:**
 - `MODEL` - Model identifier (default: `anthropic/claude-3-haiku-20240307`, configurable to `openai/gpt-4.1-nano` or other models)
@@ -74,13 +74,14 @@ The codebase follows Mastra's agent framework conventions:
   - Optional filtering strategy: supports both filtered queries and fetching all data for LLM analysis
   - Slack-friendly formatting (bold, bullets, emoji)
   - Date-aware responses using current date
-- **Tools**: Two Airtable data fetching tools (cohort and AI Lab)
+- **Tools**: One Airtable data fetching tool (`getCohortDataTool`)
+- **Note**: Agent instructions reference an AI Lab tool that is not yet implemented
 
 ### Tool Architecture
 
-**Airtable Tools with Optional Filtering**:
+**Airtable Tool with Optional Filtering**:
 
-Both tools support optional filtering parameters for efficient data retrieval:
+The agent currently has one tool that supports optional filtering parameters for efficient data retrieval:
 
 - **getCohortDataTool** (`src/mastra/tools/cohort-data-tool.ts`):
   - Fetches records from the Pioneers cohort Airtable base
@@ -92,18 +93,6 @@ Both tools support optional filtering parameters for efficient data retrieval:
     - `fieldName` + `fieldValue`: Exact match on a field
   - If no filters provided, fetches all records
 
-- **getAiLabDataTool** (`src/mastra/tools/ai-lab-data-tool.ts`):
-  - Fetches records from the AI Lab Airtable base
-  - Uses `AI_LAB_BASE_ID` and `AI_LAB_TABLE_ID` environment variables
-  - Returns array of records with `id` and `fields` properties
-  - Field mapping reference available in `data/ai-lab-table-ref.json`
-  - **Filtering options** (same as cohort tool):
-    - `filterFormula`: Airtable formula
-    - `searchField` + `searchText`: Text search (case-insensitive)
-    - `fieldName` + `fieldValue`: Exact match
-  - Case-insensitive field name matching with validation against available fields
-  - If no filters provided, fetches all records
-
 **Filtering Strategy**:
 The agent instructions guide when to use filters vs. fetching all data:
 - Use filters for simple, targeted queries (e.g., "CTOs", "Accepted applicants")
@@ -113,17 +102,19 @@ The agent instructions guide when to use filters vs. fetching all data:
 ### Data Sources
 
 **Airtable Bases**:
-The agent accesses two Airtable bases:
+
+Currently accessible:
 1. **Pioneers Cohort Data** (`SU_2025_BASE_ID`/`SU_2025_TABLE_ID`):
    - Contains information about the Pioneers accelerator program
    - Includes pioneer profiles, sessions, events, general Q&A
    - Accessed via `getCohortDataTool`
 
+Infrastructure defined but not yet implemented:
 2. **AI Lab Data** (`AI_LAB_BASE_ID`/`AI_LAB_TABLE_ID`):
-   - Contains AI Lab participant information and feedback
-   - Field structure documented in `data/ai-lab-table-ref.json`
-   - Includes fields: first_name, last_name, email, skills, problem, notes, decision, etc.
-   - Accessed via `getAiLabDataTool`
+   - Environment variables configured for AI Lab Airtable base
+   - Local data files exist in `airtable_data/` and `bff/ai-lab/`
+   - Reference utilities exist in `lib/update-table-ref-ids.ts`
+   - Tool implementation pending (would follow same pattern as `getCohortDataTool`)
 
 ### Slack Integration
 
@@ -164,8 +155,8 @@ The agent accesses two Airtable bases:
 1. User sends message via Slack or terminal CLI
 2. Route handler/CLI parses message and initiates agent streaming
 3. Agent retrieves conversation context from Memory (last 20 messages)
-4. Agent processes message using instructions, memory, and available tools
-5. Agent may call Airtable tools with optional filtering:
+4. Agent processes message using instructions, memory, and available tool
+5. Agent may call `getCohortDataTool` with optional filtering:
    - **With filters**: Specific queries (e.g., "CTOs", "Accepted applicants") are filtered at Airtable level
    - **Without filters**: Fetch all data for complex queries requiring LLM analysis
    - Agent's LLM analyzes returned data to answer the specific question
@@ -276,9 +267,12 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - Run `pnpm dev:cli` for local testing with interactive agent interface
 - Use `log()` helper from `lib/print-helpers` for debugging (visible in terminal output)
 - Slack streaming uses rate limit-tolerant animation (errors during animation updates are ignored)
-- Airtable tools support optional filtering - use when appropriate for efficiency
+- `getCohortDataTool` supports optional filtering - use when appropriate for efficiency
 
 ### Project Structure Notes
-- `data/` directory contains reference files like AI Lab table field mappings (`ai-lab-table-ref.json`)
+- `data/` directory contains reference files and table field mappings
+- `airtable_data/` contains JSON exports of Airtable data for reference/backup
+- `bff/ai-lab/` contains models and services for AI Lab (not yet integrated with agent)
 - `lib/` contains shared utilities (print helpers, Airtable client, update scripts for syncing table references)
 - Agent instructions emphasize concise responses (2-4 sentences) with Slack-friendly formatting
+- **Known inconsistency**: Agent instructions (`lucie-instructions.ts`) reference AI Lab tool that doesn't exist yet
