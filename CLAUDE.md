@@ -22,6 +22,15 @@ pnpm build
 
 # Production - Start production server
 pnpm start
+
+# Database - Generate migration files from schema changes
+pnpm drizzle-kit generate
+
+# Database - Apply migrations to Turso database
+pnpm drizzle-kit migrate
+
+# Database - Open Drizzle Studio for database inspection
+pnpm drizzle-kit studio
 ```
 
 ## Environment Variables
@@ -47,6 +56,10 @@ Required environment variables (see `.env`):
 **Observability:**
 - `MASTRA_CLOUD_ACCESS_TOKEN` - Token for Mastra Cloud observability platform
 
+**Database (Turso + Drizzle ORM):**
+- `TURSO_CONNECTION_URL` - Turso database connection URL (libsql://...)
+- `TURSO_AUTH_TOKEN` - Turso authentication token for database access
+
 ## Architecture
 
 ### Core Structure
@@ -60,7 +73,10 @@ The codebase follows Mastra's agent framework conventions:
 - **`src/mastra/scorers/`** - Evaluation scorers for agent performance (not actively used)
 - **`src/mastra/slack/`** - Slack integration and streaming logic
 - **`src/mastra/terminal/`** - Terminal CLI and streaming logic
-- **`lib/`** - Shared utility functions (Airtable client, print helpers, update scripts)
+- **`src/db/`** - Database infrastructure with Turso + Drizzle ORM
+  - `src/db/index.ts` - Database client initialization
+  - `src/db/schemas/` - Drizzle ORM schema definitions (currently: founders)
+- **`lib/`** - Shared utility functions (Airtable client, print helpers, update scripts, field ID mappings)
 
 ### Agent Architecture
 
@@ -101,20 +117,30 @@ The agent instructions guide when to use filters vs. fetching all data:
 
 ### Data Sources
 
-**Airtable Bases**:
+**Airtable → Turso Database Migration Pattern**:
 
-Currently accessible:
-1. **Pioneers Cohort Data** (`SU_2025_BASE_ID`/`SU_2025_TABLE_ID`):
-   - Contains information about the Pioneers accelerator program
-   - Includes pioneer profiles, sessions, events, general Q&A
-   - Accessed via `getCohortDataTool`
+The project is in transition from direct Airtable querying to a Turso database with structured schemas:
 
-Infrastructure defined but not yet implemented:
-2. **AI Lab Data** (`AI_LAB_BASE_ID`/`AI_LAB_TABLE_ID`):
-   - Environment variables configured for AI Lab Airtable base
-   - Local data files exist in `airtable_data/` and `bff/ai-lab/`
-   - Reference utilities exist in `lib/update-table-ref-ids.ts`
-   - Tool implementation pending (would follow same pattern as `getCohortDataTool`)
+1. **Primary Data Source - Airtable**:
+   - **Pioneers Cohort Data** (`SU_2025_BASE_ID`/`SU_2025_TABLE_ID`):
+     - Contains information about the Pioneers accelerator program
+     - Includes pioneer profiles, sessions, events, general Q&A
+     - Accessed via `getCohortDataTool`
+   - **AI Lab Data** (`AI_LAB_BASE_ID`/`AI_LAB_TABLE_ID`):
+     - Environment variables configured but tool not yet implemented
+     - Local data files exist in `airtable_data/` and `bff/ai-lab/`
+
+2. **Turso Database (In Development)**:
+   - **Purpose**: Structured, queryable storage layer for Airtable data
+   - **Current Status**: Schema and infrastructure in place, data migration pending
+   - **Tables**:
+     - `founders` - Founder profiles with comprehensive personal/professional data
+     - Additional tables (sessions, startups) mapped but schemas not yet created
+   - **Field ID Mappings** (`lib/airtable-field-ids-ref.ts`):
+     - Maps Drizzle schema field names to Airtable field IDs
+     - Three mappings: `founderAirtableFieldIds`, `sessionEventAirtableFieldIds`, `startupAirtableFieldIds`
+     - Enables bidirectional sync between Airtable and Turso
+   - **Configuration**: `drizzle.config.ts` for migrations and schema management
 
 ### Slack Integration
 
@@ -166,7 +192,8 @@ Infrastructure defined but not yet implemented:
 
 ### Storage and Observability
 
-- **Storage**: LibSQL in-memory storage (`:memory:`) for observability, scores, and other data. Can be changed to `file:../mastra.db` for persistence.
+- **Mastra Storage**: LibSQL in-memory storage (`:memory:`) for observability, scores, and agent metadata. Can be changed to `file:../mastra.db` for persistence.
+- **Application Database**: Turso (hosted LibSQL) via Drizzle ORM for structured application data (founders, sessions, startups)
 - **Logger**: Pino logger at `info` level
 - **Observability**: Enabled with `default` exporter for tracing
 
@@ -211,6 +238,62 @@ export const myTool = createTool({
 5. Configure webhook URL: `https://your-domain.com/slack/{name}/events`
 6. Enable Event Subscriptions and subscribe to `app_mention` and `message.im` events
 
+### Working with Database Schemas
+
+**Adding a New Table Schema**:
+
+1. Create schema file in `src/db/schemas/` (e.g., `sessions.ts`):
+```typescript
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+
+export const sessions = sqliteTable('sessions', {
+  id: text('id').primaryKey().notNull(),
+  name: text('name'),
+  date: integer('date', { mode: 'timestamp' }),
+  // ... other fields
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;
+```
+
+2. If syncing from Airtable, add field ID mappings to `lib/airtable-field-ids-ref.ts`:
+```typescript
+export const sessionAirtableFieldIds = {
+  name: 'fld...',
+  date: 'fld...',
+  // ... mapping schema field names to Airtable field IDs
+} as const;
+```
+
+3. Generate migration:
+```bash
+pnpm drizzle-kit generate
+```
+
+4. Apply migration to Turso:
+```bash
+pnpm drizzle-kit migrate
+```
+
+5. Import and use in your code:
+```typescript
+import { db } from '@/db';
+import { sessions } from '@/db/schemas/session';
+
+const allSessions = await db.select().from(sessions);
+```
+
+**Schema Design Notes**:
+- Use Airtable record IDs as primary keys (text type) for easier sync
+- All fields nullable by default to match Airtable's optional field structure
+- Include Airtable field IDs in comments for traceability
+- Add `createdAt`/`updatedAt` timestamps (not from Airtable, managed by database)
+- Use snake_case for database column names, camelCase for TypeScript field names
+
 ## Key Implementation Details
 
 ### Mastra Framework
@@ -247,6 +330,7 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - **Type**: ESM (package.json has `"type": "module"`)
 - **Strict mode**: Enabled
 - **No emit**: Enabled (Mastra handles bundling)
+- **Path Aliases**: `@/db` resolves to `src/db/` for database imports
 
 ## Important Notes
 
@@ -270,9 +354,24 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - `getCohortDataTool` supports optional filtering - use when appropriate for efficiency
 
 ### Project Structure Notes
-- `data/` directory contains reference files and table field mappings
+- `data/2025-Cohort_Data/JSON/founders/` contains Airtable table reference JSONs with field IDs
 - `airtable_data/` contains JSON exports of Airtable data for reference/backup
 - `bff/ai-lab/` contains models and services for AI Lab (not yet integrated with agent)
-- `lib/` contains shared utilities (print helpers, Airtable client, update scripts for syncing table references)
+- `lib/` contains shared utilities:
+  - `airtable.ts` - Airtable client for API interactions
+  - `airtable-field-ids-ref.ts` - Field ID mappings for Airtable ↔ Turso sync
+  - `print-helpers.ts` - Logging utilities for development
+  - `update-table-ref-ids.ts` - Scripts for syncing table reference data
+- `src/db/` contains database infrastructure:
+  - `index.ts` - Turso database client initialization
+  - `schemas/founder.ts` - Founder table schema (first migrated table)
+  - Additional schemas pending: sessions, startups
+- `drizzle.config.ts` - Drizzle Kit configuration for migrations
+- `migrations/` - Generated SQL migration files (not yet in repo, created by drizzle-kit)
 - Agent instructions emphasize concise responses (2-4 sentences) with Slack-friendly formatting
 - **Known inconsistency**: Agent instructions (`lucie-instructions.ts`) reference AI Lab tool that doesn't exist yet
+
+### Database Migration Status
+- **Completed**: Turso setup, Drizzle ORM integration, founders schema, field ID mappings
+- **Pending**: Data migration from Airtable to Turso, sessions/startups schemas, tool updates to query Turso instead of Airtable
+- **Strategy**: Dual-read approach possible - keep Airtable tool while building Turso tools, then gradually migrate
