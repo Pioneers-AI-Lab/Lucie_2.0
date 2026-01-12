@@ -32,6 +32,7 @@
 
 # mastra
 .mastra
+/migrations
 
 # typescript
 *.tsbuildinfo
