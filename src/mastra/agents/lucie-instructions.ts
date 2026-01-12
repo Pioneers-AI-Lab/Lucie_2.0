@@ -38,7 +38,6 @@ What can I help you with today? 🚀 "
      * "What's the next session?" → Fetch all (date filtering requires LLM analysis)
      * "When is the deadline?" → Fetch all (need to search across multiple fields)
 
-
 ## Tool Selection Strategy:
 
 **Available Tool:**
