@@ -3,37 +3,37 @@
     {
       "key": "name",
       "type": "string",
-      "id": null,
+      "id": "fldpKRlpdU3QBdvml",
       "index": 0
     },
     {
       "key": "event",
       "type": "string",
-      "id": null,
+      "id": "fldpKyaYLtsxJGnHb",
       "index": 1
     },
     {
       "key": "name_from_event",
       "type": "string",
-      "id": null,
+      "id": "fld75ZaTvVh2mEyEF",
       "index": 2
     },
     {
       "key": "notes",
       "type": "string",
-      "id": null,
+      "id": "fldWV6UfJnSa1dLjY",
       "index": 3
     },
     {
       "key": "name_from_notes",
       "type": "string",
-      "id": null,
+      "id": "fldI84aSmUIdpA9ia",
       "index": 4
     },
     {
       "key": "some_notes",
       "type": "string",
-      "id": null,
+      "id": "fldpy5VR375aOLsau",
       "index": 5
     }
   ]
