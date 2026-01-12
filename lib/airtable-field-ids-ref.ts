@@ -60,24 +60,10 @@ export const sessionEventAirtableFieldIds = {
  */
 export const startupAirtableFieldIds = {
   startup: 'fldA82NTk7duTwdVO',
-  pitchSequence: 'fld6Yx9hCxozMgknD',
   industry: 'flduc7bH38SHYwrSG',
   startupInAWord: 'fld6BW7qxBJ3YE2Wc',
-  activeInactive: 'fldYpMoV3drUxnfZ8',
-  weeklyForms: 'fldzdaRoe75HUWYmh',
-  mainSu2025: 'fldSbVdRtv6an2dvj',
-  mainSu20252: 'fldWgXcKYEkhjaKXf',
   teamMembers: 'fldyCgeN9ePx0chyW',
-  notes: 'fldhGDTxgl3th6DkL',
   tractionSummary: 'fldLoDkUtrEVC8VLO',
-  tractionSummaryOld: 'fldgcuEeyIKLRg6aT',
-  maximeComment: 'fld01lYeq1NrVdCPA',
   detailedProgress: 'fld2Arvu7GVTN0phX',
-  detailedProgressOld: 'fldlhhx2Gk9yHadsF', // ! NOTE: Do I need this?
-  fullNotes: 'fldgokIMd3VxtBqvm',
   previousDecks: 'fldKmiI0gYosRaeh8',
-  committee: 'fldUCeQYvsu5kiJil',
-  fundingApplications: 'fldTu3HV4il5iwLxT',
-  startupEvaluation: 'fld6a9TUTUeaNySzd',
-  startupEvaluationCopy: 'fldv7klSlCJTIp4ZH',
 } as const;
