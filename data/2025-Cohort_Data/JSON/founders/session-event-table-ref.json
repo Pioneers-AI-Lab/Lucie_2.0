@@ -1,0 +1,76 @@
+{
+  "fields": [
+    {
+      "key": "name",
+      "type": "string",
+      "id": null,
+      "index": 0
+    },
+    {
+      "key": "date",
+      "type": "string",
+      "id": null,
+      "index": 1
+    },
+    {
+      "key": "program_week",
+      "type": "string",
+      "id": null,
+      "index": 2
+    },
+    {
+      "key": "type_of_session",
+      "type": "string",
+      "id": null,
+      "index": 3
+    },
+    {
+      "key": "speaker",
+      "type": "string",
+      "id": null,
+      "index": 4
+    },
+    {
+      "key": "emails",
+      "type": "string",
+      "id": null,
+      "index": 5
+    },
+    {
+      "key": "slack_instruction_email_commu",
+      "type": "string",
+      "id": null,
+      "index": 6
+    },
+    {
+      "key": "notes_feedback",
+      "type": "string",
+      "id": null,
+      "index": 7
+    },
+    {
+      "key": "attachments",
+      "type": "string",
+      "id": null,
+      "index": 8
+    },
+    {
+      "key": "participants",
+      "type": "string",
+      "id": null,
+      "index": 9
+    },
+    {
+      "key": "name_from_linked",
+      "type": "string",
+      "id": null,
+      "index": 10
+    },
+    {
+      "key": "notes_2",
+      "type": "string",
+      "id": null,
+      "index": 11
+    }
+  ]
+}
