@@ -1,0 +1,267 @@
+{
+  "rec0nrDbKZrsszvvf": {
+    "createdTime": "2025-06-27T14:27:38.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jun 24 – Team Formation \n\n- Franz (COO), Tea (CEO), Adhityan (CTO)\n\n\n🛠️ Aug 4 – Office Hours\n\n- Initial focus: validate credit scoring problem with banks + consumers\n\n- 59 bank contacts made, 1 showing interest\n\n- Consumer app launch targeted this month (goal: 1,000 early users)\n\n\n🎤 Aug 8 – Pitch\n\n- Open banking integration path established\n\n- Consumer app launched this weekend\n\n- 74 bank executives contacted; 2 meetings lined up\n\n- 3 LOIs signed\n\n\n🛠️ Aug 11 – Office Hours\n\n- Beta app launched with Tink (Visa) integration\n\n- 2 bank meetings secured\n\n- Fintech partner interested in year-long paid pilot (regardless of user base)\n\n- Microbank (CaixaBank subsidiary) identified as key target\n\n- Outreach expanded to 118 risk managers\n\n\n🎤 Aug 15 – Pitch\n\n- User app live, but traction metrics missing from pitch\n\n- Market size + AI benefits to banks not clearly presented\n\n\n🛠️ Aug 18 – Office Hours\n\n- Technical progress: app deployed on AWS, open banking integration functional\n\n- 3 LOIs still active, aiming for 5\n\n- Hottest lead: Austrian online bank via software partner\n\n- Preparing fintech pilot meeting in Barcelona\n\n\n🎤 Aug 22 – Pitch\n\n- Converted first LOI → paid pilot (€1.5K, potential €50K ARR)\n\n- Ongoing discussions with other banks\n\n- Meeting with Stéphane Boghossian to refine user acquisition strategy\n\n\n🛠️ Aug 25 – Co-Founder Conflict Meeting\n\n- Cofounder conflict emerged (communication breakdown, unclear roles)\n\nUrgent need for process fixes before IC\n\n\n🎤 Aug 29 – Pitch\n\n- 1 paid pilot signed, negotiating 2nd pilot\n\nFeedback (IC prep): must show differentiation vs bank algorithms + solid customer acquisition plan",
+      "Industry": "FinTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "ScoreTrue (ex CreditPath)",
+      "Startup in a word": "AI-powered user centric credit scoring solution\n(AI-powered app that uses Open Banking and behavioural data to help financial services assess and support young or ‘credit invisible’ users for fairer, more responsible lending)",
+      "Team Members": "Franz Weber, Tea Vrcic, Adhityan KV",
+      "Traction Summary": "🚀 Traction summary\n- 3 LOIs signed, 1 converted to paid pilot (€1.5K)\n- Beta app live with Tink (Visa) open banking integration\n\n✅ Customer Validation\n- Outreach to 100+ risk managers and bank executives (59 by Aug 4, 74+ by Aug 8, 118+ later)\n- Strategic discussions with Microbank (CaixaBank) and Austrian online bank\n\n🛠️ Product\n- Consumer app launched (Aug 8), beta live with AWS deployment and open banking integration\n- App includes credit scoring and AI-enhanced features for banks\n- Traction metrics from users not yet demonstrated\n\n📌 Other\n- Strong cofounder conflict (communication breakdown, unclear roles)\n- Feedback: clarify differentiation from existing bank algorithms and improve customer acquisition strategy"
+    }
+  },
+  "rec13EhdLNCFApcPb": {
+    "createdTime": "2025-06-27T14:27:48.000Z",
+    "fields": {
+      "Startup": "PulseAI",
+      "Startup in a word": "AI agent for proactive application health monitoring that helps you detect issues before they impact the users and helps you quickly fix them - https://www.spil.dev/",
+      "Team Members": "Amit Sinha, Tomas Jenicek"
+    }
+  },
+  "rec3zysTAj0wZsqXa": {
+    "createdTime": "2025-06-27T14:27:01.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jun 23 – Team Formation\n\nZac (COO), Jules (CEO), Tomas (CTO just decided to leave on September 3!)\n\n\n🛠️ Aug 5 – Office Hours\n\n- Customer discovery: ~100 cold calls, 15 logistics companies engaged (5 large, 10 SMEs)\n\n- Prospects: FM Logistic, Andros, XPO, Group Rota\n\n- 2 staffing agencies committed as contract partners\n\n- Marketplace model validated with 50% margin on full-service (supply + demand)\n\n- Goal: first transactions by end of month\n\n\n🎤 Aug 8 – Pitch\n\n- Position: Unified database for blue-collar workers\n\n- MVP: predicting no-shows + real-time worker replacement\n\n- Case study: logistics company with 30% no-shows costing €2M/year\n\n\n🎤 Aug 15 – Pitch\n\n- Reframed as AI hiring system for staffing agencies\n\n- Value: reducing placement time from days → minutes with sourcing + matching automation\n\n- Progress: traction in France, but struggling in US (cold calls harder)\n\n- Feedback: solution too broad, problem statement generic, urged to focus on France first\n\n- Target: design partners next week, paying customers by end of summer\n\n\n🎤 Aug 22 – Pitch\n\n- Solution: AI conversational agent messaging workers in parallel, automating agency workflows\n\n- Market: €200B staffing, focusing on €22B temp staffing segment\n\n- Progress: 2 design partners signed, MVP ready, aiming for 2 more + first paying customers\n\n- Feedback: clarify terminology (“talent pool” vs AI agent)\n\n\n🎤 Aug 29 – Pitch\n\n- Position: AI recruiter automating candidate search/outreach (4 hours → minutes)\n\n- Traction: new design partner signed, 25 customers contacted, pipeline of 1000 agencies identified\n\nFeedback (Salomon):\n• Strong presentation\n• Market is crowded → stronger traction needed before VC funding\n\n🎤 Sep 8 – Pre-IC\n\n- Traction: 4 design partners signed, €38k revenue pipeline\n\n- Market: €200B global staffing, €42B in France\n\n- Model: Hybrid approach (AI tool + database ownership + full agency services)\n\n- Strategy: focus on small agency partnerships to gain traction, validate in Europe before US expansion\n\n- Vision: long-term plan to own worker database and provide end-to-end staffing solutions",
+      "Industry": "HR Tech",
+      "Previous Decks": "[object Object]",
+      "Startup": "JooobAI",
+      "Startup in a word": "Enabling staffing agencies to hire the best workers, faster.",
+      "Team Members": "Jules Ferrer, Zaccarie Morel, Tomas Jenicek",
+      "Traction Summary": "🚀 Traction summary\n- 4 design partners signed (staffing agencies)\n- €38k revenue pipeline confirmed\n- 25+ potential customers contacted; pipeline of 1,000 agencies identified\n- MVP ready, targeting first paying customers\n\n✅ Customer Validation\n- 100 cold calls, 15 logistics companies engaged\n\n🛠️ Product\n- conversational agent, predicts no-shows, massively reducing placement time\n\n📌 Other\n- €200B global staffing market, €42B in France\n- Feedback: focus on France before US\n- Market crowded – stronger traction needed before expansion\n- Long-term vision: own worker database, provide end-to-end staffing solutions"
+    }
+  },
+  "rec8M6MPGZEYaZ3rf": {
+    "createdTime": "2025-07-22T14:02:29.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jul 17 – Team Formation\n\n- Leon: 5 years GovTech experience, ex-VC-backed startup\n- Alex: Strong tech background\n\n- Opportunity: sales intelligence for tech companies targeting German public sector\n\n- Validation: 15 customer interviews → narrowed to foreign tech companies with small German public sector teams\n\n\n🛠️ Aug 6 – Office Hours\n\n- Demo prepared for CrowdStrike, 3–4 hot leads identified\n\n- Recommendation: charge €200–500 for design partnerships to ensure commitment\n\n- Market assessment: GovTech tough but moat-building if cracked\n\n- Risk: little visible traction yet\n\n\n🎤 Aug 8 – Pitch\n\n- Position: AI-enabled Bloomberg Terminal for procurement\n\n- Demo functional, data extraction working\n\n- Progress: first paid LOI secured (€250/month), 3 more pilots in pipeline\n\n\n🎤 Aug 15 – Pitch\n\n- Progress: signed first paid pilot (€300/6 weeks) + 2 LOIs\n\n- AWS flagged as key account (50–60 person public sector team)\n\n- Feedback: need clearer market size, sharper solution definition, compelling win stories\n\n\n🎤 Aug 22 – Pitch\n\n- Refined position: public sector sales intelligence platform\n\n- Market: 10,000 companies selling to German gov (~€200M), expandable to €105B Europe\n\n- Progress: 2 LOIs pending, more demos ongoing\n\n- Feedback: slides too problem-heavy (50%), team’s data-processing expertise underplayed, market sizing visuals confusing\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: paid pilot with CrowdStrike completed\n\n- Position: entity profiling + early signal detection for public sector sales\n\n- Next milestone: industry fair (20K visitors)\n\n- Feedback (Salomon): strong concept, but needs clearer GTM, stronger gov navigation expertise, and focus on high ACV contracts (limited customer base)\n\n\n🎤 Sep 8 – Pre-IC Pitch\n\n- Position: AI-powered early signals for government tender opportunities\n\n- Market: €180M addressable market in Germany, 500+ accessible accounts\n\n- Traction: pilot customer CrowdStrike, €20–25K ARR per account, targeting €200K ARR in Germany before expanding to Europe\n\n- Team: strong background in government and data infrastructure\n\n- Feedback:\n• Realistic ARR targets, but needs sharper clarity on market size and competitive differentiation\n• Scaling via international companies with dedicated public sector sales teams",
+      "Industry": "GovTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "GovIntel",
+      "Startup in a word": "Market intelligence for B2G sales",
+      "Team Members": "Leon Ruckert, Alex Polovian",
+      "Traction Summary": "🚀 Traction summary\n- 1 paid pilot completed with CrowdStrike (€300 / 6 weeks)\n- 2 LOIs signed, 3–4 hot leads in pipeline\n- €180M addressable market in Germany (500+ accessible accounts)\n- €20–25K average ARR per account, targeting €200K ARR in Germany before European expansion\n\n✅ Customer Validation\n- 15 customer interviews with foreign tech companies targeting German public sector\n- First paid pilot confirms willingness to pay\n\n🛠️ Product\n- AI-enabled sales intelligence platform (“Bloomberg Terminal for procurement”)\n- Features: entity profiling and early signal detection for public sector sales\n- Demo functional with data extraction working\n\n📌 Other\n- Strong founder background in government and data infrastructure\n- Feedback: improve clarity on market size and differentiation\n- Scaling strategy: expand from German focus to broader European market via international tech companies"
+    }
+  },
+  "recEBMmGuZY967b1s": {
+    "createdTime": "2025-07-17T10:57:26.000Z",
+    "fields": {
+      "Startup": "PulseOps",
+      "Startup in a word": "Handing operational issues so you don't have to\n\nField management voice AI Agent to handle equipment breakdown and more multi-site businesses",
+      "Team Members": "Artur Vianna, Sam Pouyan"
+    }
+  },
+  "recFe6iiMcUH8fyz2": {
+    "createdTime": "2025-06-27T14:27:58.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "Mirae (ex Smartfluence)",
+      "Startup in a word": "Matching brands with the perfect influencers, and let them delegate the management",
+      "Team Members": "André Kaminker, Leo Thevenet, Lu Wang"
+    }
+  },
+  "recFfOxGTpT6TlvuK": {
+    "createdTime": "2025-09-04T15:47:48.000Z",
+    "fields": {
+      "Industry": "Social Tech",
+      "Previous Decks": "[object Object]",
+      "Startup": "Ooma",
+      "Startup in a word": "Social AI lab focusing on building Ted - the first AI teddy bear companion you can share with your friends.\n\n",
+      "Team Members": "Kevin Messali, Alexandre Mikulaniec"
+    }
+  },
+  "recFkAsakwmENY1wZ": {
+    "createdTime": "2025-09-04T15:46:28.000Z",
+    "fields": {
+      "Startup": "Ooma",
+      "Team Members": "Alexandre Mikulaniec, Kevin Messali"
+    }
+  },
+  "recHRVTq6tvZydMj9": {
+    "createdTime": "2025-07-17T10:53:41.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "Unvested - NAIA",
+      "Startup in a word": "Automated savings and investments for financial empowerments",
+      "Team Members": "Sachin Saluja, Diana Piemari Cereda"
+    }
+  },
+  "recKRtBD0ycC8lZGx": {
+    "createdTime": "2025-07-28T13:23:24.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jul 25 – Team Formation\n\nPierre - Google B2B sales)\nPascal - Google product strategy\n\n- Vision: AI nutrition/chatbot app via B2B2C gym/pharmacy partnerships\n\n\n🛠️ Aug 4 – Office Hours\n\nEarly traction:\n• Fitness Park (1M members, launch Sept/Oct)\n• Groupe Mirage (26 Paris gyms acquired)\n• Decathlon (CMO contact, exploring freemium)\n\n- Goal: deploy in 500 Fitness Park gyms by Jan 2026 (starting with 50–100 pilot gyms)\n\n- Alpha app ready: nutrition tracking, macro updates, personalized coaching\n\n- Beta launch targeted for Sept\n\n- Risk: dependency on external dev agency (5% equity deal)\n\n\n🎤 Aug 8 – Pitch\n\n- Positioned as 24/7 nutritional chatbot\n\n- Validation: 126K Twitter views, influencer support\n\n- Dev challenge: GPT-4 API vs ChatGPT speed issues\n\n- B2B traction: meetings with Fitness Park, Decathlon, Newness, Basic Fit, Episode, Alan (insurance wellness)\n\n- Launch target: mid-Sept (uncertain for pre-IC)\n\n\n🛠️ Aug 11 – Office Hours\n\n- Roadmap for 0–3 months with sales projections\n\n- Product validated at base level, but UX not yet commercial\n\n- Demo dilemma: show infra vs mock-ups\n\n- Equity deal with agency considered too risky → alternatives: BPI grants, angels, freelancers\n\n- Funding target: €80–100K to build v1 without long-term equity dilution\n\n\n🎤 Aug 15 – Pitch\n\n- Position: AI nutrition companion via B2B2C gyms/pharmacies\n\n- Secured 4 soft partnership commitments\n\n- MVP due end of Aug, beta Sept\n\n- Feedback: strong potential, but avoid risky equity deal\n\n\n🎤 Aug 22 – Pitch\n\n- Problem framed: global weight-loss failure rates (95%)\n\n- Market: €5B nutrition apps, €15B fitness/wellness\n\n- Progress: top 5 gym networks engaged (covering 40% of market), alpha release end of week\n\n- Feedback: too much time on problem/solution → need more traction + distribution focus\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: 7 gym networks engaged, 2 agreed commercialization rollout\n\n- Market approach: target 75% of French gym-goers (~€2.5–5M ARR potential)\n\n- Feedback (Salomon): hot market but crowded; must prove gym acquisition execution + viral loops before IC\n\n🎤 Sep 8 – Pre-IC Pitch\n\n- Position: AI-powered nutrition app with gym network partnerships\n\n- Traction: partnerships with 7 top French gym brands (covering 75% of market, 4.5M users)\n\n- 2 pilot agreements signed with Fitness Park and Basic Fit (launch Oct/Nov)\n\n- Product: alpha complete, beta launch delayed ~1.5 months, targeting Sept user acquisition\n\n- Innovation: exploring smart glasses integration for frictionless food logging\n\nFeedback:\n• Market strategy solid (B2B2C focus), but must validate execution at scale\n• Needs sharper viral growth mechanics and clear distribution roadmap",
+      "Industry": "Health/Fitness",
+      "Previous Decks": "[object Object]",
+      "Startup": "FitBot",
+      "Startup in a word": "An AI powered nutritional coach.",
+      "Team Members": "Pierre Kalil, Pascal Trang",
+      "Traction Summary": "🚀 Traction summary\n- Partnerships with 7 top French gym brands (covering 75% of market, ~4.5M users)\n- 2 pilot agreements signed with Fitness Park and Basic Fit (launch Oct/Nov)\n- Beta launch pushed ~1.5 months, now targeting September for user acquisition\n- Exploring smart glasses integration for effortless food logging\n\n✅ Customer Validation\n- Early commitments from 4+ gym/pharmacy partners \n- Goal: deploy in 500 Fitness Park gyms by Jan 2026 (pilot 50–100 gyms first)\n\n🛠️ Product\n- AI-powered nutrition/chatbot companion with macro tracking, personalized coaching, and API integrations\n- Beta launch planned for September\n- Exploring smart glasses integration to improve frictionless logging\n- Development risk: dependency on external agency (5% equity deal) → exploring alternatives (BPI grants, angels, freelancers)\n\n📌 Other\n- Market hot but crowded - proof of execution and viral loops required \n"
+    }
+  },
+  "recLJZjnmwep93fmB": {
+    "createdTime": "2025-06-27T14:27:01.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n\n👥 Jun 18 – Team Formation\n\n- Connor - backend, Jonathan - frontend, Clément - CRO, Stéphane - CEO\n\n- Started in HR process optimization → pivoted to hiring/sourcing solutions after 100+ interviews\n\n\n🛠️ Aug 5 - Office Hours\n\n- Pivot confirmed: focus on hiring specialization\n- Pricing models tested:\n• €300 for 2-week sprint (with €200 deposit)\n• €70/seat subscription\n\n- Goal: 10 paying customers pre-product\n\n- Early interest: HubSpot, Sorare, Salesforce, Klaviyo (no paying clients yet)\n\n- Strategy: Target CEOs directly (decision-making power + budget)\n\n\n🎤 Aug 8 – Pitch\n\n- Position: Automated headhunting via LinkedIn founder networks\n\n- Early proof: Sorare engaged, payment pending\n\n- MVP manual delivery while building tech\n- Goal: 500 outreach/week → 20 meetings → 10 new clients\n\n\n🎤 Aug 15 – Pitch\n\n- Reported first 2 paying customers (€1K/year each)\n- Conversion funnel: 20 requests → 14 accepts → 4 replies → 1 hire\n\nFeedback:\n• Avoid small automation tool comparisons (Waalaxy, PhantomBuster)\n• Emphasize big vision for CEO recruiting transformation\n\n- Target: 140 customers by cohort end\n\n\n🎤 Aug 22 – Pitch\n\n- Refined positioning: “Recruiting platform using founders network” for Series A/B founders. New positioning: https://umamy.io/ \n\n- Delivers 20–30 warm leads/month with 30%+ reply rates (3x industry avg)\n\n- MVP built, early clients migrating to product\n\n- Market framed as €1.5–2M ARR with 100 clients\n\nFeedback:\n• Tagline too vague\n• Problem section too long\n• Solution slide should show concrete mechanics\n\n\n🎤 Aug 29 – Pitch\n\n- Current traction: 5 paying customers, €6K ARR\n\n- MVP: LinkedIn AI agent → 160 conversations/month, 65% reply rate\n\n- Slack workflow integration live\n\nPricing: €199/month\nTarget: €190K ARR by mid-Sept\n\nFeedback (Salomon):\n• Website strong, needs demo video\n• Must address retention/churn + HR tool integrations (Personio, HiBob)\n\n🎤 Sep 8 – Pre-IC Pitch\n\n- Position: LinkedIn headhunting automation for founders\n\n- Traction: 5 paying customers in France/US, €109/month pricing\n\n- Sales: short cycle (within 1 week), 1/3 outbound conversion rate\n\n- Team: 15+ years combined experience at Google, Salesforce\n\n- Target: €200k ARR by year-end\n\nFeedback:\n• Strong differentiation from proprietary data generated in conversations\n• Early traction mostly from personal networks – needs outbound expansion plan",
+      "Industry": "HR Tech",
+      "Previous Decks": "[object Object]",
+      "Startup": "Umamy",
+      "Startup in a word": "HR agent to help founders connect to top talents on LinkedIn",
+      "Team Members": "Connor Blair, Stéphane Millet",
+      "Traction Summary": "🚀 Traction summary\n- 5 paying customers (€6K ARR)\n- €109/month pricing, short sales cycle (within 1 week)\n- 1/3 conversion rate on outbound\n- Targeting €200k ARR by end of year\n\n✅ Customer Validation\n- pivoted from HR process optimization to hiring/sourcing solutions after 100+ interviews\n- Paying clients confirmed\n- Conversion funnel: 20 requests → 14 accepts → 4 replies → 1 client\n\n🛠️ Product\n- LinkedIn AI agent automating headhunting for founders\n- MVP live with Slack integration\n- Subscription model tested (€109/month)\n\n📌 Other\n- Feedback: clarify tagline, add demo video, show mechanics, integrate with HR tools"
+    }
+  },
+  "recNCKA9PBFfUQm2u": {
+    "createdTime": "2025-07-22T14:11:00.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "ThirdPlace",
+      "Startup in a word": "The AI social compass matching you to your people AND your plans.",
+      "Team Members": "Thamanna Razak"
+    }
+  },
+  "recQpVpn9qPUBTeJi": {
+    "createdTime": "2025-07-17T09:52:26.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jul 5 – Team Formation\n\n- Amit + Alin (both ex Antler), product/GTM role split\n\n\n🛠️ Aug 5 – Office Hours\n\n- Learning: too early for big enterprise → focusing on startup-scale customers\n\n- Target: 3 more LOIs by IC\n\n- Introduced quantified outreach funnel (daily tracking)\n\n\n🎤 Aug 8 – Pitch\n\n- Position: AI for incident alert prioritization\n\n- Progress: 2 LOIs converting into pilots, MVP planned for Aug 15\n\n- Feedback: strong problem validation, but need startup case studies before enterprise\n\n\n🛠️ Aug 12 – Office Hours\n\n- Pilot engagement inconsistent (slow responses)\n\n- Product launch set for Aug 15 → plan to release even if incomplete\n\n- Pipeline weaker than expected, demos too basic\n\n- New outreach: multi-platform + automated campaigns\n\n- Validation strong: incident remediation pain resonates\n\n\n🎤 Aug 15 – Pitch\n\n- Launched 5,000-lead cold email campaign\n\n- MVP delayed to Aug 18 after customer feedback\n\n- Progress with design partners, but pitch flagged as low-energy/unfocused\n\n- Feedback: must streamline GTM strategy, avoid showing zero metrics\n\n\n🛠️ Aug 19 – Office Hours\n\n- Major changes required:\n• Clarify title (“Helping developers resolve incidents faster”)\n• Simplify problem slide with big numbers\n• Avoid jargon (e.g. MTTR)\n• Boost team credibility (roles + €350K saved in 20 min at Zalando example)\n• Design cleanup across slides\n\n\n🎤 Aug 22 – Pitch\n\n- Progress: 2 active customers, MVP nearly ready\n\n- Presentation stronger, with use case examples\n\n- Still too many unproven GTM channels\n\n- Problem slide too text-heavy\n\n- Feedback: traction credible, but story must highlight €10M+ savings + 1000+ incidents solved\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: 2 signed customers + 1 new Amsterdam client\n\n- Solution framed as AI copilot aggregating monitoring data + generating insights\n\n- GTM: targeting startups via CTO network (500+)\n\n- Feedback (Salomon): problem real but story not “sexy”; must show differentiation vs Monte Carlo earlier",
+      "Industry": "DevTools",
+      "Previous Decks": "[object Object]",
+      "Startup": "Orchly",
+      "Startup in a word": "The DevOps copilot that resolves incidents in minutes",
+      "Team Members": "Amit Sinha, Davesh Sharma, Alin Nica",
+      "Traction Summary": "🚀 Traction summary\n- 2 pilot customers live (Slack integrations)\n- 1 new client signed (Aug 29)\n- 5K cold emails sent to expand pipeline\n- MVP launched mid-August\n\n✅ Customer Validation\n- 2 pilots active with real Slack usage\n- Targeting startup customers first (enterprise too early)\n- Early traction credible, but customer engagement inconsistent\n\n🛠️ Product\n- MVP launched mid-August as AI copilot for incident alert prioritization, Slack integration\n- Aggregates monitoring data and generates actionable insights\n- Positioning requires clearer differentiation vs Monte Carlo and other competitors\n\n📌 Other\n- Feedback: strong technical validation, but storytelling “not sexy” enough; need startup case studies, simpler messaging, and sharper GTM focus"
+    }
+  },
+  "recS7bP4NjqRJZTzL": {
+    "createdTime": "2025-07-17T10:51:18.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "Revelio",
+      "Startup in a word": "All-in one AI native compliance solution for fintech companies \n\nWIP landing: https://reveliolabs.app \n",
+      "Team Members": "Dylan Mérigaud, Keyu Chen"
+    }
+  },
+  "recTgFx0MhiR4iLBe": {
+    "createdTime": "2025-07-17T10:25:45.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "Promptaize",
+      "Startup in a word": "Know your Brand positioning in LLM search results",
+      "Team Members": "Kamila Gimadullina, Alina Kanstantsi"
+    }
+  },
+  "recY8mEu15qBkFKVJ": {
+    "createdTime": "2025-09-03T12:57:22.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Sep 8 – Pre-IC Pitch\n\nTeam presented Everest, an AI-powered property search assistant\n\nMarket: targeting €7B French real estate transaction market\n\nProduct: natural language interface for property search\n\nRoadmap: v0 testing Oct 2025, public launch 2026\n\nDistribution: partnerships with agent networks OP and Digital under discussion\n\nFeedback:\n• Strong concept and clear pain point\n• Needs sharper short-term milestones to complement long-term launch vision\n• Early validation via network partnerships critical for traction",
+      "Industry": "PropTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "Everest (external)",
+      "Startup in a word": "The next generation of intelligent real estate assistant",
+      "Team Members": "Franck Le Tendre, Olivier Martineau",
+      "Traction Summary": "🚀 Traction summary\n\n- AI-powered property search with natural language interface\n- Targeting €7B French real estate transactions market\n- Partnerships in discussion with agent networks (OP, Digital)\n- v0 testing planned for Oct 2025, public launch in 2026\n\n✅ Customer Validation\n- Market pain confirmed: property search remains fragmented and inefficient\n- Partnerships identified as main entry channel\n\n🛠️ Product\n- AI assistant simplifying real estate search through natural language queries\n- Designed to reduce dependency on legacy classified platforms\n\n\n📌 Other\n- Feedback: promising long-term vision, but early stage with long runway before launch\n- Needs to define near-term milestones and early validation metrics\n- Strategy: leverage partnerships to secure initial supply before public rollout\n- CTO not full-time until early 2026"
+    }
+  },
+  "reca19vBRUyvW3ti7": {
+    "createdTime": "2025-07-28T13:18:37.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jul 25 – Team Formation\n\n- Zac (Good Legal – 48K users) partnered with Moussa (AI engineer)\n\nInitial idea: infrastructure API for AI agents → pivoted to lawyer-facing tools\n\n\n🎤 Aug 8 – Pitch\n\n- Problem: legal research chaos (10+ logins, 20+ tabs)\n\n- Solution: browser-controlling AI agent\n\n- Traction: 54 outreach emails (44% click rate), 1 waitlist signup, 60K-lawyer database available\n\n- Ambition: build 4 tools/month\n\n\n🎤 Aug 15 – Pitch\n\n- Reframed as “Stripe for legal research”, infra for AI agents by 2030\n\n- Progress: 6 waitlist signups, iterating on landing page\n\n- Feedback: strong founder credibility, but unclear positioning (prosumer vs infra); need sharper articulation of target customer\n\n\n🎤 Aug 22 – Pitch\n\n- MVP nearing launch\n\n- Positioning still too technical (“SERP Firecrawl API”), lacked lawyer connection\n\n- Learning: lawyers prefer immediate interaction via UI vs pure infra\n\n- MVP private beta scheduled for Monday\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: 7 tools launched\n\n- Signed design partnership with established legal publisher (founded 1612): €30K creation fee + €10K/year maintenance (credit-sharing model)\n\n- Market: €850B legal tooling, dominated by human effort\n\n- Feedback (Salomon): strong pain/solution framing + vision, but slides need stronger visuals for investor impact",
+      "Industry": "LegalTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "LegaLabs (ex Vindex)",
+      "Startup in a word": "\"Stripe of legal knowledge\" - build the infrastructure for AI legal agents.\n",
+      "Team Members": "Moussa El Ouafi, Zacharie Laïk",
+      "Traction Summary": "🚀 Traction summary\n- MVP launched, 6 waitlist signups to date\n- Design partnership signed with legal publisher (€30K creation fee + €10K/year)\n- Founder credibility: built Good Legal to 48K users\n\n✅ Customer Validation\n- Early signups (6 on waitlist) show lawyer interest\n- Design partnership confirms B2B demand\n\n🛠️ Product\n- Pivoted from infrastructure API to lawyer-facing tools\n- Browser-controlling AI agent for legal research\n\n📌 Other\n- Feedback: strong founder credibility, but product positioning (prosumer vs infra) still lacks validation"
+    }
+  },
+  "recfwAXL9FCSPpKdU": {
+    "createdTime": "2025-07-17T11:01:02.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jul 8 – Team Formation\n\n- Barbara – ex-logistics startup founder, BD\n- Christian – CPO, leading freelancers\n\n- Focus: AI operational intelligence for logistics, starting with exception management (lost/missing parcels)\n\n- Early traction: landing page live, LOI with Govara (Turkish logistics player, also potential investor)\n\n\n🛠️ Aug 6 – Office Hours\n\n- Product ~70% complete: backend ready, email parser + WhatsApp integration working, dashboard in progress\n\n- LOI with Govara; founder’s prior company used as design partner\n\n- Weaknesses: limited visible traction, unclear speed of progress\n\n- Feedback: pitch too vague/generalist; needs tighter problem framing + single use case\n\n\n🎤 Aug 8 – Pitch\n\n- Position: AI operational intelligence for logistics\n\n- Progress: design partnership with Govara; DHL innovation team in pipeline (slow due to vacations)\n\n- Exploring accounting firms as distribution partners\n\n- Tech ~70% complete; launch targeted end of month\n\n\n🛠️ Aug 13 – Office Hours\n\n- MVP timeline unchanged: end of month\n\n- Development accelerated with AI tools\n\n- Sales pipeline: 15–20 daily personalized emails (via Crunchbase Premium)\n\n- Positioning refined to exception management (lost/missing parcels)\n\n- Feedback: need stronger storytelling; avoid “dashboard that does everything”\n\n\n🎤 Aug 15 – Pitch\n\n- Progress: 3 LOIs signed incl. Tesco (paying customer funding MVP)\n\n- Targeting €200M embedded analytics market in Europe\n\n- MVP launch set for Sept 1\n\n- Feedback: presentation too wordy + low-energy; integration with legacy logistics systems questioned\n\n\n🎤 Aug 22 – Pitch\n\n- Team strengthened: Barbara + Christian (experience: 9+ products, Daimler Trucks)\n\n- Progress: 3 partners in discussions, high-level European executives engaged, MVP pre-launch prep underway\n\n- Technical milestones: ingestion layer, WhatsApp/CSV integration, dispatcher shift overview\n\n- Feedback: compelling team + problem framing, but still no traction metrics beyond LOIs",
+      "Industry": "Logistics",
+      "Previous Decks": "[object Object]",
+      "Startup": "Certin",
+      "Startup in a word": "Operational Intelligence for Modern Logistics\n\nOps teams in logistics are overwhelmed and drowning in scattered data between WhatsApp, spreadsheets, emails, and siloed systems. \nCertin is building an AI platform that analyzes operational data, detects SLA risks early, and automates workflows",
+      "Team Members": "Barbara Okoro, Christian Lessing",
+      "Traction Summary": "🚀 Traction summary\n- 3 LOIs signed, including Tesco (paying MVP)\n- MVP launch planned for Sept 1\n- Target: 10 LOIs and 5 paying customers by IC\n\n✅ Customer Validation\n- LOIs secured with Turkish logistics firm (also potential investor) and Tesco\n- DHL innovation team in pipeline; high-level execs engaged\n\n🛠️ Product\n- MVP ~70% complete in mid-August: backend + email parser + WhatsApp integration working, dashboard in progress\n- MVP launch Sept 1\n- Focused use case: logistics exception management (lost/missing parcels)\n\n📌 Other\n- Feedback: avoid overly generalist framing, clarify integrations with legacy logistics systems"
+    }
+  },
+  "recgcfQoyVJ6vQcOv": {
+    "createdTime": "2025-06-27T14:48:10.000Z",
+    "fields": {
+      "Startup": "Invest'Her",
+      "Startup in a word": "Empowering women to manage their finances and engage in financial investing",
+      "Team Members": "Julie Colin, Sachin Saluja"
+    }
+  },
+  "rechY9RpaTtX4jAW5": {
+    "createdTime": "2025-06-27T14:27:50.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "GoFusion",
+      "Startup in a word": "Go Fusion is a gamified app that engages employees on health and climate issues through real-life challenges — personalized to the company’s strategy, measurable, and motivating.\nPersonas: HR Directors, CSR Managers, Health & Safety Officers…",
+      "Team Members": "Oudavone Surot, Thomas Martin"
+    }
+  },
+  "recjkOOsE15ZOrrMN": {
+    "createdTime": "2025-06-27T14:28:55.000Z",
+    "fields": {
+      "Startup": "Not in a team yet"
+    }
+  },
+  "reck8wtLF8vPfrml3": {
+    "createdTime": "2025-07-28T17:11:38.000Z",
+    "fields": {
+      "Startup": "LeadCatAI",
+      "Startup in a word": "AI agents to find companies that want to buy your product",
+      "Team Members": "Artur Vianna"
+    }
+  },
+  "recqqNkMnWZ5iRnnC": {
+    "createdTime": "2025-07-28T13:18:07.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "AdaLove",
+      "Startup in a word": "The AI financial advisor designed by and for women",
+      "Team Members": "Julie Colin"
+    }
+  },
+  "recrvuP1aF4gcmOGR": {
+    "createdTime": "2025-06-27T14:28:16.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jun 17 – Team Formation\n\n- Maria (PhD in AI/NLP) + Alex (B2B entrepreneur)\n\n- Initial focus: large B2B companies with legal approval delays\n\n\n🛠️ Aug 4 – Office Hours\n\n- Product v1 ~2–3 weeks from launch\n\n- Focus clarified: contract-heavy industrial players (500+ employees, Europe)\n\n- Goal: sign 1 more pilot by end of August\n\n\n🎤 Aug 8 – Pitch\n\n- Alstom demo scheduled, Odoo meeting secured\n\n- Strong tech progress but bug in contract history management\n\n\n🛠️ Aug 11 – Office Hours\n\n- Alstom less suitable (public procurement focus)\n\n- Sales strategy pivot: angels → direct prospect outreach using advice-seeking approach\n\n- SaaS identified as promising ICP; building list of 60+ targets\n\n- Pipeline goal: 3–4 pilots (2 minimum acceptable)\n\n\n🎤 Aug 15 – Pitch\n\n- Emphasis: AI solution for repetitive legal reviews\n\n- Progress: 1 pilot signed with Hitachi, demo scheduled with Alstom VP Legal, strong interest from Coface & CEVA\n\n- Goal: 1 more LOI + 5 new companies contacted\n\n- Feedback: GTM too broad; unclear organizational behavior change required\n\n\n🛠️ Aug 18 – Office Hours \n\nFeedback:\n• Tagline too vague\n• Problem framing needs specificity (3–4 week delays)\n• Slides lacked text hierarchy\n• Recommendation: start with team slide for credibility\n\n\n🎤 Aug 22 – Pitch\n\n- 50+ interviews\n\n- Signed €15K paid pilot with Hitachi\n\n- Ongoing discussions: Alstom, Odoo\n\n- Feedback: better clarity, but missing competitor landscape & distribution strategy\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: 50+ interviews, €15K Hitachi pilot confirmed\n\n- Ongoing discussions: Alstom, Coface, CEVA\n\nFeedback (Salomon):\n• Strong pain point identification\n• Questions on technical integration\n• Reliance on past approvals for high-budget decisions\n• ACV pricing justification (€50–100K)\n\n\n🎤 Sep 8 – Pre-IC Pitch\n\n- Position: AI platform to streamline legal workflows and reduce approval bottlenecks\n\n- Traction: €15K pilot with Hitachi, strong enterprise interest (Alstom, Coface, CEVA)\n\n- Validation: clear pain point – 3–4 week contract approval delays\n\n- Revenue model: targeting €100K pre-seed through pilot scaling\n\nFeedback:\n• Solid product solving real bottleneck, but concerns on market timing and competitive differentiation\n• Must refine competitor landscape and sharpen differentiation",
+      "Industry": "LegalTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "Mirmi",
+      "Startup in a word": "The AI that knows your internal legal rules",
+      "Team Members": "Alex Hayem, Mariya Borovikova",
+      "Traction Summary": "🚀 Traction summary\n- €15K paid pilot signed with Hitachi\n- Advanced talks with Alstom, Coface, CEVA\n- Target: 1 more pilot in September\n\n✅ Customer Validation\n- 50+ interviews with legal and procurement teams\n- Identified SaaS companies as promising ICP (60+ targets)\n\n🛠️ Product\n- v1 product ~2–3 weeks from launch (as of early August)\n- Core feature in progress; resolving contract history bug\n- AI solution automates repetitive legal reviews, cutting approval delays by up to 80%\n\n\n📌 Other\n- Feedback: clarify problem framing (3–4 week approval delays), refine competitor landscape & ACV pricing (€50–100K)\n- Concerns raised on market timing and competitive differentiation"
+    }
+  },
+  "recxTQWoeOvfbefXm": {
+    "createdTime": "2025-06-27T14:58:13.000Z",
+    "fields": {
+      "Startup": "Pitch Day"
+    }
+  },
+  "recytyNYmCLGxzIgt": {
+    "createdTime": "2025-07-17T10:48:17.000Z",
+    "fields": {
+      "Previous Decks": "[object Object]",
+      "Startup": "Vuen AI",
+      "Startup in a word": "A framework to build and chain visual agents that see, reason, and act on screen interfaces Think LangChain for Visual Agents",
+      "Team Members": "Enoc Silva, Giorgio Rodrigano"
+    }
+  },
+  "reczBZLnrTPQVYfu0": {
+    "createdTime": "2025-06-27T14:27:01.000Z",
+    "fields": {
+      "Detailed Progress": "📅 Progress Timeline\n\n👥 Jun 20 – Team Formation\n\n- Vision: AI assistant to automate communication + coordination for Airbnb/Booking managers\n\n\n🛠️ Aug 4 – Office Hours\n\n- Focus: converting free → paid users\n\n- Booking integration delayed but top priority\n\n- Lead magnet campaign launched for past Airbnb testers\n\n- Cold calls + LinkedIn outreach driving steady sign-ups\n\n- Goal: 1,000 listings by Selection Day\n\n\n🎤 Aug 8 – Pitch\n\nPositioned as 8x cheaper than manual concierges (€60K/year savings for 40 listings)\n\nProgress: partnership with Keynes (smart locks), outreach to larger property managers\n\nTech blocker: not yet live on Booking → slowing growth\n\n\n🛠️ Aug 11 – Office Hours\n\n- Booking integration delayed again, blocking conversions\n\n- Landing page upgraded with video guides + FAQs\n\n- Outreach: 7 new sign-ups (5 via cold calls, 20 via automated campaigns)\n\n- Learning: engaged clients push product forward; silent clients churn\n\n- Need: automated customer issue-tracking system\n\n\n🎤 Aug 15 – Pitch\n\n- Reported €650 MRR, targeting €800 next week\n\n- Partnership: Key Nest (hardware lock partner)\n\n- Clients highly value analytics features\n\n- Feedback: pitch missing long-term vision beyond chatbot + €25/listing model\n\n- Next focus: automate support, stabilize Booking integration, explore UK\n\n\n🎤 Aug 22 – Pitch\n\n- Strong traction: €2K MRR, 78% post-demo conversion, zero churn, +5 clients/week\n\n- Signed Flex Living (700 listings, 3-year partner) + domotics partnerships\n\n- Expanded into Italy + Spain\n\n- Feedback: highlight zero churn + multi-platform coverage; add market growth data\n\n\n🎤 Aug 29 – Pitch\n\n- Progress: 35 customers, 800 listings, €2K MRR\n\n- Solution: AI co-pilot for communication, reviews, scheduling, staff coordination across Airbnb, Booking, WhatsApp, calls, texts\n\n- Feedback (Salomon): strong PMF + sticky model, but missing roadmap from €2K MRR → €100K ARR + competitive landscape\n\n\n🎤 Sep 8 – Pre-IC Pitch\n\n- Position: AI operations manager for short-term rental hosts\n\n- Traction: 12 paying customers, €36k ARR, 840 hours of workforce saved\n\n- Pricing: €25/listing model, early tests at €10/listing\n\n- Value: boost host margins from 10% to 40%\n\n- Team: strong background in hospitality industry\n\n- Feedback:\n• Competitors like Guesty face technical debt slowing AI adoption\n• Must refine roadmap to €100K ARR and highlight competitive edge\n• GTM focus on Europe via database-driven email + WhatsApp campaigns",
+      "Industry": "PropTech",
+      "Previous Decks": "[object Object]",
+      "Startup": "AvaHome",
+      "Startup in a word": "The AI Host for Short-Term Rentals",
+      "Team Members": " Simon Bigot, Alan Chevillard",
+      "Traction Summary": "🚀 Traction summary\n- 12 paying customers, €36k ARR\n- 840 hours of workforce saved\n- €25/listing pricing model, targeting 100-property managers globally\n- Signed partnership with Flex Living (700 listings, 3-year deal)\n\n✅ Customer Validation\n- High conversion rate (78–80%) from demo to paid\n- Zero churn across customer base\n- Customers highly value analytics features and AI-driven coordination\n\n🛠️ Product\n- AI co-pilot for rental managers: handles communication, reviews, scheduling, and staff coordination\n- Multi-platform coverage: Airbnb, Booking (integration delays), WhatsApp, calls, texts\n- €25/listing subscription model; MRR growing steadily\n\n📌 Other\n- Strong founding team with hospitality industry background\n- Feedback: show roadmap to €100K ARR, add competitive landscape and market growth data\n- Competition: incumbents (e.g. Guesty) have technical debt slowing AI adoption"
+    }
+  }
+}
