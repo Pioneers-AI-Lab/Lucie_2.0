@@ -18,75 +18,56 @@ interface AirtableResponse {
 function fixJsonWithEmbeddedNewlines(content: string): string {
   const result: string[] = [];
   let inString = false;
-  let i = 0;
 
-  while (i < content.length) {
+  // Valid JSON escape sequences
+  const validEscapes = new Set(['n', 'r', 't', '"', '\\', '/', 'u', 'b', 'f']);
+
+  for (let i = 0; i < content.length; i++) {
     const char = content[i];
-    const charCode = char.charCodeAt(0);
 
-    // Handle backslash (escape sequences)
     if (char === '\\') {
-      if (inString && i + 1 < content.length) {
-        const nextChar = content[i + 1];
-        const validEscapes = new Set([
-          'n',
-          'r',
-          't',
-          '"',
-          '\\',
-          '/',
-          'u',
-          'b',
-          'f',
-        ]);
+      // Check if we're inside a string
+      if (inString) {
+        // Look ahead to see what comes after the backslash
+        const nextChar = i + 1 < content.length ? content[i + 1] : null;
 
-        if (validEscapes.has(nextChar)) {
+        if (nextChar && validEscapes.has(nextChar)) {
           // Valid escape sequence - keep as is
-          result.push('\\', nextChar);
-          i += 2;
-          continue;
+          result.push(char);
         } else {
-          // Invalid escape - escape the backslash
+          // Invalid escape sequence - escape the backslash itself
           result.push('\\\\');
-          i++;
-          continue;
         }
       } else {
-        // Outside string or at end - keep as is
-        result.push('\\');
-        i++;
-        continue;
+        // Outside string - keep as is
+        result.push(char);
       }
-    }
-
-    // Handle quote (string delimiter)
-    if (char === '"') {
-      inString = !inString;
-      result.push('"');
-      i++;
       continue;
     }
 
-    // Handle control characters inside strings
-    if (inString && charCode < 32) {
-      // Control character must be escaped in JSON strings
+    if (char === '"') {
+      inString = !inString;
+      result.push(char);
+      continue;
+    }
+
+    // If we're inside a string, escape control characters
+    if (inString) {
       if (char === '\n') {
         result.push('\\n');
       } else if (char === '\r') {
         result.push('\\r');
       } else if (char === '\t') {
         result.push('\\t');
-      } else {
+      } else if (char.charCodeAt(0) < 32) {
         // Other control characters - replace with space
         result.push(' ');
+      } else {
+        result.push(char);
       }
-      i++;
-      continue;
+    } else {
+      result.push(char);
     }
-
-    // Regular character
-    result.push(char);
-    i++;
   }
 
   return result.join('');
@@ -127,29 +108,8 @@ function main() {
     // Fix embedded newlines in JSON strings
     const fixedContent = fixJsonWithEmbeddedNewlines(content);
 
-    // Parse JSON with better error reporting
-    let data: AirtableResponse;
-    try {
-      data = JSON.parse(fixedContent);
-    } catch (parseError) {
-      if (parseError instanceof SyntaxError) {
-        const match = parseError.message.match(/position (\d+)/);
-        if (match) {
-          const pos = parseInt(match[1], 10);
-          const start = Math.max(0, pos - 100);
-          const end = Math.min(fixedContent.length, pos + 100);
-          const snippet = fixedContent.substring(start, end);
-          console.error(`JSON parse error at position ${pos}:`);
-          console.error(`Context: ...${snippet}...`);
-          console.error(
-            `\nCharacter at position ${pos}: "${
-              fixedContent[pos]
-            }" (charCode: ${fixedContent.charCodeAt(pos)})`,
-          );
-        }
-      }
-      throw parseError;
-    }
+    // Parse JSON
+    const data: AirtableResponse = JSON.parse(fixedContent);
     const records = data.records;
 
     if (!records || records.length === 0) {
