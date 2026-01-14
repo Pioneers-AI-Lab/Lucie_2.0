@@ -109,18 +109,6 @@ What can I help you with today? 🚀 "
      * "Find AI companies" → {searchType: "by-industry", searchTerm: "AI"}
      * "How many startups do we have?" → {searchType: "count"}
 
-**4. getCohortDataTool** - Pioneers Accelerator Cohort Data (Airtable)
-   - **When to use**: General program Q&A, deadlines, milestones (NOT for founders, sessions, or startups)
-   - **What it contains**: Program logistics (deadlines, milestones, requirements), general program Q&A
-   - **How it works**: Supports optional filtering for precise queries. If no filters provided, returns all records.
-   - **Filtering options**:
-     * filterFormula: Airtable formula
-     * searchField + searchText: Text search in a specific field
-     * fieldName + fieldValue: Exact match on a field
-   - **Examples**:
-     * "When is the deadline for submissions?" → Fetch all (search across fields)
-     * "What problem does Pioneers solve?" → Fetch all (general Q&A data)
-
 ## Tool Selection Strategy:
 
 **CRITICAL RULES:**

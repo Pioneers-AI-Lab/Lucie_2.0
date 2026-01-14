@@ -107,8 +107,7 @@ The codebase follows Mastra's agent framework conventions:
   - Optional filtering strategy: supports both filtered queries and fetching all data for LLM analysis
   - Slack-friendly formatting (bold, bullets, emoji)
   - Date-aware responses using current date
-- **Tools**: Four data fetching tools:
-  - `getCohortDataTool` - Legacy Airtable direct access (still available for fallback)
+- **Tools**: Three specialized Turso database query tools:
   - `queryFoundersTool` - Turso database query for founders (137 records across two tables)
   - `querySessionsTool` - Turso database query for sessions/events (100 records)
   - `queryStartupsTool` - Turso database query for startups (27 records)
@@ -116,12 +115,12 @@ The codebase follows Mastra's agent framework conventions:
 
 ### Tool Architecture
 
-The agent has **four data query tools** - three modern Turso database tools and one legacy Airtable tool:
+The agent has **three specialized Turso database query tools** that provide fast, efficient access to all Pioneers program data:
 
-**Primary Tools (Turso Database - Recommended)**:
+**Turso Database Tools**:
 
 1. **queryFoundersTool** (`src/mastra/tools/query-founders-tool.ts`):
-   - Queries 137 unique founders from Turso database (no rate limits, much faster)
+   - Queries 137 unique founders from Turso database (no rate limits, much faster than Airtable)
    - Combines data from two tables:
      - Profile Book (37 founders) - Detailed professional data
      - Grid View (100 founders) - Essential contact info
@@ -141,22 +140,17 @@ The agent has **four data query tools** - three modern Turso database tools and 
    - Includes team info, traction, and progress data
    - Uses helper functions from `src/db/helpers/query-startups.ts`
 
-**Legacy Tool (Airtable - Fallback Only)**:
-
-4. **getCohortDataTool** (`src/mastra/tools/cohort-data-tool.ts`):
-   - Direct Airtable access (retained for fallback or data not yet in Turso)
-   - Uses `SU_2025_BASE_ID` and `SU_2025_TABLE_ID` environment variables
-   - **Filtering options**:
-     - `filterFormula`: Airtable formula (e.g., `"{Role} = 'CTO'"`)
-     - `searchField` + `searchText`: Text search in specific field
-     - `fieldName` + `fieldValue`: Exact match on a field
-   - Returns array of records with `id` and `fields` properties
+**Note on getCohortDataTool**:
+- The `cohort-data-tool.ts` file still exists but has been **completely refactored** from an Airtable tool to a unified Turso cross-table search tool
+- It's marked as "LEGACY" and is **not actively used** by the agent (not included in agent's tool configuration)
+- It provides global search across all Turso tables for cross-table queries
+- The specialized tools above are preferred for all queries
 
 **Tool Selection Strategy**:
-- **Prefer Turso tools** (`queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`) for all queries
-- Turso tools are faster (no rate limits), more reliable, and provide better search capabilities
-- Use `getCohortDataTool` only as fallback or for data not yet migrated to Turso
-- Turso tools include specialized search types (e.g., "upcoming sessions", "by-skills") vs generic Airtable filtering
+- Use the three specialized Turso tools for all queries
+- Each tool is optimized for its specific domain (founders, sessions, startups)
+- Specialized search types (e.g., "upcoming sessions", "by-skills") provide better results than generic searches
+- No Airtable queries - all data is now served from Turso database
 
 ### Data Sources
 
@@ -247,12 +241,10 @@ The project is in transition from direct Airtable querying to a Turso database w
 3. Agent retrieves conversation context from Memory (last 20 messages)
 4. Agent processes message using instructions, memory, and available tools
 5. Agent selects appropriate tool and calls it:
-   - **Turso tools** (preferred): Fast database queries with specialized search types
+   - **Turso tools**: Fast database queries with specialized search types
      - `queryFoundersTool` - For founder-related queries (by name, skills, batch)
      - `querySessionsTool` - For session/event queries (by name, speaker, upcoming/past)
      - `queryStartupsTool` - For startup queries (by name, industry, team member)
-   - **Airtable tool** (fallback): Direct Airtable access with formula filtering
-     - `getCohortDataTool` - For data not yet in Turso or complex custom queries
 6. Agent generates response based on retrieved data
 7. Response streams back to Slack (with animation) or terminal (real-time text)
 8. Conversation context saved to Memory for future turns
@@ -478,10 +470,10 @@ The field ID mapping system enables bidirectional synchronization:
    ```
 
 4. **Migration Status & Strategy**:
-   - **Current**: Direct Airtable queries via `getCohortDataTool`
-   - **In Progress**: Turso schemas defined, infrastructure ready
-   - **Pending**: Data migration scripts, tool updates
-   - **Recommended**: Dual-read approach - keep Airtable tool while building Turso tools, gradually migrate queries
+   - **✅ COMPLETED**: Migration from Airtable to Turso fully complete
+   - All data now served from Turso database via specialized query tools
+   - No Airtable direct queries - Airtable now serves only as data source for periodic syncs
+   - `getCohortDataTool` refactored to Turso cross-table search (not actively used)
 
 ## Key Implementation Details
 
@@ -508,14 +500,12 @@ This project uses Mastra (v1.0.0-beta.19), an AI agent framework. Key concepts:
 
 ### Agent Instructions Philosophy
 
-The Lucie agent uses a **Turso-first querying strategy**:
-- **Primary approach**: Use Turso query tools (`queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`)
-  - Much faster (no API rate limits)
+The Lucie agent uses a **Turso-only querying strategy**:
+- **Approach**: Use specialized Turso query tools exclusively (`queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`)
+  - Much faster than Airtable (no API rate limits)
   - Specialized search types (by-name, by-skills, upcoming, past, etc.)
   - Structured data with consistent schemas
-- **Fallback approach**: Use Airtable tool (`getCohortDataTool`) only when:
-  - Data not available in Turso
-  - Custom complex queries not supported by Turso tools
+  - No Airtable queries - all data migrated to Turso
 - **Tool selection**: Agent intelligently picks the right tool based on query type
   - "Who are the CTOs?" → `queryFoundersTool` with `by-skills` search
   - "What's the next session?" → `querySessionsTool` with `next` search
@@ -559,7 +549,7 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - Run `pnpm dev:cli` for local testing with interactive agent interface
 - Use `log()` helper from `lib/print-helpers` for debugging (visible in terminal output)
 - Slack streaming uses rate limit-tolerant animation (errors during animation updates are ignored)
-- **Prefer Turso query tools** over Airtable tool - faster, no rate limits, better search capabilities
+- **Use specialized Turso query tools** - all queries are now served from Turso (no Airtable queries)
 - Database helpers provide specialized query functions (by name, by skills, upcoming sessions, etc.)
 
 ### Project Structure Notes
@@ -606,11 +596,11 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
     - `querySessionsTool` - 100 sessions/events
     - `queryStartupsTool` - 27 startups
   - Database helper functions in `src/db/helpers/` for specialized queries
-  - Agent now uses Turso tools as primary data source
-  - `getCohortDataTool` retained as fallback for edge cases
+  - Agent exclusively uses Turso tools (no Airtable queries)
+  - `getCohortDataTool` refactored to Turso cross-table search (not included in agent configuration)
 - **⏳ PENDING**:
   - Sync mechanism for keeping Turso data fresh from Airtable (manual updates for now)
-  - Consider removing `getCohortDataTool` if no longer needed
+  - Consider removing `cohort-data-tool.ts` entirely if unused
 - **Important**: Run `pnpm db:setup` to push schema and seed data (use `pnpm db:seed` to re-seed without schema changes)
 
 ### Testing & Quality Infrastructure
@@ -651,8 +641,8 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 **Debugging Strategies**:
 - **Agent Instructions**: Test in terminal CLI, inspect tool calls and responses
 - **Streaming Issues**: Check console logs for chunk types, state transitions
-- **Airtable Queries**: Use `log()` from `lib/print-helpers` to inspect filter formulas
-- **Database Issues**: Use Drizzle Studio (`pnpm dbs`) to inspect data
+- **Database Queries**: Use `log()` from `lib/print-helpers` to inspect query parameters and results
+- **Database Issues**: Use Drizzle Studio (`pnpm dbs`) to inspect data and schema
 - **Slack Issues**: Check Slack API logs, verify signature in `src/mastra/slack/verify.ts`
 
 **Handling Airtable Schema Changes**:
@@ -715,10 +705,10 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - Character-by-character terminal output may be slow for long responses
 - Slack message updates have API rate limits (~1 request/second per channel)
 
-**Airtable Queries**:
-- No caching layer - every query hits Airtable API
-- Filter formulas can be complex - test performance with large datasets
-- **Recommendation**: Implement caching or move to Turso for performance
+**Database Queries**:
+- All queries now served from Turso database (no external API calls)
+- No caching needed - Turso queries are fast and have no rate limits
+- Specialized search functions optimized for common query patterns
 
 **Memory**:
 - Stores last 20 messages per conversation
@@ -726,7 +716,7 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - **Recommendation**: Use persistent storage for production (`file:../mastra.db`)
 
 **Turso Query Performance**:
-- Turso tools are significantly faster than Airtable direct queries
-- No rate limits (local database connection vs API calls)
+- Turso tools provide fast, reliable query performance
+- No rate limits (database connection vs external API calls)
 - Specialized search functions optimized for common query patterns
-- **Recommendation**: Always prefer Turso tools over `getCohortDataTool` unless data not available
+- All agent queries exclusively use Turso database

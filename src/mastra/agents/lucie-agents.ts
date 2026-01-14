@@ -1,6 +1,5 @@
 import { Agent } from "@mastra/core/agent";
-import { Memory } from "@mastra/memory";
-import { getCohortDataTool } from '../tools/cohort-data-tool';
+import { Memory } from '@mastra/memory';
 import { queryFoundersTool } from '../tools/query-founders-tool';
 import { querySessionsTool } from '../tools/query-sessions-tool';
 import { queryStartupsTool } from '../tools/query-startups-tool';
@@ -19,7 +18,6 @@ export const lucie = new Agent({
 
   model: process.env.MODEL || 'anthropic/claude-3-haiku-20240307',
   tools: {
-    getCohortDataTool,
     queryFoundersTool,
     querySessionsTool,
     queryStartupsTool,
