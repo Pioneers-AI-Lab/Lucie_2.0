@@ -123,31 +123,31 @@ export async function getFoundersBySkills(
 /**
  * Get founders by batch (Profile Book only)
  * NOTE: Batch field is not in Profile Book table-ref, so this function returns all founders
- * TODO: Add batch field to schema if batch filtering is needed
+ * TODO: uncomment when batch field is added to schema or when new table id is retrieved
  */
-export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
-  // Batch field not available in Profile Book schema - return all founders
-  // This maintains API compatibility but doesn't filter by batch
-  const foundersData = await db
-    .select()
-    .from(founders)
-    .where(sql`${founders.introduction} IS NOT NULL`);
+// export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
+//   // Batch field not available in Profile Book schema - return all founders
+//   // This maintains API compatibility but doesn't filter by batch
+//   const foundersData = await db
+//     .select()
+//     .from(founders)
+//     .where(sql`${founders.introduction} IS NOT NULL`);
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    name: f.name,
-    email: f.email,
-    phone: f.whatsapp,
-    linkedin: f.linkedin,
-    nationality: f.nationality,
-    status: f.status,
-    techSkills: f.techSkills,
-    roles: f.rolesICouldTake,
-    industries: f.industries,
-    introduction: f.introduction,
-    source: 'profile_book' as const,
-  }));
-}
+//   return foundersData.map((f) => ({
+//     id: f.id,
+//     name: f.name,
+//     email: f.email,
+//     phone: f.whatsapp,
+//     linkedin: f.linkedin,
+//     nationality: f.nationality,
+//     status: f.status,
+//     techSkills: f.techSkills,
+//     roles: f.rolesICouldTake,
+//     industries: f.industries,
+//     introduction: f.introduction,
+//     source: 'profile_book' as const,
+//   }));
+// }
 
 /**
  * Get count of all founders (Profile Book only)
