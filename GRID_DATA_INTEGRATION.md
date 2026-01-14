@@ -168,4 +168,38 @@ All 4 tables are correctly seeded and verified. The database is ready for:
 - Creating type-safe Drizzle queries
 - Implementing data relationships (founders ↔ startups)
 
-**Next Steps**: Create Turso-based query tools to replace/supplement the Airtable tool!
+## 🔍 Understanding the Two Founder Tables
+
+**CRITICAL DISCOVERY**: The `founders` (Profile Book) and `founders_grid_data` (Grid View) tables have **ZERO overlap** - they represent completely different people:
+
+- **Profile Book**: 37 unique founders
+- **Grid View**: 100 unique founders
+- **Overlapping records**: 0 (by ID or name)
+- **Total unique founders**: 137 people
+
+This means:
+- NULL fields in `founders` are NOT "missing data" that exists in `founders_grid_data`
+- The tables represent different batches/cohorts
+- To query all founders, you must query BOTH tables
+
+## 📊 Query Strategies
+
+### Option 1: Helper Functions (Recommended)
+Use the helper functions in `src/db/helpers/query-all-founders.ts`:
+- `getAllFounders()` - Returns all 137 founders with unified schema
+- `searchFoundersByName(term)` - Searches both tables by name
+- `searchFoundersBySkills(term)` - Searches tech skills across both
+- `getFoundersByBatch(batch)` - Filters both tables by batch
+- `getTotalFoundersCount()` - Returns 137
+
+### Option 2: SQL View
+Use the `founders_unified` view created by `src/db/create-unified-view.ts`:
+```sql
+SELECT * FROM founders_unified;
+-- Returns 137 founders with a 'source' column indicating origin
+```
+
+### Option 3: Direct Queries
+Query both tables separately and combine in your application code.
+
+**Next Steps**: Create Turso-based query tools for Lucie to replace/supplement the Airtable tool!
