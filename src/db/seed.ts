@@ -11,7 +11,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { db } from './index.js';
-import { founders, foundersGridData, sessionEvents, startups } from './schemas/index.js';
+import { founders, sessionEvents, startups } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 
 // Wrapper functions that match our usage
@@ -80,41 +80,6 @@ const FOUNDERS_FIELD_MAP: Record<string, string> = {
   'I confirm my enrolment to the Pioneers program Batch SU25.': 'openToJoinAnotherProject',
 };
 
-/**
- * Field name mappings for Founders Grid View data
- *
- * CRITICAL: The Grid View export ALSO has misaligned headers (different from profile book)!
- *
- * Verified misalignments for grid view:
- *   'Mobile number' → name (Louis Gavalda)
- *   'Email address' → emailAddress (louis@gavalda.fr) ✓ CORRECT!
- *   'Linkedin' → mobileNumber (+33 7 82 97 07 32)
- *   'Intro message' → linkedin (https://www.linkedin.com/in/louis-gavalda/)
- *   'Name' → nationality (FR)
- *   'Pitch' → proKeywords (Web Apps,Scraping...)
- *   'Notes' → personalKeywords (Nature,Sea,Honesty...)
- */
-const FOUNDERS_GRID_FIELD_MAP: Record<string, string> = {
-  // === CRITICAL MISALIGNMENTS (Grid View specific) ===
-  'Mobile number': 'name',  // Contains: person's name
-  'Email address': 'emailAddress',  // ✓ CORRECT - contains actual email
-  'Linkedin': 'mobileNumber',  // Contains: phone number
-  'Intro message': 'linkedin',  // Contains: LinkedIn URL
-  'Name': 'nationality',  // Contains: nationality code
-  'Pitch': 'proKeywords',  // Contains: professional keywords/skills
-  'Notes': 'personalKeywords',  // Contains: personal keywords
-
-  // === Fields that match correctly ===
-  'Age': 'age',
-  'Batch N': 'batch',
-  'IT Expertise': 'itExpertise',
-  'Photo': 'photo',
-  ' please write his/her name below."': 'introMessage',  // Contains intro text
-  'Anything you want to let us know?': 'pitch',  // Contains pitch/intro
-  // 'Technical' field doesn't exist in grid view
-  // 'Personal Keywords' contains [object Object] - skip
-};
-
 const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
   'Name': 'name',
   'Date': 'date',
@@ -164,33 +129,6 @@ function transformFounder(recordId: string, record: any): any {
       continue;
     } else if (typeof value === 'string' && value.includes('[object Object]')) {
       // Skip stringified objects
-      continue;
-    } else {
-      transformed[dbKey] = typeof value === 'string' ? value : String(value);
-    }
-  }
-
-  return transformed;
-}
-
-/**
- * Transform Founders Grid Data record
- */
-function transformFounderGridData(recordId: string, record: any): any {
-  const fields = record.fields || {};
-  const transformed: any = { id: recordId };
-
-  for (const [jsonKey, dbKey] of Object.entries(FOUNDERS_GRID_FIELD_MAP)) {
-    const value = fields[jsonKey];
-
-    if (value === undefined || value === null) {
-      continue;
-    }
-
-    // Skip objects and stringified objects
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      continue;
-    } else if (typeof value === 'string' && value.includes('[object Object]')) {
       continue;
     } else {
       transformed[dbKey] = typeof value === 'string' ? value : String(value);
@@ -313,43 +251,6 @@ async function seedFounders() {
 }
 
 /**
- * Seed founders grid data table
- */
-async function seedFoundersGridData() {
-  log('Seeding founders grid data...');
-
-  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/grid_view_all_readable.json');
-  const records = Object.entries(jsonData);
-
-  if (records.length === 0) {
-    log('No founders grid data records found');
-    return;
-  }
-
-  const transformed = records
-    .map(([recordId, record]) => transformFounderGridData(recordId, record))
-    .filter(record => record.name); // Only include records with names
-
-  if (transformed.length === 0) {
-    log('No valid founders grid data records to insert');
-    return;
-  }
-
-  // Delete existing records
-  await db.delete(foundersGridData);
-
-  // Insert in batches of 100
-  const batchSize = 100;
-  for (let i = 0; i < transformed.length; i += batchSize) {
-    const batch = transformed.slice(i, i + batchSize);
-    await db.insert(foundersGridData).values(batch);
-    log(`Inserted ${Math.min(i + batchSize, transformed.length)}/${transformed.length} founders grid data records`);
-  }
-
-  message(`✓ Successfully seeded ${transformed.length} founders grid data records`);
-}
-
-/**
  * Seed session events table
  */
 async function seedSessionEvents() {
@@ -431,7 +332,6 @@ async function main() {
     log('Starting database seed...');
 
     await seedFounders();
-    await seedFoundersGridData();
     await seedSessionEvents();
     await seedStartups();
 

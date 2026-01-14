@@ -16,7 +16,7 @@
 
 import Airtable from 'airtable';
 import { db } from './index.js';
-import { foundersGridData, sessionEvents, startups } from './schemas/index.js';
+import { founders, sessionEvents, startups } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 import { eq } from 'drizzle-orm';
 
@@ -36,8 +36,7 @@ const base = airtable.base(process.env.SU_2025_BASE_ID);
 
 // Table IDs/names - Update these to match your Airtable base structure
 const TABLES = {
-  GRID_VIEW: process.env.GRID_VIEW_TABLE_ID || 'Grid View (all)',
-  PROFILE_BOOK: process.env.PROFILE_BOOK_TABLE_ID || 'Pioneers Profile Book',
+  FOUNDERS: process.env.PROFILE_BOOK_TABLE_ID || 'Pioneers Profile Book',
   SESSIONS: process.env.SESSIONS_TABLE_ID || 'Sessions & Events 2025',
   STARTUPS: process.env.STARTUPS_TABLE_ID || 'Startups 2025',
 };
@@ -61,19 +60,19 @@ function normalizeBatch(batch: string | null | undefined): string | null {
 }
 
 /**
- * Sync Grid View founders from Airtable
+ * Sync founders from Airtable
  */
-async function syncGridViewFounders(batchFilter?: string) {
-  log('Syncing Grid View founders from Airtable...');
+async function syncFounders(batchFilter?: string) {
+  log('Syncing founders from Airtable...');
 
   try {
     // Fetch from Airtable
-    const formula = batchFilter ? `{Batch N} = "${batchFilter}"` : '';
-    const records = await base(TABLES.GRID_VIEW)
+    const formula = batchFilter ? `{Batch} = "${batchFilter}"` : '';
+    const records = await base(TABLES.FOUNDERS)
       .select({ filterByFormula: formula })
       .all();
 
-    log(`Fetched ${records.length} records from Airtable Grid View`);
+    log(`Fetched ${records.length} founders from Airtable`);
 
     if (records.length === 0) {
       log('No records to sync');
@@ -87,125 +86,63 @@ async function syncGridViewFounders(batchFilter?: string) {
     for (const record of records) {
       const fields = record.fields;
 
-      // Transform to database format (handling misaligned headers)
+      // Transform to founders schema (handling misaligned headers from Airtable)
       const data = {
         id: record.id,
-        name: fields['Mobile number'] as string | undefined, // Misaligned: contains name
-        emailAddress: fields['Email address'] as string | undefined,
-        mobileNumber: fields['Linkedin'] as string | undefined, // Misaligned: contains phone
-        linkedin: fields['Intro message'] as string | undefined, // Misaligned: contains LinkedIn
-        nationality: fields['Name'] as string | undefined, // Misaligned: contains nationality
-        batch: normalizeBatch(fields['Batch N'] as string | undefined),
-        age: fields['Age'] as string | undefined,
-        technical: fields['Technical'] as string | undefined,
-        itExpertise: fields['IT Expertise'] as string | undefined,
-        proKeywords: fields['Pitch'] as string | undefined, // Misaligned: contains pro keywords
-        personalKeywords: fields['Notes'] as string | undefined, // Misaligned: contains personal keywords
-        pitch: fields['Anything you want to let us know?'] as string | undefined,
-        introMessage: fields[' please write his/her name below."'] as string | undefined,
-        photo: fields['Photo'] as string | undefined,
+        name: fields['Email'] as string | undefined, // Misaligned: contains name
+        email: fields['Education'] as string | undefined, // Misaligned: contains email
+        whatsapp: fields['Track record / something I am proud of '] as string | undefined, // Misaligned: contains phone
+        linkedin: fields['Industries'] as string | undefined, // Misaligned: contains LinkedIn
+        nationality: fields['LinkedIn'] as string | undefined, // Misaligned: contains nationality
+        status: fields['Nationality'] as string | undefined, // Misaligned: contains status
+        batch: normalizeBatch(fields['Batch'] as string | undefined),
+        yourPhoto: fields['Your Photo'] as string | undefined,
+        techSkills: fields['Roles I could take'] as string | undefined, // Misaligned
+        rolesICouldTake: fields['Name'] as string | undefined, // Misaligned
+        trackRecordProud: fields['Status'] as string | undefined, // Misaligned
+        companiesWorked: fields['Are you open to join another project during the program? '] as string | undefined, // Misaligned
+        degree: fields['Companies Worked'] as string | undefined, // Misaligned
+        existingProjectIdea: fields['Degree'] as string | undefined, // Misaligned
+        education: fields['Do you have an existing project/idea ?'] as string | undefined, // Misaligned
+        gender: fields['Founder'] as string | undefined, // Misaligned
+        leftProgram: fields['Gender'] as string | undefined, // Misaligned
+        industries: fields['"If yes'] as string | undefined, // Misaligned
+        interestedInWorkingOn: fields['Tech Skills'] as string | undefined, // Misaligned
+        yearsOfXp: fields['What I am interested in working on:'] ?
+          parseInt(fields['What I am interested in working on:'] as string, 10) : null,
+        introduction: fields['Introduction:'] as string | undefined,
+        academicField: fields['Academic Field'] as string | undefined,
+        projectExplanation: fields[' explain it in a few words"'] as string | undefined,
+        joiningWithCofounder: fields[' please insert his/her name below."'] as string | undefined,
+        existingCofounderName: fields['"Are you joining with an existing cofounder? If yes'] as string | undefined,
+        openToJoinAnotherProject: fields['I confirm my enrolment to the Pioneers program Batch SU25.'] as string | undefined,
       };
 
       // Check if record exists
       const existing = await db
         .select()
-        .from(foundersGridData)
-        .where(eq(foundersGridData.id, record.id))
+        .from(founders)
+        .where(eq(founders.id, record.id))
         .limit(1);
 
       if (existing.length > 0) {
         // Update existing record
         await db
-          .update(foundersGridData)
+          .update(founders)
           .set({ ...data, updatedAt: new Date() })
-          .where(eq(foundersGridData.id, record.id));
+          .where(eq(founders.id, record.id));
         updated++;
       } else {
         // Insert new record
-        await db.insert(foundersGridData).values(data);
+        await db.insert(founders).values(data);
         inserted++;
       }
     }
 
-    message(`✓ Grid View sync complete: ${inserted} inserted, ${updated} updated`);
+    message(`✓ Founders sync complete: ${inserted} inserted, ${updated} updated`);
     return { inserted, updated };
   } catch (err: any) {
-    error(`Grid View sync failed: ${err.message}`);
-    throw err;
-  }
-}
-
-/**
- * Sync Profile Book founders from Airtable
- */
-async function syncProfileBookFounders(batchFilter?: string) {
-  log('Syncing Profile Book founders from Airtable...');
-
-  try {
-    // Fetch from Airtable
-    const formula = batchFilter ? `{Batch} = "${batchFilter}"` : '';
-    const records = await base(TABLES.PROFILE_BOOK)
-      .select({ filterByFormula: formula })
-      .all();
-
-    log(`Fetched ${records.length} records from Airtable Profile Book`);
-
-    if (records.length === 0) {
-      log('No records to sync');
-      return { inserted: 0, updated: 0 };
-    }
-
-    let inserted = 0;
-    let updated = 0;
-
-    // Process each record and add to Grid View table
-    for (const record of records) {
-      const fields = record.fields;
-
-      // Transform to Grid View format
-      const data = {
-        id: record.id,
-        name: fields['Email'] as string | undefined, // Misaligned: contains name
-        emailAddress: fields['Education'] as string | undefined, // Misaligned: contains email
-        linkedin: fields['Industries'] as string | undefined, // Misaligned: contains LinkedIn
-        nationality: fields['LinkedIn'] as string | undefined, // Misaligned: contains nationality
-        batch: normalizeBatch(fields['Batch'] as string | undefined),
-        mobileNumber: fields['Track record / something I am proud of '] as string | undefined, // Misaligned: contains phone
-        technical: fields['Technical'] as string | undefined,
-        age: fields['Age'] as string | undefined,
-        itExpertise: fields['IT Expertise'] as string | undefined,
-        proKeywords: fields['Pro Keywords'] as string | undefined,
-        personalKeywords: fields['Personal Keywords'] as string | undefined,
-        pitch: fields['Pitch'] as string | undefined,
-        introMessage: fields['Intro Message'] as string | undefined,
-        photo: fields['Your Photo'] as string | undefined,
-      };
-
-      // Check if record exists in Grid View table
-      const existing = await db
-        .select()
-        .from(foundersGridData)
-        .where(eq(foundersGridData.id, record.id))
-        .limit(1);
-
-      if (existing.length > 0) {
-        // Update existing record
-        await db
-          .update(foundersGridData)
-          .set({ ...data, updatedAt: new Date() })
-          .where(eq(foundersGridData.id, record.id));
-        updated++;
-      } else {
-        // Insert new record
-        await db.insert(foundersGridData).values(data);
-        inserted++;
-      }
-    }
-
-    message(`✓ Profile Book sync complete: ${inserted} inserted, ${updated} updated`);
-    return { inserted, updated };
-  } catch (err: any) {
-    error(`Profile Book sync failed: ${err.message}`);
+    error(`Founders sync failed: ${err.message}`);
     throw err;
   }
 }
@@ -357,10 +294,9 @@ async function main() {
 
     // Sync based on arguments
     if (!table || table === 'founders') {
-      const gridResult = await syncGridViewFounders(batch);
-      const profileResult = await syncProfileBookFounders(batch);
-      stats.totalInserted += gridResult.inserted + profileResult.inserted;
-      stats.totalUpdated += gridResult.updated + profileResult.updated;
+      const result = await syncFounders(batch);
+      stats.totalInserted += result.inserted;
+      stats.totalUpdated += result.updated;
     }
 
     if (!table || table === 'sessions') {

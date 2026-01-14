@@ -15,7 +15,6 @@ Before running the sync, you need to verify your Airtable table names/IDs in you
 3. Add these to your `.env` file (if they differ from defaults):
 
 ```bash
-GRID_VIEW_TABLE_ID="Grid View (all)"        # Or your actual table name
 PROFILE_BOOK_TABLE_ID="Pioneers Profile Book" # Or your actual table name
 SESSIONS_TABLE_ID="Sessions & Events 2025"    # Or your actual table name
 STARTUPS_TABLE_ID="Startups 2025"             # Or your actual table name
@@ -29,7 +28,6 @@ STARTUPS_TABLE_ID="Startups 2025"             # Or your actual table name
 4. Add to your `.env` file:
 
 ```bash
-GRID_VIEW_TABLE_ID="tblXXXXXXXXXXXXXX"
 PROFILE_BOOK_TABLE_ID="tblYYYYYYYYYYYYYY"
 SESSIONS_TABLE_ID="tblZZZZZZZZZZZZZZ"
 STARTUPS_TABLE_ID="tblAAAAAAAAAAAAA"
@@ -89,10 +87,9 @@ pnpm db:sync --table=founders --batch=S25
 
 The sync script fetches data from these Airtable tables:
 
-1. **Grid View (all)** → `founders_grid_data` table
-2. **Pioneers Profile Book** → `founders_grid_data` table (merged)
-3. **Sessions & Events 2025** → `session_events` table
-4. **Startups 2025** → `startups` table
+1. **Pioneers Profile Book** → `founders` table
+2. **Sessions & Events 2025** → `session_events` table
+3. **Startups 2025** → `startups` table
 
 ## Batch Name Normalization
 
@@ -121,7 +118,7 @@ The script automatically normalizes batch names to short codes:
    pnpm dbs
    ```
    Navigate to `http://localhost:4983` and check:
-   - `founders_grid_data` table for new founders
+   - `founders` table for new founders
    - `session_events` table for new sessions
    - `startups` table for new startups
 

@@ -14,10 +14,10 @@ import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import {
   getAllFounders,
-  searchFoundersByName,
-  searchFoundersBySkills,
+  getFoundersByName,
+  getFoundersBySkills,
   getFoundersByBatch,
-  getTotalFoundersCount,
+  getFoundersCount,
 } from '../../db/helpers/query-all-founders.js';
 
 /**
@@ -43,34 +43,44 @@ export const queryFoundersTool = createTool({
   Use this tool for any questions about founders, their skills, backgrounds, or contact information.`,
 
   inputSchema: z.object({
-    searchType: z.union([
-      z.literal('all'),
-      z.literal('by-name'),
-      z.literal('by-skills'),
-      z.literal('by-batch'),
-      z.literal('count'),
-    ]).describe('Type of search to perform'),
-    searchTerm: z.string().optional()
-      .describe('Search term (required for by-name, by-skills, by-batch searches)'),
+    searchType: z
+      .union([
+        z.literal('all'),
+        z.literal('by-name'),
+        z.literal('by-skills'),
+        z.literal('by-batch'),
+        z.literal('count'),
+      ])
+      .describe('Type of search to perform'),
+    searchTerm: z
+      .string()
+      .optional()
+      .describe(
+        'Search term (required for by-name, by-skills, by-batch searches)',
+      ),
   }),
 
   outputSchema: z.object({
-    founders: z.array(z.object({
-      id: z.string(),
-      name: z.string().nullable(),
-      email: z.string().nullable(),
-      phone: z.string().nullable(),
-      linkedin: z.string().nullable(),
-      nationality: z.string().nullable(),
-      age: z.string().nullable(),
-      batch: z.string().nullable(),
-      status: z.string().nullable(),
-      techSkills: z.string().nullable(),
-      roles: z.string().nullable(),
-      industries: z.string().nullable(),
-      introduction: z.string().nullable(),
-      source: z.enum(['profile_book', 'grid_view']),
-    })).optional(),
+    founders: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string().nullable(),
+          email: z.string().nullable(),
+          phone: z.string().nullable(),
+          linkedin: z.string().nullable(),
+          nationality: z.string().nullable(),
+          age: z.string().nullable(),
+          batch: z.string().nullable(),
+          status: z.string().nullable(),
+          techSkills: z.string().nullable(),
+          roles: z.string().nullable(),
+          industries: z.string().nullable(),
+          introduction: z.string().nullable(),
+          source: z.enum(['profile_book', 'grid_view']),
+        }),
+      )
+      .optional(),
     count: z.number(),
     message: z.string().optional(),
   }),
@@ -81,7 +91,7 @@ export const queryFoundersTool = createTool({
     try {
       // Handle count-only request
       if (searchType === 'count') {
-        const count = await getTotalFoundersCount();
+        const count = await getFoundersCount();
         return {
           count,
           message: `Total founders in database: ${count} (37 from Profile Book + 100 from Grid View)`,
@@ -104,7 +114,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-name search',
             };
           }
-          founders = await searchFoundersByName(searchTerm);
+          founders = await getFoundersByName(searchTerm);
           break;
 
         case 'by-skills':
@@ -115,7 +125,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-skills search',
             };
           }
-          founders = await searchFoundersBySkills(searchTerm);
+          founders = await getFoundersBySkills(searchTerm);
           break;
 
         case 'by-batch':
@@ -140,11 +150,11 @@ export const queryFoundersTool = createTool({
       return {
         founders,
         count: founders.length,
-        message: founders.length === 0
-          ? `No founders found matching "${searchTerm}"`
-          : `Found ${founders.length} founder(s)`,
+        message:
+          founders.length === 0
+            ? `No founders found matching "${searchTerm}"`
+            : `Found ${founders.length} founder(s)`,
       };
-
     } catch (error: any) {
       return {
         founders: [],

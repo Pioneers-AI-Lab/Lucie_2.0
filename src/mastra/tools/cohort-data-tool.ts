@@ -2,7 +2,6 @@ import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 import { db } from '../../db/index.js';
 import { founders } from '../../db/schemas/founders.js';
-import { foundersGridData } from '../../db/schemas/founders-grid-data.js';
 import { sessionEvents } from '../../db/schemas/session-events.js';
 import { startups } from '../../db/schemas/startups.js';
 import { like, or, sql } from 'drizzle-orm';
@@ -57,17 +56,16 @@ export const getCohortDataTool = createTool({
       if (searchType === 'all' || !searchTerm) {
         // Return summary counts from all tables
         const [foundersCount] = await db.select({ count: sql<number>`count(*)` }).from(founders);
-        const [foundersGridCount] = await db.select({ count: sql<number>`count(*)` }).from(foundersGridData);
         const [sessionsCount] = await db.select({ count: sql<number>`count(*)` }).from(sessionEvents);
         const [startupsCount] = await db.select({ count: sql<number>`count(*)` }).from(startups);
 
-        const totalFounders = (foundersCount?.count || 0) + (foundersGridCount?.count || 0);
+        const totalFounders = foundersCount?.count || 0;
         const totalSessions = sessionsCount?.count || 0;
         const totalStartups = startupsCount?.count || 0;
 
         return {
           totalRecords: totalFounders + totalSessions + totalStartups,
-          message: `Database contains: ${totalFounders} founders (${foundersCount?.count || 0} from Profile Book + ${foundersGridCount?.count || 0} from Grid View), ${totalSessions} sessions, ${totalStartups} startups. Use specialized query tools for better results.`,
+          message: `Database contains: ${totalFounders} founders, ${totalSessions} sessions, ${totalStartups} startups. Use specialized query tools for better results.`,
         };
       }
 
@@ -75,7 +73,7 @@ export const getCohortDataTool = createTool({
       const searchPattern = `%${searchTerm}%`;
 
       // Search founders
-      const foundersResults = await db
+      const allFounders = await db
         .select({
           id: founders.id,
           name: founders.name,
@@ -87,31 +85,11 @@ export const getCohortDataTool = createTool({
             like(founders.name, searchPattern),
             like(founders.email, searchPattern),
             like(founders.techSkills, searchPattern),
-            like(founders.roles, searchPattern),
+            like(founders.rolesICouldTake, searchPattern),
           )
         )
-        .limit(10);
-
-      const foundersGridResults = await db
-        .select({
-          id: foundersGridData.id,
-          name: foundersGridData.name,
-          email: foundersGridData.email,
-        })
-        .from(foundersGridData)
-        .where(
-          or(
-            like(foundersGridData.name, searchPattern),
-            like(foundersGridData.email, searchPattern),
-            like(foundersGridData.keywords, searchPattern),
-          )
-        )
-        .limit(10);
-
-      const allFounders = [
-        ...foundersResults.map(f => ({ ...f, source: 'profile_book' })),
-        ...foundersGridResults.map(f => ({ ...f, source: 'grid_view' })),
-      ];
+        .limit(10)
+        .then(results => results.map(f => ({ ...f, source: 'founders' })));
 
       // Search sessions
       const sessionsResults = await db

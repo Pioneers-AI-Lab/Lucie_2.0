@@ -83,7 +83,6 @@ Required environment variables (see `.env`):
 - `TURSO_AUTH_TOKEN` - Turso authentication token for database access
 
 **Airtable Sync (Optional - for incremental sync script):**
-- `GRID_VIEW_TABLE_ID` - Airtable table name or ID for Grid View (default: "Grid View (all)")
 - `PROFILE_BOOK_TABLE_ID` - Airtable table name or ID for Profile Book (default: "Pioneers Profile Book")
 - `SESSIONS_TABLE_ID` - Airtable table name or ID for Sessions (default: "Sessions & Events 2025")
 - `STARTUPS_TABLE_ID` - Airtable table name or ID for Startups (default: "Startups 2025")
@@ -119,9 +118,9 @@ The codebase follows Mastra's agent framework conventions:
   - Slack-friendly formatting (bold, bullets, emoji)
   - Date-aware responses using current date
 - **Tools**: Three specialized Turso database query tools:
-  - `queryFoundersTool` - Turso database query for founders (137 records across two tables)
-  - `querySessionsTool` - Turso database query for sessions/events (100 records)
-  - `queryStartupsTool` - Turso database query for startups (27 records)
+  - `queryFoundersTool` - Turso database query for founders
+  - `querySessionsTool` - Turso database query for sessions/events
+  - `queryStartupsTool` - Turso database query for startups
 - **Note**: Agent instructions reference an AI Lab tool that is not yet implemented
 
 ### Tool Architecture
@@ -131,12 +130,8 @@ The agent has **three specialized Turso database query tools** that provide fast
 **Turso Database Tools**:
 
 1. **queryFoundersTool** (`src/mastra/tools/query-founders-tool.ts`):
-   - Queries 137 unique founders from Turso database (no rate limits, much faster than Airtable)
-   - Combines data from two tables:
-     - Profile Book (37 founders) - Detailed professional data
-     - Grid View (100 founders) - Essential contact info
+   - Queries all founders from Turso database (no rate limits, much faster than Airtable)
    - **Search types**: `all`, `by-name`, `by-skills`, `by-batch`, `count`
-   - Each result includes `source` field indicating origin (profile_book or grid_view)
    - Uses helper functions from `src/db/helpers/query-all-founders.ts`
 
 2. **querySessionsTool** (`src/mastra/tools/query-sessions-tool.ts`):
@@ -182,10 +177,9 @@ The project is in transition from direct Airtable querying to a Turso database w
    - **Purpose**: Structured, queryable storage layer for Airtable data
    - **Current Status**: ✅ Fully seeded and operational
    - **Tables**:
-     - `founders` - Founder profiles from Profile Book view (37 records) - comprehensive data
-     - `founders_grid_data` - Founder profiles from Grid view (100 records) - essential contact info
-     - `session_events` - Session and event information (100 records) with dates, speakers, and participants
-     - `startups` - Startup profiles (27 records) with team information, industry, and traction data
+     - `founders` - Founder profiles with comprehensive professional and personal data
+     - `session_events` - Session and event information with dates, speakers, and participants
+     - `startups` - Startup profiles with team information, industry, and traction data
    - **Field ID Mappings** (`lib/airtable-field-ids-ref.ts`):
      - Maps Drizzle schema field names to Airtable field IDs
      - Three mappings: `founderAirtableFieldIds`, `sessionEventAirtableFieldIds`, `startupAirtableFieldIds`
@@ -355,7 +349,7 @@ The agent has three specialized Turso database query tools that are **much faste
 
 **Database Helpers**:
 Each tool uses helper functions from `src/db/helpers/`:
-- `query-all-founders.ts` - Founder queries with SQL, merges Profile Book + Grid View data
+- `query-all-founders.ts` - Founder queries with SQL filters for name, skills, and batch
 - `query-sessions.ts` - Session queries with date handling and temporal filters
 - `query-startups.ts` - Startup queries with team member and industry searches
 
@@ -574,8 +568,7 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
   - `update-table-ref-ids.ts` - Scripts for syncing table reference data
 - `src/db/` contains database infrastructure:
   - `index.ts` - Turso database client initialization
-  - `schemas/founders.ts` - Founder table schema from Profile Book view (detailed)
-  - `schemas/founders-grid-data.ts` - Founder table schema from Grid view (contact info)
+  - `schemas/founders.ts` - Founder table schema with comprehensive professional and personal data
   - `schemas/session-events.ts` - Session events schema with dates and participants
   - `schemas/startups.ts` - Startup information schema with traction and team data
   - `schemas/index.ts` - Central schema exports
@@ -591,11 +584,10 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - **✅ COMPLETED**:
   - Turso setup and configuration (`drizzle.config.ts`)
   - Drizzle ORM integration (`src/db/index.ts`)
-  - **Four schemas fully defined and seeded**:
-    - `founders.ts` - 37 records from Profile Book view
-    - `founders-grid-data.ts` - 100 records from Grid view
-    - `session-events.ts` - 100 records
-    - `startups.ts` - 27 records
+  - **Three schemas fully defined and seeded**:
+    - `founders.ts` - Founder profiles with comprehensive data
+    - `session-events.ts` - Session and event records
+    - `startups.ts` - Startup profiles
   - Field ID mappings for all tables (`lib/airtable-field-ids-ref.ts`)
   - Migration infrastructure (migrations auto-generated in `migrations/` directory, gitignored)
   - **Seed script** (`src/db/seed.ts`) - ✅ PRODUCTION READY, handles misaligned Airtable exports
@@ -603,9 +595,9 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
   - **Database successfully seeded with all data** - verified working
 - **✅ MIGRATION COMPLETED**:
   - **Three Turso query tools implemented and active**:
-    - `queryFoundersTool` - 137 founders (Profile Book + Grid View)
-    - `querySessionsTool` - 100 sessions/events
-    - `queryStartupsTool` - 27 startups
+    - `queryFoundersTool` - All founders
+    - `querySessionsTool` - All sessions/events
+    - `queryStartupsTool` - All startups
   - Database helper functions in `src/db/helpers/` for specialized queries
   - Agent exclusively uses Turso tools (no Airtable queries)
   - `getCohortDataTool` refactored to Turso cross-table search (not included in agent configuration)
