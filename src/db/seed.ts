@@ -76,6 +76,7 @@ const FOUNDERS_FIELD_MAP: Record<string, string> = {
   'Pitch': 'pitch',
   'Left Program': 'leftProgram',
   'Batch N': 'batch',
+  'Batch': 'batch',  // Profile book uses "Batch" instead of "Batch N"
   'I confirm my enrolment to the Pioneers program Batch SU25.': 'openToJoinAnotherProject',
 };
 
@@ -280,7 +281,7 @@ function readJsonFile(filePath: string): any {
 async function seedFounders() {
   log('Seeding founders...');
 
-  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/pioneers_profile_book_2025_readable.json');
+  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/pioneers_profile_book_table_records_readable.json');
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
