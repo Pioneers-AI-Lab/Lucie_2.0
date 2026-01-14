@@ -48,6 +48,11 @@ pnpm db:seed
 
 # Database - Setup database: push schema + seed data
 pnpm db:setup
+
+# Database - Sync new data from Airtable to Turso (incremental update)
+pnpm db:sync
+# or with filters:
+pnpm db:sync --table=founders --batch=S25
 ```
 
 ## Environment Variables
@@ -76,6 +81,12 @@ Required environment variables (see `.env`):
 **Database (Turso + Drizzle ORM):**
 - `TURSO_CONNECTION_URL` - Turso database connection URL (libsql://...)
 - `TURSO_AUTH_TOKEN` - Turso authentication token for database access
+
+**Airtable Sync (Optional - for incremental sync script):**
+- `GRID_VIEW_TABLE_ID` - Airtable table name or ID for Grid View (default: "Grid View (all)")
+- `PROFILE_BOOK_TABLE_ID` - Airtable table name or ID for Profile Book (default: "Pioneers Profile Book")
+- `SESSIONS_TABLE_ID` - Airtable table name or ID for Sessions (default: "Sessions & Events 2025")
+- `STARTUPS_TABLE_ID` - Airtable table name or ID for Startups (default: "Startups 2025")
 
 ## Architecture
 
@@ -598,10 +609,19 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
   - Database helper functions in `src/db/helpers/` for specialized queries
   - Agent exclusively uses Turso tools (no Airtable queries)
   - `getCohortDataTool` refactored to Turso cross-table search (not included in agent configuration)
+- **✅ SYNC MECHANISM IMPLEMENTED**:
+  - **Incremental sync script** (`src/db/sync-from-airtable.ts`) fetches data directly from Airtable API
+  - Command: `pnpm db:sync` (with optional `--table` and `--batch` filters)
+  - Upserts records (insert new, update existing) - never deletes
+  - Automatically normalizes batch names ("Summer 2025" → "S25")
+  - See `docs/database-sync-guide.md` for detailed instructions
 - **⏳ PENDING**:
-  - Sync mechanism for keeping Turso data fresh from Airtable (manual updates for now)
   - Consider removing `cohort-data-tool.ts` entirely if unused
-- **Important**: Run `pnpm db:setup` to push schema and seed data (use `pnpm db:seed` to re-seed without schema changes)
+  - Optional: Set up automated sync (cron job or GitHub Actions)
+- **Important**:
+  - Initial setup: Run `pnpm db:setup` to push schema and seed data
+  - Regular updates: Run `pnpm db:sync` to fetch new data from Airtable
+  - Configure table IDs in `.env` (see docs/database-sync-guide.md)
 
 ### Testing & Quality Infrastructure
 
