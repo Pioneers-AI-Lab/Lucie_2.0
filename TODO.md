@@ -24,15 +24,17 @@ whatsapp: fields['Track record...'] as string | undefined,
 **Estimate**: 2-4 hours
 **Dependencies**: None
 
-### [ ] 2. Fix or Remove Broken Batch Filtering
-**File**: `src/db/helpers/query-all-founders.ts:128`
+### [✅] 2. Fix or Remove Broken Batch Filtering
+**File**: `src/mastra/tools/query-founders-tool.ts`
 **Issue**: `getFoundersByBatch()` returns all founders regardless of batch parameter
-**Options**:
-- Option A: Add `batch` field to founders schema + update migrations
-- Option B: Remove `by-batch` search type from `queryFoundersTool`
-**Impact**: Agent makes false promises to users
-**Estimate**: 3-5 hours (Option A), 30 minutes (Option B)
-**Dependencies**: None
+**Solution**: Commented out `by-batch` search type (Option B) - can be re-enabled when batch field is added to schema
+**Changes Made**:
+- Removed `by-batch` from input schema union
+- Commented out import and case statement
+- Added default case to switch for safety
+- Preserved code for future re-enablement
+**Impact**: Agent no longer advertises broken feature
+**Completed**: 2026-01-14
 
 ### [ ] 3. Fix Agent Instructions - Remove Non-Existent Tool References
 **File**: `src/mastra/agents/lucie-instructions.ts`
@@ -393,13 +395,13 @@ whatsapp: fields['Track record...'] as string | undefined,
 ## 📊 Progress Tracking
 
 ### By Priority
-- **Critical (P1)**: 0/3 completed (0%)
+- **Critical (P1)**: 2/3 completed (67%) ⚡
 - **High (P2)**: 0/4 completed (0%)
 - **Medium (P3)**: 0/8 completed (0%)
 - **Long Term (P4)**: 0/8 completed (0%)
 
 ### By Category
-- **Bug Fixes**: 0/3 completed
+- **Bug Fixes**: 2/3 completed ✅
 - **Testing**: 0/3 completed
 - **Infrastructure**: 0/6 completed
 - **Security**: 0/2 completed

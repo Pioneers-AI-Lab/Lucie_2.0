@@ -8,19 +8,44 @@ import { like, or, and, eq, sql } from 'drizzle-orm';
 
 /**
  * Founder interface (Profile Book only)
+ * Matches pioneers-profile-book-table-ref.json structure
  */
 export interface Founder {
   id: string;
+  // Basic Information
   name: string | null;
-  email: string | null;
-  phone: string | null;
-  linkedin: string | null;
-  nationality: string | null;
   status: string | null;
+  whatsapp: string | null;
+  email: string | null;
+  yourPhoto: string | null;
+  // Project Information
+  existingProjectIdea: string | null;
+  projectExplanation: string | null;
+  existingCofounderName: string | null;
+  openToJoinAnotherProject: string | null;
+  joiningWithCofounder: string | null;
+  // Professional Profile
+  linkedin: string | null;
   techSkills: string | null;
-  roles: string | null;
   industries: string | null;
+  rolesICouldTake: string | null;
+  trackRecordProud: string | null;
+  interestedInWorkingOn: string | null;
   introduction: string | null;
+  // Professional Background
+  companiesWorked: string | null;
+  // Education
+  education: string | null;
+  nationality: string | null;
+  gender: string | null;
+  yearsOfXp: number | null;
+  degree: string | null;
+  academicField: string | null;
+  // Relationships
+  founder: string | null;
+  // Status
+  leftProgram: string | null;
+  // Metadata
   source: 'profile_book';
 }
 
@@ -36,15 +61,31 @@ export async function getAllFounders(): Promise<Founder[]> {
   return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
-    email: f.email,
-    phone: f.whatsapp,
-    linkedin: f.linkedin,
-    nationality: f.nationality,
     status: f.status,
+    whatsapp: f.whatsapp,
+    email: f.email,
+    yourPhoto: f.yourPhoto,
+    existingProjectIdea: f.existingProjectIdea,
+    projectExplanation: f.projectExplanation,
+    existingCofounderName: f.existingCofounderName,
+    openToJoinAnotherProject: f.openToJoinAnotherProject,
+    joiningWithCofounder: f.joiningWithCofounder,
+    linkedin: f.linkedin,
     techSkills: f.techSkills,
-    roles: f.rolesICouldTake,
     industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
+    interestedInWorkingOn: f.interestedInWorkingOn,
     introduction: f.introduction,
+    companiesWorked: f.companiesWorked,
+    education: f.education,
+    nationality: f.nationality,
+    gender: f.gender,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    founder: f.founder,
+    leftProgram: f.leftProgram,
     source: 'profile_book' as const,
   }));
 }
@@ -70,15 +111,31 @@ export async function getFoundersByName(
   return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
-    email: f.email,
-    phone: f.whatsapp,
-    linkedin: f.linkedin,
-    nationality: f.nationality,
     status: f.status,
+    whatsapp: f.whatsapp,
+    email: f.email,
+    yourPhoto: f.yourPhoto,
+    existingProjectIdea: f.existingProjectIdea,
+    projectExplanation: f.projectExplanation,
+    existingCofounderName: f.existingCofounderName,
+    openToJoinAnotherProject: f.openToJoinAnotherProject,
+    joiningWithCofounder: f.joiningWithCofounder,
+    linkedin: f.linkedin,
     techSkills: f.techSkills,
-    roles: f.rolesICouldTake,
     industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
+    interestedInWorkingOn: f.interestedInWorkingOn,
     introduction: f.introduction,
+    companiesWorked: f.companiesWorked,
+    education: f.education,
+    nationality: f.nationality,
+    gender: f.gender,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    founder: f.founder,
+    leftProgram: f.leftProgram,
     source: 'profile_book' as const,
   }));
 }
@@ -107,15 +164,31 @@ export async function getFoundersBySkills(
   return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
-    email: f.email,
-    phone: f.whatsapp,
-    linkedin: f.linkedin,
-    nationality: f.nationality,
     status: f.status,
+    whatsapp: f.whatsapp,
+    email: f.email,
+    yourPhoto: f.yourPhoto,
+    existingProjectIdea: f.existingProjectIdea,
+    projectExplanation: f.projectExplanation,
+    existingCofounderName: f.existingCofounderName,
+    openToJoinAnotherProject: f.openToJoinAnotherProject,
+    joiningWithCofounder: f.joiningWithCofounder,
+    linkedin: f.linkedin,
     techSkills: f.techSkills,
-    roles: f.rolesICouldTake,
     industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
+    interestedInWorkingOn: f.interestedInWorkingOn,
     introduction: f.introduction,
+    companiesWorked: f.companiesWorked,
+    education: f.education,
+    nationality: f.nationality,
+    gender: f.gender,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    founder: f.founder,
+    leftProgram: f.leftProgram,
     source: 'profile_book' as const,
   }));
 }
