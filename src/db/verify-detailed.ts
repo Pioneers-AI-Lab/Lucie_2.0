@@ -42,7 +42,7 @@ async function verifyDetailed() {
     console.log(`  LinkedIn: ${sampleGrid.linkedin?.substring(0, 60)}...`);
     console.log(`  Nationality: ${sampleGrid.nationality}`);
     console.log(`  Age: ${sampleGrid.age}`);
-    console.log(`  Batch: ${sampleGrid.batchN}`);
+    console.log(`  Batch: ${sampleGrid.batch}`);
     console.log(`  Pro Keywords: ${sampleGrid.proKeywords?.substring(0, 100)}...`);
     console.log(`  Personal Keywords: ${sampleGrid.personalKeywords?.substring(0, 100)}...`);
   }

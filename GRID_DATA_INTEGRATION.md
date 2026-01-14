@@ -75,7 +75,7 @@ The Grid View export also has **misaligned headers** (different from Profile Boo
   "linkedin": "https://www.linkedin.com/in/louis-gavalda/",
   "nationality": "FR",
   "age": "29",
-  "batchN": "F24",
+  "batch": "F24",
   "proKeywords": "Web Apps,Scraping,Automation,Computer Vision...",
   "personalKeywords": "Nature,Sea,Honesty,Relaxed,Experimental..."
 }
@@ -135,7 +135,7 @@ const louis = await db.select()
 // Filter by batch
 const f24Founders = await db.select()
   .from(foundersGridData)
-  .where(eq(foundersGridData.batchN, 'F24'));
+  .where(eq(foundersGridData.batch, 'F24'));
 ```
 
 ---

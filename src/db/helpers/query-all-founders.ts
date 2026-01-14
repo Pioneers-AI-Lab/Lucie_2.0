@@ -49,7 +49,7 @@ export async function getAllFounders(): Promise<UnifiedFounder[]> {
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: null, // Not in profile book
-      batch: f.batchN,
+      batch: f.batch,
       status: f.status,
       techSkills: f.techSkills,
       roles: f.rolesICouldTake,
@@ -65,7 +65,7 @@ export async function getAllFounders(): Promise<UnifiedFounder[]> {
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: f.age,
-      batch: f.batchN,
+      batch: f.batch,
       status: null, // Not in grid view
       techSkills: f.itExpertise,
       roles: null, // Not in grid view
@@ -104,7 +104,7 @@ export async function searchFoundersByName(searchTerm: string): Promise<UnifiedF
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: null,
-      batch: f.batchN,
+      batch: f.batch,
       status: f.status,
       techSkills: f.techSkills,
       roles: f.rolesICouldTake,
@@ -120,7 +120,7 @@ export async function searchFoundersByName(searchTerm: string): Promise<UnifiedF
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: f.age,
-      batch: f.batchN,
+      batch: f.batch,
       status: null,
       techSkills: f.itExpertise,
       roles: null,
@@ -157,7 +157,7 @@ export async function searchFoundersBySkills(skillTerm: string): Promise<Unified
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: null,
-      batch: f.batchN,
+      batch: f.batch,
       status: f.status,
       techSkills: f.techSkills,
       roles: f.rolesICouldTake,
@@ -173,7 +173,7 @@ export async function searchFoundersBySkills(skillTerm: string): Promise<Unified
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: f.age,
-      batch: f.batchN,
+      batch: f.batch,
       status: null,
       techSkills: f.itExpertise,
       roles: null,
@@ -191,12 +191,12 @@ export async function getFoundersByBatch(batch: string): Promise<UnifiedFounder[
   // Search Profile Book
   const profileMatches = await db.select()
     .from(founders)
-    .where(eq(founders.batchN, batch));
+    .where(eq(founders.batch, batch));
 
   // Search Grid View
   const gridMatches = await db.select()
     .from(foundersGridData)
-    .where(eq(foundersGridData.batchN, batch));
+    .where(eq(foundersGridData.batch, batch));
 
   // Normalize and combine
   return [
@@ -208,7 +208,7 @@ export async function getFoundersByBatch(batch: string): Promise<UnifiedFounder[
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: null,
-      batch: f.batchN,
+      batch: f.batch,
       status: f.status,
       techSkills: f.techSkills,
       roles: f.rolesICouldTake,
@@ -224,7 +224,7 @@ export async function getFoundersByBatch(batch: string): Promise<UnifiedFounder[
       linkedin: f.linkedin,
       nationality: f.nationality,
       age: f.age,
-      batch: f.batchN,
+      batch: f.batch,
       status: null,
       techSkills: f.itExpertise,
       roles: null,

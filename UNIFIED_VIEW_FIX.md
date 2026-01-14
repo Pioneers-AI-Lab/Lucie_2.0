@@ -55,7 +55,7 @@ SELECT
 **Problem**: Used camelCase TypeScript property names instead of snake_case database column names:
 - `emailAddress` → should be `email_address`
 - `mobileNumber` → should be `mobile_number`
-- `batchN` → should be `batch_n`
+- `batch` → should be `batch_n`
 - `itExpertise` → should be `it_expertise`
 - `proKeywords` → should be `pro_keywords`
 - And many more...

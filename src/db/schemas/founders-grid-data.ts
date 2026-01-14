@@ -32,7 +32,7 @@ export const foundersGridData = sqliteTable('founders_grid_data', {
   // Airtable ID: fld2v5HBSXKokjTrG
   nationality: text('nationality'),
   // Airtable ID: fldcjn3YhPoDRT64G
-  batchN: text('batch_n'),
+  batch: text('batch_n'),
   // Airtable ID: fldkuBIMd9oCG54Sc
   itExpertise: text('it_expertise'),
   // Airtable ID: fldBZTfVtUKSR3Ue1

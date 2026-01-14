@@ -155,6 +155,12 @@
       "type": "string",
       "id": "fldBepgICe1g9FANb",
       "index": 25
+    },
+    {
+      "key": "left_program",
+      "type": "string",
+      "id": "fldJdDqVIehLc5JAi",
+      "index": 26
     }
   ]
 }

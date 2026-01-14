@@ -75,7 +75,7 @@ const FOUNDERS_FIELD_MAP: Record<string, string> = {
   'Personal Keywords': 'personalKeywords',
   'Pitch': 'pitch',
   'Left Program': 'leftProgram',
-  'Batch N': 'batchN',
+  'Batch N': 'batch',
   'I confirm my enrolment to the Pioneers program Batch SU25.': 'openToJoinAnotherProject',
 };
 
@@ -105,7 +105,7 @@ const FOUNDERS_GRID_FIELD_MAP: Record<string, string> = {
 
   // === Fields that match correctly ===
   'Age': 'age',
-  'Batch N': 'batchN',
+  'Batch N': 'batch',
   'IT Expertise': 'itExpertise',
   'Photo': 'photo',
   ' please write his/her name below."': 'introMessage',  // Contains intro text
