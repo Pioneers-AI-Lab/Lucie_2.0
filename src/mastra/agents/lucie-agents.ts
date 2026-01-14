@@ -1,6 +1,7 @@
 import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import { getCohortDataTool } from '../tools/cohort-data-tool';
+import { queryFoundersTool } from '../tools/query-founders-tool';
 import { lucieInstructions } from "./lucie-instructions";
 
 export const lucie = new Agent({
@@ -17,5 +18,6 @@ export const lucie = new Agent({
   model: process.env.MODEL || 'anthropic/claude-3-haiku-20240307',
   tools: {
     getCohortDataTool,
+    queryFoundersTool,
   },
 });
