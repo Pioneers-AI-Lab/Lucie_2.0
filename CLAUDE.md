@@ -42,6 +42,12 @@ pnpm dbp
 pnpm drizzle-kit studio
 # or shorthand:
 pnpm dbs
+
+# Database - Seed Turso database from JSON files (deletes existing data!)
+pnpm db:seed
+
+# Database - Setup database: push schema + seed data
+pnpm db:setup
 ```
 
 ## Environment Variables
@@ -471,15 +477,18 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - **Completed**:
   - Turso setup and configuration (`drizzle.config.ts`)
   - Drizzle ORM integration (`src/db/index.ts`)
-  - Three schemas fully defined: `founders.ts`, `startups.ts`, `session-events.ts`
+  - Three schemas fully defined: `founders.ts` (37 records), `session-events.ts` (100 records), `startups.ts` (27 records)
   - Field ID mappings for all three tables (`lib/airtable-field-ids-ref.ts`)
   - Migration infrastructure (migrations auto-generated in `migrations/` directory, gitignored)
+  - **Seed script** (`src/db/seed.ts`) - fully functional, populates Turso from JSON files
   - JSON seed data prepared in `data/2025-Cohort_Data/JSON/` for all three tables
+  - Database successfully seeded with all data
 - **Pending**:
-  - Data migration scripts (Airtable → Turso bulk import from JSON seed files)
   - Tool updates to query Turso instead of/alongside Airtable
   - Decision on read strategy (Turso primary vs Airtable primary vs dual-read)
+  - Sync mechanism for keeping Turso data fresh from Airtable
 - **Strategy**: Dual-read approach recommended - keep `getCohortDataTool` while building Turso tools, gradually migrate queries
+- **Important**: Run `pnpm db:setup` to push schema and seed data (use `pnpm db:seed` to re-seed without schema changes)
 
 ### Testing & Quality Infrastructure
 

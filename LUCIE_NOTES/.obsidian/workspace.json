@@ -11,10 +11,14 @@
             "id": "c6cf859015a0e3d8",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "To Do.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "To Do"
             }
           }
         ]
@@ -178,6 +182,7 @@
   },
   "active": "c6cf859015a0e3d8",
   "lastOpenFiles": [
+    "To Do.md",
     "Welcome.md"
   ]
 }

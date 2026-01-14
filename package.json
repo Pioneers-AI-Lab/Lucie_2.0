@@ -12,7 +12,9 @@
     "dbg": "npx drizzle-kit generate",
     "dbm": "npx drizzle-kit migrate",
     "dbp": "npx drizzle-kit push",
-    "dbs": "npx drizzle-kit studio"
+    "dbs": "npx drizzle-kit studio",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:setup": "pnpm dbp && pnpm db:seed"
   },
   "keywords": [],
   "author": "",
