@@ -18,41 +18,42 @@ import { message, error as printError, log as printLog } from '../../lib/print-h
 const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
 
+// CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
+// These mappings must match the actual misaligned data structure from sync-from-airtable.ts
+// Field order matches pioneers-profile-book-table-ref.json
 const FOUNDERS_FIELD_MAP: Record<string, string> = {
-  // === CRITICAL MISALIGNMENTS (verified) ===
-  Email: 'name', // Contains: person's name
-  Education: 'email', // Contains: actual email address
-  Industries: 'linkedin', // Contains: LinkedIn URL
-  LinkedIn: 'nationality', // Contains: actual nationality
-  Nationality: 'status', // Contains: availability status
-  Status: 'trackRecordProud', // Contains: track record text
-  'Track record / something I am proud of ': 'whatsapp', // Contains: phone number
-  Name: 'rolesICouldTake', // Contains: roles list
-  'Are you open to join another project during the program? ':
-    'companiesWorked', // Contains: companies list
-  'Companies Worked': 'degree', // Contains: degree level
-  Degree: 'existingProjectIdea', // Contains: Yes/No for project
-  'Do you have an existing project/idea ?': 'education', // Contains: education institution
-  Founder: 'gender', // Contains: gender
-  Gender: 'leftProgram', // Contains: enrollment confirmation
-  '"If yes': 'industries', // Contains: industries list
-  'Tech Skills': 'interestedInWorkingOn', // Contains: what they want to work on
-  'What I am interested in working on:': 'yearsOfXp', // Contains: years (as string like "7")
-  'Roles I could take': 'techSkills', // Contains: actual tech skills
-
-  // === Project/cofounder fields ===
-  ' explain it in a few words"': 'projectExplanation',
-  ' please insert his/her name below."': 'joiningWithCofounder',
-  '"Are you joining with an existing cofounder? If yes':
-    'existingCofounderName',
-
-  // === Fields that match correctly ===
-  'Introduction:': 'introduction',
-  'Academic Field': 'academicField',
-  'Your Photo': 'yourPhoto',
-  'left program': 'leftProgram', // Note: lowercase in records file
-  'I confirm my enrolment to the Pioneers program Batch SU25.':
-    'openToJoinAnotherProject',
+  // Basic Information (table-ref index 0-4)
+  Name: 'name', // Misaligned: contains name (index 0)
+  Status: 'status', // Misaligned: contains status (index 1)
+  Whatsapp: 'whatsapp', // Misaligned: contains phone (index 2)
+  Email: 'email', // Misaligned: contains email (index 3)
+  'Your photo': 'yourPhoto', // Photo is an array of objects (index 4)
+  // Project Information (table-ref index 5-9)
+  'Do you have an existing project/idea ?': 'existingProjectIdea', // Misaligned (index 5)
+  ' explain it in a few words': 'projectExplanation', // Misaligned (partial field name) (index 6)
+  'Are you joining with an existing cofounder? If yes': 'existingCofounderName', // Misaligned (partial field name) (index 7)
+  'I confirm my enrolment to the Pioneers program Batch': 'openToJoinAnotherProject', // (index 8)
+  ' please insert his/her name below': 'joiningWithCofounder', // Misaligned (partial field name) (index 9)
+  // Professional Profile (table-ref index 10-16)
+  LinkedIn: 'linkedin', // Misaligned: contains LinkedIn (index 10)
+  'Roles I could take': 'techSkills', // Misaligned (index 11)
+  Industries: 'industries', // Misaligned (partial field name) (index 12)
+  // Note: 'Name' at index 13 maps to 'rolesICouldTake' but we can't have duplicate keys
+  'Track record / something I am proud of ': 'trackRecordProud', // Misaligned (index 14)
+  'Tech Skills': 'interestedInWorkingOn', // Misaligned (index 15)
+  'Introduction:': 'introduction', // (index 16)
+  // Professional Background (table-ref index 17)
+  'Companies Worked': 'companiesWorked', // Misaligned (index 17)
+  // Education (table-ref index 18-23)
+  Education: 'education', // Misaligned (index 18)
+  Nationality: 'nationality', // Misaligned: contains nationality (index 19)
+  Gender: 'gender', // Misaligned (index 20)
+  YearsofXP: 'yearsOfXp', // Misaligned (index 21)
+  Degree: 'degree', // Misaligned (index 22)
+  AcademicField: 'academicField', // (index 23)
+  // Relationships (table-ref index 24)
+  Founder: 'founder', // (index 24)
+  // Note: 'Gender' at index 25 maps to 'leftProgram' but we can't have duplicate keys
 };
 
 const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
@@ -81,12 +82,32 @@ const STARTUPS_FIELD_MAP: Record<string, string> = {
 };
 
 /**
+ * Helper function to safely parse integer values
+ */
+function safeParseInt(value: any): number | null {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = typeof value === 'number' ? value : parseInt(value, 10);
+  return isNaN(parsed) ? null : parsed;
+}
+
+/**
+ * Helper function to convert arrays to comma-separated strings
+ */
+function arrayToString(value: any): string | undefined {
+  if (value === null || value === undefined) return undefined;
+  if (Array.isArray(value)) return value.join(', ');
+  return String(value);
+}
+
+/**
  * Transform JSON record to database format
+ * CRITICAL: Matches the transformation logic from sync-from-airtable.ts
  */
 function transformFounder(recordId: string, record: any): any {
   const fields = record.fields || {};
   const transformed: any = { id: recordId };
 
+  // Process fields from the field map
   for (const [jsonKey, dbKey] of Object.entries(FOUNDERS_FIELD_MAP)) {
     const value = fields[jsonKey];
 
@@ -95,15 +116,17 @@ function transformFounder(recordId: string, record: any): any {
     }
 
     // Handle special type conversions
-    if (dbKey === 'yearsOfXp') {
-      // Try to parse as integer
-      const parsed = parseInt(value, 10);
-      transformed[dbKey] = isNaN(parsed) ? null : parsed;
+    if (dbKey === 'yourPhoto') {
+      // Photo is an array of objects - stringify it
+      transformed[dbKey] = JSON.stringify(value);
+    } else if (dbKey === 'yearsOfXp') {
+      // Parse as integer
+      transformed[dbKey] = safeParseInt(value);
     } else if (Array.isArray(value)) {
-      // Convert arrays to comma-separated strings (e.g., Tech Skills, Industries)
-      transformed[dbKey] = value.join(', ');
+      // Convert arrays to comma-separated strings
+      transformed[dbKey] = arrayToString(value);
     } else if (typeof value === 'object' && value !== null) {
-      // Skip objects like [object Object] or photo objects
+      // Skip objects like [object Object]
       continue;
     } else if (typeof value === 'string' && value.includes('[object Object]')) {
       // Skip stringified objects
@@ -112,6 +135,19 @@ function transformFounder(recordId: string, record: any): any {
       transformed[dbKey] = typeof value === 'string' ? value : String(value);
     }
   }
+
+  // Handle fields that can't be in the map due to duplicate keys
+  // Note: Due to misaligned headers, some field names appear multiple times
+  // These additional mappings match sync-from-airtable.ts lines 122 and 140
+
+  // rolesICouldTake: maps from 'Name' at index 13 (but we already used 'Name' for name at index 0)
+  // This would need special handling if the JSON structure actually has duplicate keys
+  // For now, commenting out as the standard field map handles the primary occurrence
+  // transformed.rolesICouldTake = arrayToString(fields['Name']); // Would conflict with name field
+
+  // leftProgram: maps from 'Gender' at index 25 (but we already used 'Gender' for gender at index 20)
+  // This would need special handling if the JSON structure actually has duplicate keys
+  // transformed.leftProgram = arrayToString(fields['Gender']); // Would conflict with gender field
 
   return transformed;
 }

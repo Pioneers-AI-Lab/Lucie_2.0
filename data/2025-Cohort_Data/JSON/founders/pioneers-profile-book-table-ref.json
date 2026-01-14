@@ -128,7 +128,7 @@
     },
     {
       "key": "years_of_xp",
-      "type": "number",
+      "type": "string",
       "id": "fldNlvxotHY13xj13",
       "index": 21
     },
@@ -157,7 +157,7 @@
       "index": 25
     },
     {
-      "key": "left_program",
+      "key": "batch",
       "type": "string",
       "id": "fldJdDqVIehLc5JAi",
       "index": 26

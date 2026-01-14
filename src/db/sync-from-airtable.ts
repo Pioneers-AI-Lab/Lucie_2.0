@@ -11,7 +11,7 @@
  * Usage:
  *   pnpm db:sync                    # Sync all tables
  *   pnpm db:sync --table founders   # Sync specific table
- *   pnpm db:sync --batch S25        # Sync only specific batch
+ *   Note: Batch filtering not available - Batch field not in Profile Book schema
  */
 
 import Airtable from 'airtable';
@@ -19,11 +19,8 @@ import { db } from './index.js';
 import { founders, sessionEvents, startups } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 import { eq } from 'drizzle-orm';
-import {
-  founderAirtableFieldIds,
-  sessionEventAirtableFieldIds,
-  startupAirtableFieldIds,
-} from '../../lib/airtable-field-ids-ref.js';
+// Note: Field IDs are not used because Airtable API returns human-readable field names
+// import { founderAirtableFieldIds, sessionEventAirtableFieldIds, startupAirtableFieldIds } from '../../lib/airtable-field-ids-ref.js';
 
 const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
@@ -49,36 +46,18 @@ const TABLES = {
   STARTUPS: process.env.SU_2025_STARTUPS_TABLE_ID || 'Startups 2025',
 };
 
-/**
- * Normalize batch value
- */
-function normalizeBatch(batch: string | null | undefined): string | null {
-  if (!batch) return null;
-
-  return batch
-    .replace(/Summer\s*2025/i, 'S25')
-    .replace(/Summer\s*25/i, 'S25')
-    .replace(/Fall\s*2024/i, 'F24')
-    .replace(/Fall\s*24/i, 'F24')
-    .replace(/Spring\s*2024/i, 'S24')
-    .replace(/Spring\s*24/i, 'S24')
-    .replace(/Fall\s*2023/i, 'F23')
-    .replace(/Fall\s*23/i, 'F23')
-    .trim();
-}
+// Note: Batch field removed from Profile Book schema - batch filtering not available
 
 /**
  * Sync founders from Airtable
+ * Note: Batch filtering not available - Batch field not in Profile Book schema
  */
-async function syncFounders(batchFilter?: string) {
+async function syncFounders() {
   log('Syncing founders from Airtable...');
 
   try {
     // Fetch from Airtable
-    const formula = batchFilter ? `{Batch} = "${batchFilter}"` : '';
-    const records = await base(TABLES.FOUNDERS)
-      .select({ filterByFormula: formula })
-      .all();
+    const records = await base(TABLES.FOUNDERS).select().all();
 
     log(`Fetched ${records.length} founders from Airtable`);
 
@@ -101,36 +80,64 @@ async function syncFounders(batchFilter?: string) {
         return isNaN(parsed) ? null : parsed;
       };
 
-      // Transform to founders schema using Airtable field IDs
+      // Helper function to convert arrays to comma-separated strings
+      const arrayToString = (value: any): string | undefined => {
+        if (value === null || value === undefined) return undefined;
+        if (Array.isArray(value)) return value.join(', ');
+        return String(value);
+      };
+
+      // Transform to founders schema using Airtable human-readable field names
+      // CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
+      // These mappings match seed.ts and must match the actual misaligned data!
+      // Field order matches pioneers-profile-book-table-ref.json
       const data = {
         id: record.id,
-        name: fields[founderAirtableFieldIds.name] as string | undefined,
-        email: fields[founderAirtableFieldIds.email] as string | undefined,
-        whatsapp: fields[founderAirtableFieldIds.whatsapp] as string | undefined,
-        linkedin: fields[founderAirtableFieldIds.linkedin] as string | undefined,
-        nationality: fields[founderAirtableFieldIds.nationality] as string | undefined,
-        status: fields[founderAirtableFieldIds.status] as string | undefined,
-        batch: normalizeBatch(fields['Batch'] as string | undefined),
-        yourPhoto: fields[founderAirtableFieldIds.yourPhoto] as string | undefined,
-        techSkills: fields[founderAirtableFieldIds.techSkills] as string | undefined,
-        rolesICouldTake: fields[founderAirtableFieldIds.rolesICouldTake] as string | undefined,
-        trackRecordProud: fields[founderAirtableFieldIds.trackRecordProud] as string | undefined,
-        companiesWorked: fields[founderAirtableFieldIds.companiesWorked] as string | undefined,
-        degree: fields[founderAirtableFieldIds.degree] as string | undefined,
-        existingProjectIdea: fields[founderAirtableFieldIds.existingProjectIdea] as string | undefined,
-        education: fields[founderAirtableFieldIds.education] as string | undefined,
-        gender: fields[founderAirtableFieldIds.gender] as string | undefined,
-        leftProgram: fields[founderAirtableFieldIds.leftProgram] as string | undefined,
-        industries: fields[founderAirtableFieldIds.industries] as string | undefined,
-        interestedInWorkingOn: fields[founderAirtableFieldIds.interestedInWorkingOn] as string | undefined,
-        yearsOfXp: safeParseInt(fields[founderAirtableFieldIds.yearsOfXp]),
-        introduction: fields[founderAirtableFieldIds.introduction] as string | undefined,
-        academicField: fields[founderAirtableFieldIds.academicField] as string | undefined,
-        projectExplanation: fields[founderAirtableFieldIds.projectExplanation] as string | undefined,
-        joiningWithCofounder: fields[founderAirtableFieldIds.joiningWithCofounder] as string | undefined,
-        existingCofounderName: fields[founderAirtableFieldIds.existingCofounderName] as string | undefined,
-        openToJoinAnotherProject: fields[founderAirtableFieldIds.openToJoinAnotherProject] as string | undefined,
-        founder: fields[founderAirtableFieldIds.founder] as string | undefined,
+        // Basic Information (table-ref index 0-4)
+        name: arrayToString(fields['Name']), // Misaligned: contains name (index 0)
+        status: arrayToString(fields['Status']), // Misaligned: contains status (index 1)
+        whatsapp: arrayToString(fields['Whatsapp']), // Misaligned: contains phone (index 2)
+        email: arrayToString(fields['Email']), // Misaligned: contains email (index 3)
+        yourPhoto: fields['Your photo']
+          ? JSON.stringify(fields['Your photo'])
+          : undefined, // Photo is an array of objects (index 4)
+        // Project Information (table-ref index 5-9)
+        existingProjectIdea: arrayToString(
+          fields['Do you have an existing project/idea ?'],
+        ), // Misaligned (index 5)
+        projectExplanation: arrayToString(fields[' explain it in a few words']), // Misaligned (partial field name) (index 6)
+        existingCofounderName: arrayToString(
+          fields['Are you joining with an existing cofounder? If yes'],
+        ), // Misaligned (partial field name) (index 7)
+        openToJoinAnotherProject: arrayToString(
+          fields['I confirm my enrolment to the Pioneers program Batch'],
+        ), // (index 8)
+        joiningWithCofounder: arrayToString(
+          fields[' please insert his/her name below'],
+        ), // Misaligned (partial field name) (index 9)
+        // Professional Profile (table-ref index 10-16)
+        linkedin: arrayToString(fields['LinkedIn']), // Misaligned: contains LinkedIn (index 10)
+        techSkills: arrayToString(fields['Roles I could take']), // Misaligned (index 11)
+        industries: arrayToString(fields['Industries']), // Misaligned (partial field name) (index 12)
+        rolesICouldTake: arrayToString(fields['Name']), // Misaligned (index 13)
+        trackRecordProud: arrayToString(
+          fields['Track record / something I am proud of '],
+        ), // Misaligned (index 14)
+        interestedInWorkingOn: arrayToString(fields['Tech Skills']), // Misaligned (index 15)
+        introduction: arrayToString(fields['Introduction:']), // (index 16)
+        // Professional Background (table-ref index 17)
+        companiesWorked: arrayToString(fields['Companies Worked']), // Misaligned (index 17)
+        // Education (table-ref index 18-23)
+        education: arrayToString(fields['Education']), // Misaligned (index 18)
+        nationality: arrayToString(fields['Nationality']), // Misaligned: contains nationality (index 19)
+        gender: arrayToString(fields['Gender']), // Misaligned (index 20)
+        yearsOfXp: safeParseInt(fields['Years of XP']), // Misaligned (index 21)
+        degree: arrayToString(fields['Degree']), // Misaligned (index 22)
+        academicField: arrayToString(fields['Academic Field']), // (index 23)
+        // Relationships (table-ref index 24)
+        founder: arrayToString(fields['Founder']), // (index 24)
+        // Status (table-ref index 25)
+        leftProgram: arrayToString(fields['Gender']), // Misaligned (index 25)
       };
 
       // Check if record exists
@@ -154,7 +161,9 @@ async function syncFounders(batchFilter?: string) {
       }
     }
 
-    message(`✓ Founders sync complete: ${inserted} inserted, ${updated} updated`);
+    message(
+      `✓ Founders sync complete: ${inserted} inserted, ${updated} updated`,
+    );
     return { inserted, updated };
   } catch (err: any) {
     error(`Founders sync failed: ${err.message}`);
@@ -184,20 +193,23 @@ async function syncSessionEvents() {
     for (const record of records) {
       const fields = record.fields;
 
+      // Use human-readable field names (Airtable API returns these, not field IDs)
       const data = {
         id: record.id,
-        name: fields[sessionEventAirtableFieldIds.name] as string | undefined,
-        date: fields[sessionEventAirtableFieldIds.date] ? new Date(fields[sessionEventAirtableFieldIds.date] as string) : null,
-        programWeek: fields[sessionEventAirtableFieldIds.programWeek] as string | undefined,
-        typeOfSession: fields[sessionEventAirtableFieldIds.typeOfSession] as string | undefined,
-        speaker: fields[sessionEventAirtableFieldIds.speaker] as string | undefined,
-        emails: fields[sessionEventAirtableFieldIds.emails] as string | undefined,
-        slackInstructionEmailCommu: fields[sessionEventAirtableFieldIds.slackInstructionEmailCommu] as string | undefined,
-        participants: fields[sessionEventAirtableFieldIds.participants] as string | undefined,
-        notesFeedback: fields[sessionEventAirtableFieldIds.notesFeedback] as string | undefined,
-        notes2: fields[sessionEventAirtableFieldIds.notes2] as string | undefined,
-        attachments: fields[sessionEventAirtableFieldIds.attachments] as string | undefined,
-        nameFromLinked: fields[sessionEventAirtableFieldIds.nameFromLinked] as string | undefined,
+        name: fields['Name'] as string | undefined,
+        date: fields['Date'] ? new Date(fields['Date'] as string) : null,
+        programWeek: fields['Program Week'] as string | undefined,
+        typeOfSession: fields['Type of session'] as string | undefined,
+        speaker: fields['Speaker'] as string | undefined,
+        emails: fields['Emails'] as string | undefined,
+        slackInstructionEmailCommu: fields[
+          'Slack Instruction & Email Commu'
+        ] as string | undefined,
+        participants: fields['Participants'] as string | undefined,
+        notesFeedback: fields['Notes / Feedback'] as string | undefined,
+        notes2: fields['Notes 2'] as string | undefined,
+        attachments: fields['Attachments'] as string | undefined,
+        nameFromLinked: fields['Name (from Linked)'] as string | undefined,
       };
 
       const existing = await db
@@ -218,7 +230,9 @@ async function syncSessionEvents() {
       }
     }
 
-    message(`✓ Session events sync complete: ${inserted} inserted, ${updated} updated`);
+    message(
+      `✓ Session events sync complete: ${inserted} inserted, ${updated} updated`,
+    );
     return { inserted, updated };
   } catch (err: any) {
     error(`Session events sync failed: ${err.message}`);
@@ -248,15 +262,16 @@ async function syncStartups() {
     for (const record of records) {
       const fields = record.fields;
 
+      // Use human-readable field names (Airtable API returns these, not field IDs)
       const data = {
         id: record.id,
-        startup: fields[startupAirtableFieldIds.startup] as string | undefined,
-        industry: fields[startupAirtableFieldIds.industry] as string | undefined,
-        startupInAWord: fields[startupAirtableFieldIds.startupInAWord] as string | undefined,
-        teamMembers: fields[startupAirtableFieldIds.teamMembers] as string | undefined,
-        tractionSummary: fields[startupAirtableFieldIds.tractionSummary] as string | undefined,
-        detailedProgress: fields[startupAirtableFieldIds.detailedProgress] as string | undefined,
-        previousDecks: fields[startupAirtableFieldIds.previousDecks] as string | undefined,
+        startup: fields['Startup'] as string | undefined,
+        industry: fields['Industry'] as string | undefined,
+        startupInAWord: fields['Startup in a word'] as string | undefined,
+        teamMembers: fields['Team Members'] as string | undefined,
+        tractionSummary: fields['Traction Summary'] as string | undefined,
+        detailedProgress: fields['Detailed Progress'] as string | undefined,
+        previousDecks: fields['Previous Decks'] as string | undefined,
       };
 
       const existing = await db
@@ -277,7 +292,9 @@ async function syncStartups() {
       }
     }
 
-    message(`✓ Startups sync complete: ${inserted} inserted, ${updated} updated`);
+    message(
+      `✓ Startups sync complete: ${inserted} inserted, ${updated} updated`,
+    );
     return { inserted, updated };
   } catch (err: any) {
     error(`Startups sync failed: ${err.message}`);
@@ -292,14 +309,17 @@ async function main() {
   try {
     // Parse command line arguments
     const args = process.argv.slice(2);
-    const tableArg = args.find(arg => arg.startsWith('--table='));
-    const batchArg = args.find(arg => arg.startsWith('--batch='));
+    const tableArg = args.find((arg) => arg.startsWith('--table='));
+    const batchArg = args.find((arg) => arg.startsWith('--batch='));
 
     const table = tableArg?.split('=')[1];
     const batch = batchArg?.split('=')[1];
 
     log('Starting Airtable → Turso sync...');
-    if (batch) log(`Filtering by batch: ${batch}`);
+    if (batch)
+      log(
+        `⚠️  Batch filtering not available - Batch field not in Profile Book schema`,
+      );
     if (table) log(`Syncing only: ${table}`);
 
     const stats = {
@@ -309,7 +329,8 @@ async function main() {
 
     // Sync based on arguments
     if (!table || table === 'founders') {
-      const result = await syncFounders(batch);
+      // Note: batch parameter ignored - Batch field not in Profile Book schema
+      const result = await syncFounders();
       stats.totalInserted += result.inserted;
       stats.totalUpdated += result.updated;
     }

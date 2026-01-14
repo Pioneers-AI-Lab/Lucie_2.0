@@ -17,10 +17,17 @@ export interface Founder {
   linkedin: string | null;
   nationality: string | null;
   status: string | null;
+  yearsOfXp: number | null;
+  degree: string | null;
+  academicField: string | null;
+  leftProgram: string | null;
+  yourPhoto: string | null;
   techSkills: string | null;
   roles: string | null;
   industries: string | null;
   introduction: string | null;
+  rolesICouldTake: string | null;
+  trackRecordProud: string | null;
   source: 'profile_book';
 }
 
@@ -46,6 +53,13 @@ export async function getAllFounders(): Promise<Founder[]> {
     industries: f.industries,
     introduction: f.introduction,
     source: 'profile_book' as const,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    leftProgram: f.leftProgram,
+    yourPhoto: f.yourPhoto,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
   }));
 }
 
@@ -80,6 +94,13 @@ export async function getFoundersByName(
     industries: f.industries,
     introduction: f.introduction,
     source: 'profile_book' as const,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    leftProgram: f.leftProgram,
+    yourPhoto: f.yourPhoto,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
   }));
 }
 
@@ -116,6 +137,13 @@ export async function getFoundersBySkills(
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    leftProgram: f.leftProgram,
+    yourPhoto: f.yourPhoto,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
     source: 'profile_book' as const,
   }));
 }
@@ -145,6 +173,13 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    yearsOfXp: f.yearsOfXp,
+    degree: f.degree,
+    academicField: f.academicField,
+    leftProgram: f.leftProgram,
+    yourPhoto: f.yourPhoto,
+    rolesICouldTake: f.rolesICouldTake,
+    trackRecordProud: f.trackRecordProud,
     source: 'profile_book' as const,
   }));
 }
