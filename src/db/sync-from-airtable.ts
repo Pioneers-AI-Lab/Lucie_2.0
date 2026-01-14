@@ -95,9 +95,9 @@ async function syncFounders() {
         id: record.id,
         // Basic Information (table-ref index 0-4)
         name: arrayToString(fields['Name']), // Misaligned: contains name (index 0)
+        email: arrayToString(fields['Email']), // Misaligned: contains email (index 3)
         status: arrayToString(fields['Status']), // Misaligned: contains status (index 1)
         whatsapp: arrayToString(fields['Whatsapp']), // Misaligned: contains phone (index 2)
-        email: arrayToString(fields['Email']), // Misaligned: contains email (index 3)
         yourPhoto: fields['Your photo']
           ? JSON.stringify(fields['Your photo'])
           : undefined, // Photo is an array of objects (index 4)
@@ -131,7 +131,7 @@ async function syncFounders() {
         education: arrayToString(fields['Education']), // Misaligned (index 18)
         nationality: arrayToString(fields['Nationality']), // Misaligned: contains nationality (index 19)
         gender: arrayToString(fields['Gender']), // Misaligned (index 20)
-        yearsOfXp: safeParseInt(fields['Years of XP']), // Misaligned (index 21)
+        yearsOfXp: arrayToString(fields['Years of XP']), // Misaligned (index 21)
         degree: arrayToString(fields['Degree']), // Misaligned (index 22)
         academicField: arrayToString(fields['Academic Field']), // (index 23)
         // Relationships (table-ref index 24)

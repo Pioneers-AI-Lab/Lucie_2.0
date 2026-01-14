@@ -64,7 +64,7 @@ export const founders = sqliteTable('founders', {
   // Airtable ID: fld6sYQmTJAvxxh5Y
   gender: text('gender'),
   // Airtable ID: fldNlvxotHY13xj13
-  yearsOfXp: integer('years_of_xp'),
+  yearsOfXp: text('years_of_xp'),
   // Airtable ID: fldadoQzo3ag7t8ng
   degree: text('degree'),
   // Airtable ID: fldzTd96TnSJ90VUm
