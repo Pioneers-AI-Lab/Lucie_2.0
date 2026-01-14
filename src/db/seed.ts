@@ -18,27 +18,6 @@ import { message, error as printError, log as printLog } from '../../lib/print-h
 const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
 
-/**
- * Field name mappings from Profile Book readable JSON to database schema
- *
- * CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
- * These mappings are based on what the data ACTUALLY contains (verified for Dylan Mérigaud record).
- * DO NOT "fix" these to be logical - they must match the actual misaligned data!
- *
- * This mapping is for Profile Book fields only (matches pioneers-profile-book-table-ref.json).
- * Grid View fields (mobileNumber, age, introMessage, etc.) have been removed.
- *
- * Complete verified misalignments:
- *   'Email' → name (Dylan Mérigaud)
- *   'Education' → email (merigaudconsulting@gmail.com)
- *   'Industries' → linkedin (https://www.linkedin.com/in/dylanmerigaud)
- *   'LinkedIn' → nationality (France)
- *   'Nationality' → status (No, I have other commitments.)
- *   'Status' → trackRecordProud (- Worked for 7 years...)
- *   'Track record...' → whatsapp (+33781877734)
- *   'Name' → rolesICouldTake (Design,Tech Dev...)
- *   ... and many more (see mappings below)
- */
 const FOUNDERS_FIELD_MAP: Record<string, string> = {
   // === CRITICAL MISALIGNMENTS (verified) ===
   Email: 'name', // Contains: person's name
