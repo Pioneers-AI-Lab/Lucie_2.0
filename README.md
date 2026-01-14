@@ -349,50 +349,50 @@ pnpm start
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        User Interface                        │
-│                   (Slack / Terminal CLI)                     │
+│                        User Interface                       │
+│                   (Slack / Terminal CLI)                    │
 └────────────────────────┬────────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      Mastra Instance                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   Agents     │  │   Storage    │  │   Logger     │     │
-│  │  (Lucie)     │  │  (LibSQL)    │  │   (Pino)     │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
+│                      Mastra Instance                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │   Agents     │  │   Storage    │  │   Logger     │       │
+│  │  (Lucie)     │  │  (LibSQL)    │  │   (Pino)     │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
 └────────────────────────┬────────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                      Lucie Agent                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │ Instructions (System Prompt)                          │  │
-│  │ - Response style: Concise (2-4 sentences)             │  │
-│  │ - Greeting handling                                   │  │
-│  │ - Date-aware temporal queries                         │  │
-│  │ - Slack-friendly formatting                           │  │
-│  └──────────────────────────────────────────────────────┘  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   Model      │  │   Memory     │  │    Tools     │     │
-│  │ (Configurable│  │ (Last 20 msgs│  │  (3 Turso    │     │
-│  │  Claude/GPT) │  │   context)   │  │   queries)   │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
+│                      Lucie Agent                            │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ Instructions (System Prompt)                         │   │
+│  │ - Response style: Concise (2-4 sentences)            │   │
+│  │ - Greeting handling                                  │   │
+│  │ - Date-aware temporal queries                        │   │
+│  │ - Slack-friendly formatting                          │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │   Model      │  │   Memory     │  │    Tools     │       │
+│  │ (Configurable│  │ (Last 20 msgs│  │  (3 Turso    │       │
+│  │  Claude/GPT) │  │   context)   │  │   queries)   │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
 └────────────────────────┬────────────────────────────────────┘
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    Database Layer (Turso)                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │  Founders    │  │   Sessions   │  │   Startups   │     │
-│  │   (All)      │  │  (~100 rows) │  │  (~27 rows)  │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-│                     Drizzle ORM + LibSQL                     │
+│                    Database Layer (Turso)                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
+│  │  Founders    │  │   Sessions   │  │   Startups   │       │
+│  │   (All)      │  │  (~100 rows) │  │  (~27 rows)  │       │
+│  └──────────────┘  └──────────────┘  └──────────────┘       │
+│                     Drizzle ORM + LibSQL                    │
 └────────────────────────┬────────────────────────────────────┘
                          │
                          ▼ (Periodic Sync)
 ┌─────────────────────────────────────────────────────────────┐
-│                   Data Source (Airtable)                     │
-│              Pioneers Cohort Data (Source of Truth)          │
+│                   Data Source (Airtable)                    │
+│              Pioneers Cohort Data (Source of Truth)         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
