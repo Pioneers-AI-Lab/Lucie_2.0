@@ -19,11 +19,14 @@ const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
 
 /**
- * Field name mappings from readable JSON to database schema
+ * Field name mappings from Profile Book readable JSON to database schema
  *
  * CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
  * These mappings are based on what the data ACTUALLY contains (verified for Dylan Mérigaud record).
  * DO NOT "fix" these to be logical - they must match the actual misaligned data!
+ *
+ * This mapping is for Profile Book fields only (matches pioneers-profile-book-table-ref.json).
+ * Grid View fields (mobileNumber, age, introMessage, etc.) have been removed.
  *
  * Complete verified misalignments:
  *   'Email' → name (Dylan Mérigaud)
@@ -38,66 +41,59 @@ const error = (msg: string) => printError(msg, '');
  */
 const FOUNDERS_FIELD_MAP: Record<string, string> = {
   // === CRITICAL MISALIGNMENTS (verified) ===
-  'Email': 'name',  // Contains: person's name
-  'Education': 'email',  // Contains: actual email address
-  'Industries': 'linkedin',  // Contains: LinkedIn URL
-  'LinkedIn': 'nationality',  // Contains: actual nationality
-  'Nationality': 'status',  // Contains: availability status
-  'Status': 'trackRecordProud',  // Contains: track record text
-  'Track record / something I am proud of ': 'whatsapp',  // Contains: phone number
-  'Name': 'rolesICouldTake',  // Contains: roles list
-  'Are you open to join another project during the program? ': 'companiesWorked',  // Contains: companies list
-  'Companies Worked': 'degree',  // Contains: degree level
-  'Degree': 'existingProjectIdea',  // Contains: Yes/No for project
-  'Do you have an existing project/idea ?': 'education',  // Contains: education institution
-  'Founder': 'gender',  // Contains: gender
-  'Gender': 'leftProgram',  // Contains: enrollment confirmation
-  '"If yes': 'industries',  // Contains: industries list
-  'Tech Skills': 'interestedInWorkingOn',  // Contains: what they want to work on
-  'What I am interested in working on:': 'yearsOfXp',  // Contains: years (as string like "7")
-  'Roles I could take': 'techSkills',  // Contains: actual tech skills
+  Email: 'name', // Contains: person's name
+  Education: 'email', // Contains: actual email address
+  Industries: 'linkedin', // Contains: LinkedIn URL
+  LinkedIn: 'nationality', // Contains: actual nationality
+  Nationality: 'status', // Contains: availability status
+  Status: 'trackRecordProud', // Contains: track record text
+  'Track record / something I am proud of ': 'whatsapp', // Contains: phone number
+  Name: 'rolesICouldTake', // Contains: roles list
+  'Are you open to join another project during the program? ':
+    'companiesWorked', // Contains: companies list
+  'Companies Worked': 'degree', // Contains: degree level
+  Degree: 'existingProjectIdea', // Contains: Yes/No for project
+  'Do you have an existing project/idea ?': 'education', // Contains: education institution
+  Founder: 'gender', // Contains: gender
+  Gender: 'leftProgram', // Contains: enrollment confirmation
+  '"If yes': 'industries', // Contains: industries list
+  'Tech Skills': 'interestedInWorkingOn', // Contains: what they want to work on
+  'What I am interested in working on:': 'yearsOfXp', // Contains: years (as string like "7")
+  'Roles I could take': 'techSkills', // Contains: actual tech skills
 
   // === Project/cofounder fields ===
   ' explain it in a few words"': 'projectExplanation',
   ' please insert his/her name below."': 'joiningWithCofounder',
-  '"Are you joining with an existing cofounder? If yes': 'existingCofounderName',
+  '"Are you joining with an existing cofounder? If yes':
+    'existingCofounderName',
 
   // === Fields that match correctly ===
   'Introduction:': 'introduction',
   'Academic Field': 'academicField',
   'Your Photo': 'yourPhoto',
-  'Mobile number': 'mobileNumber',
-  'Age': 'age',
-  'Intro Message': 'introMessage',
-  'Technical': 'technical',
-  'IT Expertise': 'itExpertise',
-  'Pro Keywords': 'proKeywords',
-  'Personal Keywords': 'personalKeywords',
-  'Pitch': 'pitch',
-  'Left Program': 'leftProgram',
-  'Batch N': 'batch',
-  'Batch': 'batch',  // Profile book uses "Batch" instead of "Batch N"
-  'I confirm my enrolment to the Pioneers program Batch SU25.': 'openToJoinAnotherProject',
+  'left program': 'leftProgram', // Note: lowercase in records file
+  'I confirm my enrolment to the Pioneers program Batch SU25.':
+    'openToJoinAnotherProject',
 };
 
 const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
-  'Name': 'name',
-  'Date': 'date',
+  Name: 'name',
+  Date: 'date',
   'Program Week': 'programWeek',
   'Type of session': 'typeOfSession',
-  'Speaker': 'speaker',
-  'Emails': 'emails',
+  Speaker: 'speaker',
+  Emails: 'emails',
   'Slack Instruction & Email Commu': 'slackInstructionEmailCommu',
-  'Participants': 'participants',
+  Participants: 'participants',
   'Notes / Feedback': 'notesFeedback',
   'Notes 2': 'notes2',
-  'Attachments': 'attachments',
+  Attachments: 'attachments',
   'Name (from Linked)': 'nameFromLinked',
 };
 
 const STARTUPS_FIELD_MAP: Record<string, string> = {
-  'Startup': 'startup',
-  'Industry': 'industry',
+  Startup: 'startup',
+  Industry: 'industry',
   'Startup in a word': 'startupInAWord',
   'Team Members': 'teamMembers',
   'Traction Summary': 'tractionSummary',
@@ -124,8 +120,11 @@ function transformFounder(recordId: string, record: any): any {
       // Try to parse as integer
       const parsed = parseInt(value, 10);
       transformed[dbKey] = isNaN(parsed) ? null : parsed;
-    } else if (typeof value === 'object' && !Array.isArray(value)) {
-      // Skip objects like [object Object]
+    } else if (Array.isArray(value)) {
+      // Convert arrays to comma-separated strings (e.g., Tech Skills, Industries)
+      transformed[dbKey] = value.join(', ');
+    } else if (typeof value === 'object' && value !== null) {
+      // Skip objects like [object Object] or photo objects
       continue;
     } else if (typeof value === 'string' && value.includes('[object Object]')) {
       // Skip stringified objects
