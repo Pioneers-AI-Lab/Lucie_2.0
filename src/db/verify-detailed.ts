@@ -4,15 +4,17 @@
  */
 
 import { db } from './index.js';
-import { founders, sessionEvents, startups } from './schemas/index.js';
+import { founders, foundersGridData, sessionEvents, startups } from './schemas/index.js';
 
 async function verifyDetailed() {
-  // Check a few founders in detail
+  // Check all tables
   const allFounders = await db.select().from(founders);
+  const allFoundersGrid = await db.select().from(foundersGridData);
 
   console.log('✓ Database verification:\n');
   console.log(`Total records:`);
-  console.log(`  Founders: ${allFounders.length}`);
+  console.log(`  Founders (Profile Book): ${allFounders.length}`);
+  console.log(`  Founders (Grid View): ${allFoundersGrid.length}`);
 
   // Find a founder with good data
   const sampleFounder = allFounders.find(f => f.linkedin && f.techSkills) || allFounders[0];
@@ -27,6 +29,22 @@ async function verifyDetailed() {
     console.log(`  Tech Skills: ${sampleFounder.techSkills?.substring(0, 100)}...`);
     console.log(`  Roles: ${sampleFounder.rolesICouldTake?.substring(0, 100)}...`);
     console.log(`  Status: ${sampleFounder.status}`);
+  }
+
+  // Check grid data
+  const sampleGrid = allFoundersGrid.find(f => f.linkedin && f.proKeywords) || allFoundersGrid[0];
+
+  if (sampleGrid) {
+    console.log('\n📋 Sample Founder Grid Data (detailed):');
+    console.log(`  Name: ${sampleGrid.name}`);
+    console.log(`  Email: ${sampleGrid.emailAddress}`);
+    console.log(`  Mobile: ${sampleGrid.mobileNumber}`);
+    console.log(`  LinkedIn: ${sampleGrid.linkedin?.substring(0, 60)}...`);
+    console.log(`  Nationality: ${sampleGrid.nationality}`);
+    console.log(`  Age: ${sampleGrid.age}`);
+    console.log(`  Batch: ${sampleGrid.batchN}`);
+    console.log(`  Pro Keywords: ${sampleGrid.proKeywords?.substring(0, 100)}...`);
+    console.log(`  Personal Keywords: ${sampleGrid.personalKeywords?.substring(0, 100)}...`);
   }
 
   // Check sessions

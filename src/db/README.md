@@ -20,26 +20,38 @@ pnpm db:setup
 
 ## What Gets Seeded
 
-The seed script (`seed.ts`) populates three tables from JSON files:
+The seed script (`seed.ts`) populates four tables from JSON files:
 
 1. **Founders** (37 records) - From `data/2025-Cohort_Data/JSON/founders/pioneers_profile_book_2025_readable.json`
-2. **Session Events** (100 records) - From `data/2025-Cohort_Data/JSON/founders/sessions_events_2025_readable.json`
-3. **Startups** (27 records) - From `data/2025-Cohort_Data/JSON/founders/startups_2025_readable.json`
+   - Profile book view with detailed founder information
+2. **Founders Grid Data** (100 records) - From `data/2025-Cohort_Data/JSON/founders/grid_view_all_readable.json`
+   - Grid view with essential founder contact and profile data
+3. **Session Events** (100 records) - From `data/2025-Cohort_Data/JSON/founders/sessions_events_2025_readable.json`
+4. **Startups** (27 records) - From `data/2025-Cohort_Data/JSON/founders/startups_2025_readable.json`
 
 ## Important Notes
 
 ### Field Mapping Issues
 
-**Critical**: The JSON exports from Airtable have severely misaligned column headers. The field mappings in `seed.ts` account for this:
+**Critical**: The JSON exports from Airtable have severely misaligned column headers in BOTH views!
 
+**Profile Book View Misalignments:**
 - `"Email"` field → Contains person's **name** (not email!)
 - `"Education"` field → Contains actual **email**
 - `"Name"` field → Contains **roles**
 - `"Industries"` field → Contains **LinkedIn URL**
 - `"LinkedIn"` field → Contains **nationality**
-- And many more misalignments...
+- And 20+ more misalignments...
 
-The `FOUNDERS_FIELD_MAP` in `seed.ts` has detailed comments explaining each mapping.
+**Grid View Misalignments:**
+- `"Mobile number"` field → Contains person's **name**
+- `"Email address"` field → ✓ Contains actual **email** (CORRECT!)
+- `"Linkedin"` field → Contains **phone number**
+- `"Intro message"` field → Contains **LinkedIn URL**
+- `"Name"` field → Contains **nationality**
+- And more...
+
+The `FOUNDERS_FIELD_MAP` and `FOUNDERS_GRID_FIELD_MAP` in `seed.ts` have detailed comments explaining each mapping.
 
 ### Data Quality
 
@@ -54,7 +66,8 @@ The seed script **deletes all existing data** before inserting new records. This
 
 ## Schema Files
 
-- `schemas/founders.ts` - Founder profiles
+- `schemas/founders.ts` - Founder profiles (Profile Book view - detailed)
+- `schemas/founders-grid-data.ts` - Founder profiles (Grid view - essential contact info)
 - `schemas/session-events.ts` - Sessions and events
 - `schemas/startups.ts` - Startup information
 - `schemas/index.ts` - Central export
