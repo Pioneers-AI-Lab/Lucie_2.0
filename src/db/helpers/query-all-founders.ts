@@ -16,12 +16,14 @@ export interface Founder {
   phone: string | null;
   linkedin: string | null;
   nationality: string | null;
+  age: string | null;
   batch: string | null;
   status: string | null;
   techSkills: string | null;
   roles: string | null;
   industries: string | null;
   introduction: string | null;
+  source: 'profile_book' | 'grid_view';
 }
 
 /**
@@ -30,19 +32,21 @@ export interface Founder {
 export async function getAllFounders(): Promise<Founder[]> {
   const foundersData = await db.select().from(founders);
 
-  return foundersData.map(f => ({
+  return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
     email: f.email,
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
+    age: f.age,
     batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    source: f.introduction ? 'profile_book' : 'grid_view',
   }));
 }
 
@@ -57,19 +61,21 @@ export async function getFoundersByName(searchTerm: string): Promise<Founder[]> 
     .from(founders)
     .where(like(founders.name, pattern));
 
-  return foundersData.map(f => ({
+  return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
     email: f.email,
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
+    age: f.age,
     batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    source: f.introduction ? 'profile_book' : 'grid_view',
   }));
 }
 
@@ -89,19 +95,21 @@ export async function getFoundersBySkills(skillTerm: string): Promise<Founder[]>
       )
     );
 
-  return foundersData.map(f => ({
+  return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
     email: f.email,
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
+    age: f.age,
     batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    source: f.introduction ? 'profile_book' : 'grid_view',
   }));
 }
 
@@ -114,19 +122,21 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
     .from(founders)
     .where(eq(founders.batch, batch));
 
-  return foundersData.map(f => ({
+  return foundersData.map((f) => ({
     id: f.id,
     name: f.name,
     email: f.email,
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
+    age: f.age,
     batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
     industries: f.industries,
     introduction: f.introduction,
+    source: f.introduction ? 'profile_book' : 'grid_view',
   }));
 }
 
