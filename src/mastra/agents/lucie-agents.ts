@@ -2,6 +2,7 @@ import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import { getCohortDataTool } from '../tools/cohort-data-tool';
 import { queryFoundersTool } from '../tools/query-founders-tool';
+import { querySessionsTool } from '../tools/query-sessions-tool';
 import { lucieInstructions } from "./lucie-instructions";
 
 export const lucie = new Agent({
@@ -19,5 +20,6 @@ export const lucie = new Agent({
   tools: {
     getCohortDataTool,
     queryFoundersTool,
+    querySessionsTool,
   },
 });
