@@ -1,0 +1,85 @@
+name: Build 🐳 - Push ☁️ - Deploy 🚀
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: 🐳 Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4.1.2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: true
+          secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
+          tags: ${{ github.ref == 'refs/heads/master' && 'ghcr.io/samirnaggara/safeout-frontend-prod:latest' || 'ghcr.io/samirnaggara/safeout-frontend-dev:latest' }}
+          build-args: |
+            NEXT_PUBLIC_BACKEND_API_CLIENT=${{ github.ref == 'refs/heads/master' && 'https://app.safeout.io/backend'|| 'https://app.staging.safeout.io/backend' }}
+            NEXT_PUBLIC_DOMAIN=${{ github.ref == 'refs/heads/master' && 'https://app.safeout.io' || 'https://app.staging.safeout.io' }}
+      - name: Build and push Docker backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.backend
+          push: true
+          secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
+          tags: ${{ github.ref == 'refs/heads/master' && 'ghcr.io/samirnaggara/safeout-backend-prod:latest' || 'ghcr.io/samirnaggara/safeout-backend-dev:latest' }}
+
+      - name: Build and push Docker nfc-backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./nfc-backend
+          push: true
+          secrets: 'github_token=${{ secrets.GITHUB_TOKEN }}'
+          tags: ${{ github.ref == 'refs/heads/master' && 'ghcr.io/samirnaggara/safeout-nfc-backend-prod:latest' || 'ghcr.io/samirnaggara/safeout-nfc-backend-dev:latest' }}
+
+  deploy:
+    name: 🚀 Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4.1.2
+
+      - name: SSH Remote Command to Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ github.ref == 'refs/heads/master' && secrets.HOST_PRODUCTION || secrets.HOST_DEV }}
+          username: ${{ github.ref == 'refs/heads/master' && secrets.USERNAME_PRODUCTION || secrets.USERNAME_DEV }}
+          key: ${{ github.ref == 'refs/heads/master' && secrets.KEY_PRODUCTION || secrets.KEY_DEV }}
+          passphrase: ${{ github.ref == 'refs/heads/master' && secrets.PASSPHRASE_PRODUCTION || secrets.PASSPHRASE_DEV }}
+          script: |
+            cd ~/app
+            # Lancer le script de redeploiement
+            sh redeploy.sh
