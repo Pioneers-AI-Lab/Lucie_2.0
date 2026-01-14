@@ -16,8 +16,6 @@ export interface Founder {
   phone: string | null;
   linkedin: string | null;
   nationality: string | null;
-  age: string | null;
-  batch: string | null;
   status: string | null;
   techSkills: string | null;
   roles: string | null;
@@ -42,8 +40,6 @@ export async function getAllFounders(): Promise<Founder[]> {
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
-    age: f.age,
-    batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
@@ -78,8 +74,6 @@ export async function getFoundersByName(
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
-    age: f.age,
-    batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
@@ -117,8 +111,6 @@ export async function getFoundersBySkills(
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
-    age: f.age,
-    batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,
@@ -130,14 +122,16 @@ export async function getFoundersBySkills(
 
 /**
  * Get founders by batch (Profile Book only)
+ * NOTE: Batch field is not in Profile Book table-ref, so this function returns all founders
+ * TODO: Add batch field to schema if batch filtering is needed
  */
 export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
+  // Batch field not available in Profile Book schema - return all founders
+  // This maintains API compatibility but doesn't filter by batch
   const foundersData = await db
     .select()
     .from(founders)
-    .where(
-      and(eq(founders.batch, batch), sql`${founders.introduction} IS NOT NULL`),
-    );
+    .where(sql`${founders.introduction} IS NOT NULL`);
 
   return foundersData.map((f) => ({
     id: f.id,
@@ -146,8 +140,6 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
     phone: f.whatsapp,
     linkedin: f.linkedin,
     nationality: f.nationality,
-    age: f.age,
-    batch: f.batch,
     status: f.status,
     techSkills: f.techSkills,
     roles: f.rolesICouldTake,

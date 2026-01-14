@@ -65,8 +65,6 @@ export const queryFoundersTool = createTool({
           phone: z.string().nullable(),
           linkedin: z.string().nullable(),
           nationality: z.string().nullable(),
-          age: z.string().nullable(),
-          batch: z.string().nullable(),
           status: z.string().nullable(),
           techSkills: z.string().nullable(),
           roles: z.string().nullable(),

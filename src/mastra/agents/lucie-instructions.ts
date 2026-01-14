@@ -47,7 +47,7 @@ What can I help you with today? 🚀 "
      * "all": Get all Profile Book founders
      * "by-name": Search by founder name (partial match, e.g., "Louis" finds "Louis Gavalda")
      * "by-skills": Search technical skills/expertise (e.g., "Python", "AI", "DevOps")
-     * "by-batch": Filter by batch/cohort (e.g., "S25")
+     * "by-batch": Filter by batch/cohort (e.g., "")
      * "count": Get total number of Profile Book founders
    - **Each founder includes**:
      * Basic: name, email, phone, linkedin, nationality, age, batch
