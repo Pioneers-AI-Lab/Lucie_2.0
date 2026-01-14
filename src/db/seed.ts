@@ -20,42 +20,63 @@ const error = (msg: string) => printError(msg, '');
 
 /**
  * Field name mappings from readable JSON to database schema
+ *
+ * CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
+ * These mappings are based on what the data ACTUALLY contains (verified for Dylan Mérigaud record).
+ * DO NOT "fix" these to be logical - they must match the actual misaligned data!
+ *
+ * Complete verified misalignments:
+ *   'Email' → name (Dylan Mérigaud)
+ *   'Education' → email (merigaudconsulting@gmail.com)
+ *   'Industries' → linkedin (https://www.linkedin.com/in/dylanmerigaud)
+ *   'LinkedIn' → nationality (France)
+ *   'Nationality' → status (No, I have other commitments.)
+ *   'Status' → trackRecordProud (- Worked for 7 years...)
+ *   'Track record...' → whatsapp (+33781877734)
+ *   'Name' → rolesICouldTake (Design,Tech Dev...)
+ *   ... and many more (see mappings below)
  */
 const FOUNDERS_FIELD_MAP: Record<string, string> = {
-  // CRITICAL NOTE: The JSON export has severely misaligned column headers!
-  // These mappings reflect what the data ACTUALLY contains, not whatsapp': 'whatsapp',
-  'Email': 'email',
+  // === CRITICAL MISALIGNMENTS (verified) ===
+  'Email': 'name',  // Contains: person's name
+  'Education': 'email',  // Contains: actual email address
+  'Industries': 'linkedin',  // Contains: LinkedIn URL
+  'LinkedIn': 'nationality',  // Contains: actual nationality
+  'Nationality': 'status',  // Contains: availability status
+  'Status': 'trackRecordProud',  // Contains: track record text
+  'Track record / something I am proud of ': 'whatsapp',  // Contains: phone number
+  'Name': 'rolesICouldTake',  // Contains: roles list
+  'Are you open to join another project during the program? ': 'companiesWorked',  // Contains: companies list
+  'Companies Worked': 'degree',  // Contains: degree level
+  'Degree': 'existingProjectIdea',  // Contains: Yes/No for project
+  'Do you have an existing project/idea ?': 'education',  // Contains: education institution
+  'Founder': 'gender',  // Contains: gender
+  'Gender': 'leftProgram',  // Contains: enrollment confirmation
+  '"If yes': 'industries',  // Contains: industries list
+  'Tech Skills': 'interestedInWorkingOn',  // Contains: what they want to work on
+  'What I am interested in working on:': 'yearsOfXp',  // Contains: years (as string like "7")
+  'Roles I could take': 'techSkills',  // Contains: actual tech skills
+
+  // === Project/cofounder fields ===
+  ' explain it in a few words"': 'projectExplanation',
+  ' please insert his/her name below."': 'joiningWithCofounder',
+  '"Are you joining with an existing cofounder? If yes': 'existingCofounderName',
+
+  // === Fields that match correctly ===
+  'Introduction:': 'introduction',
+  'Academic Field': 'academicField',
   'Your Photo': 'yourPhoto',
   'Mobile number': 'mobileNumber',
   'Age': 'age',
-  'Do you have an existing project/idea ?': 'existingProjectIdea',
-  '"If yes, explain it in a few words"': 'projectExplanation',
-  '"Are you joining with an existing cofounder? If yes, please insert his/her name below."': 'existingCofounderName',
-  'Are you open to join another project during the program? ': 'openToJoinAnotherProject',
-  'joiningWithCofounder': 'joiningWithCofounder',
-  'LinkedIn': 'linkedin',
-  'Tech Skills': 'techSkills',
   'Intro Message': 'introMessage',
   'Technical': 'technical',
   'IT Expertise': 'itExpertise',
   'Pro Keywords': 'proKeywords',
   'Personal Keywords': 'personalKeywords',
   'Pitch': 'pitch',
-  'Industries': 'industries',
-  'Roles I could take': 'rolesICouldTake',
-  'Track record / something I am proud of ': 'trackRecordProud',
-  'What I am interested in working on:': 'interestedInWorkingOn',
-  'Introduction:': 'introduction',
-  'Companies Worked': 'companiesWorked',
-  'Education': 'education',
-  'Nationality': 'nationality',
-  'Gender': 'gender',
-  'Years of Xp': 'yearsOfXp',
-  'Degree': 'degree',
-  'Academic Field': 'academicField',
-  'Founder': 'founder',
   'Left Program': 'leftProgram',
   'Batch N': 'batchN',
+  'I confirm my enrolment to the Pioneers program Batch SU25.': 'openToJoinAnotherProject',
 };
 
 const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
