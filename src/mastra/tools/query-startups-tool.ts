@@ -4,7 +4,7 @@
  * Queries startup data from the local Turso database instead of Airtable.
  * Much faster with no rate limits.
  *
- * Contains 27 startups with information about:
+ * Contains a list of startups with information about:
  * - Startup names and industries
  * - Team members
  * - Descriptions and taglines
@@ -30,10 +30,10 @@ import {
 export const queryStartupsTool = createTool({
   id: 'query-startups-turso',
   description: `Query startup data from the Pioneers accelerator program database.
-  Contains 27 startups with team info, industries, and traction details.
+  Contains a list of startups with team info, industries, and traction details.
 
   Search types:
-  - "all": Get all 27 startups
+  - "all": Get all startups
   - "by-name": Search by startup name (partial match, case-insensitive)
   - "by-industry": Search by industry (e.g., "FinTech", "AI", "Healthcare")
   - "by-team-member": Search by team member name (e.g., find startups with specific founder)

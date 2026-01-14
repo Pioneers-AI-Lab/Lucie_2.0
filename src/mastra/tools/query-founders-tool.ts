@@ -30,7 +30,7 @@ export const queryFoundersTool = createTool({
   - "all": Get all Profile Book founders
   - "by-name": Search by founder name (partial match, case-insensitive)
   - "by-skills": Search by technical skills or expertise (partial match)
-  - "by-batch": Filter by batch/cohort (e.g., "F24", "S25")
+  - "by-batch": Filter by batch/cohort (e.g., "S25")
   - "count": Get total number of Profile Book founders (returns just the count)
 
   All founders returned are from the Profile Book (have detailed introductions).

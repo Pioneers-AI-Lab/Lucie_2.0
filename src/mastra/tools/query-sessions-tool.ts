@@ -33,10 +33,10 @@ import {
 export const querySessionsTool = createTool({
   id: 'query-sessions-turso',
   description: `Query session and event data from the Pioneers accelerator program database.
-  Contains 100 session events with dates, speakers, types, and details.
+  Contains a list of session events with dates, speakers, types, and details.
 
   Search types:
-  - "all": Get all 100 sessions
+  - "all": Get all sessions
   - "by-name": Search by session name (partial match, case-insensitive)
   - "by-speaker": Search by speaker name (partial match)
   - "by-type": Filter by session type (e.g., "Workshop", "Office hours")
@@ -50,34 +50,44 @@ export const querySessionsTool = createTool({
   Use this tool for questions about sessions, events, schedules, speakers, or program timeline.`,
 
   inputSchema: z.object({
-    searchType: z.union([
-      z.literal('all'),
-      z.literal('by-name'),
-      z.literal('by-speaker'),
-      z.literal('by-type'),
-      z.literal('by-week'),
-      z.literal('upcoming'),
-      z.literal('past'),
-      z.literal('next'),
-      z.literal('count'),
-      z.literal('global-search'),
-    ]).describe('Type of search to perform'),
-    searchTerm: z.string().optional()
-      .describe('Search term (required for by-name, by-speaker, by-type, by-week, global-search)'),
+    searchType: z
+      .union([
+        z.literal('all'),
+        z.literal('by-name'),
+        z.literal('by-speaker'),
+        z.literal('by-type'),
+        z.literal('by-week'),
+        z.literal('upcoming'),
+        z.literal('past'),
+        z.literal('next'),
+        z.literal('count'),
+        z.literal('global-search'),
+      ])
+      .describe('Type of search to perform'),
+    searchTerm: z
+      .string()
+      .optional()
+      .describe(
+        'Search term (required for by-name, by-speaker, by-type, by-week, global-search)',
+      ),
   }),
 
   outputSchema: z.object({
-    sessions: z.array(z.object({
-      id: z.string(),
-      name: z.string().nullable(),
-      date: z.date().nullable(),
-      programWeek: z.string().nullable(),
-      typeOfSession: z.string().nullable(),
-      speaker: z.string().nullable(),
-      participants: z.string().nullable(),
-      notesFeedback: z.string().nullable(),
-      attachments: z.string().nullable(),
-    })).optional(),
+    sessions: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string().nullable(),
+          date: z.date().nullable(),
+          programWeek: z.string().nullable(),
+          typeOfSession: z.string().nullable(),
+          speaker: z.string().nullable(),
+          participants: z.string().nullable(),
+          notesFeedback: z.string().nullable(),
+          attachments: z.string().nullable(),
+        }),
+      )
+      .optional(),
     count: z.number(),
     message: z.string().optional(),
   }),
@@ -194,11 +204,11 @@ export const querySessionsTool = createTool({
       return {
         sessions,
         count: sessions.length,
-        message: sessions.length === 0
-          ? `No sessions found matching "${searchTerm}"`
-          : `Found ${sessions.length} session(s)`,
+        message:
+          sessions.length === 0
+            ? `No sessions found matching "${searchTerm}"`
+            : `Found ${sessions.length} session(s)`,
       };
-
     } catch (error: any) {
       return {
         sessions: [],
