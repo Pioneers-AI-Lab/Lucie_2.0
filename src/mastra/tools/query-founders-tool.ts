@@ -13,7 +13,7 @@ import {
   getAllFounders,
   getFoundersByName,
   getFoundersBySkills,
-  // getFoundersByBatch, // TODO: uncomment when batch field is added to schema or when new table id is retrieved
+  getFoundersByBatch,
   getFoundersCount,
 } from '../../db/helpers/query-all-founders.js';
 
@@ -30,6 +30,7 @@ export const queryFoundersTool = createTool({
   - "all": Get all Profile Book founders
   - "by-name": Search by founder name (partial match, case-insensitive)
   - "by-skills": Search by technical skills or expertise (partial match)
+  - "by-batch": Filter by batch/cohort (e.g., "S25")
   - "count": Get total number of Profile Book founders (returns just the count)
 
   All founders returned are from the Profile Book (have detailed introductions).
@@ -42,14 +43,16 @@ export const queryFoundersTool = createTool({
         z.literal('all'),
         z.literal('by-name'),
         z.literal('by-skills'),
-        // z.literal('by-batch'), // TODO: uncomment when batch field is added to schema or when new table id is retrieved
+        z.literal('by-batch'),
         z.literal('count'),
       ])
       .describe('Type of search to perform'),
     searchTerm: z
       .string()
       .optional()
-      .describe('Search term (required for by-name and by-skills searches)'),
+      .describe(
+        'Search term (required for by-name, by-skills, by-batch searches)',
+      ),
   }),
 
   outputSchema: z.object({
@@ -57,40 +60,16 @@ export const queryFoundersTool = createTool({
       .array(
         z.object({
           id: z.string(),
-          // Basic Information
           name: z.string().nullable(),
-          status: z.string().nullable(),
-          whatsapp: z.string().nullable(),
           email: z.string().nullable(),
-          yourPhoto: z.string().nullable(),
-          // Project Information
-          existingProjectIdea: z.string().nullable(),
-          projectExplanation: z.string().nullable(),
-          existingCofounderName: z.string().nullable(),
-          openToJoinAnotherProject: z.string().nullable(),
-          joiningWithCofounder: z.string().nullable(),
-          // Professional Profile
+          phone: z.string().nullable(),
           linkedin: z.string().nullable(),
-          techSkills: z.string().nullable(),
-          industries: z.string().nullable(),
-          rolesICouldTake: z.string().nullable(),
-          trackRecordProud: z.string().nullable(),
-          interestedInWorkingOn: z.string().nullable(),
-          introduction: z.string().nullable(),
-          // Professional Background
-          companiesWorked: z.string().nullable(),
-          // Education
-          education: z.string().nullable(),
           nationality: z.string().nullable(),
-          gender: z.string().nullable(),
-          yearsOfXp: z.number().nullable(),
-          degree: z.string().nullable(),
-          academicField: z.string().nullable(),
-          // Relationships
-          founder: z.string().nullable(),
-          // Status
-          leftProgram: z.string().nullable(),
-          // Metadata
+          status: z.string().nullable(),
+          techSkills: z.string().nullable(),
+          roles: z.string().nullable(),
+          industries: z.string().nullable(),
+          introduction: z.string().nullable(),
           source: z.literal('profile_book'),
         }),
       )
@@ -142,17 +121,16 @@ export const queryFoundersTool = createTool({
           founders = await getFoundersBySkills(searchTerm);
           break;
 
-        // TODO: Re-enable when batch field is added to founders schema
-        // case 'by-batch':
-        //   if (!searchTerm) {
-        //     return {
-        //       founders: [],
-        //       count: 0,
-        //       message: 'Error: searchTerm is required for by-batch search',
-        //     };
-        //   }
-        //   founders = await getFoundersByBatch(searchTerm);
-        //   break;
+        case 'by-batch':
+          if (!searchTerm) {
+            return {
+              founders: [],
+              count: 0,
+              message: 'Error: searchTerm is required for by-batch search',
+            };
+          }
+          founders = await getFoundersByBatch(searchTerm);
+          break;
 
         default:
           return {
