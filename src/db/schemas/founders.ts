@@ -1,28 +1,33 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 /**
- * Founders table schema based on Pioneers Profile Book Airtable table
- * Maps to the founders/pioneers-profile-book-table-ref.json structure
+ * Founders table schema based on Pioneers Profile Book and Grid View Airtable tables
+ * Maps to both founders/pioneers-profile-book-table-ref.json and grid-view-table-ref.json structures
  *
  * This schema represents founder profiles from the Pioneers accelerator program.
  * All fields are nullable to match Airtable's optional field structure.
  * Each field includes its Airtable field ID in the comment for traceability.
+ * Fields may have multiple Airtable IDs when they exist in multiple views/tables.
  */
 export const founders = sqliteTable('founders', {
   // Primary key - using Airtable record ID
   id: text('id').primaryKey().notNull(),
 
   // Basic Information
-  // Airtable ID: fldXCZWHOholJbcR2
+  // Airtable ID: fldXCZWHOholJbcR2 (pioneers-profile-book) / fldsr8a3WAHYzOJrI (grid-view)
   name: text('name'),
   // Airtable ID: fldIUIWQideaWfdiT
   status: text('status'),
   // Airtable ID: fldbtz03NepUnVH27
   whatsapp: text('whatsapp'),
-  // Airtable ID: fldW6J9Dlp9vFvOKR
+  // Airtable ID: fldW6J9Dlp9vFvOKR (pioneers-profile-book) / fldohngERhYlFLnyF (grid-view)
   email: text('email'),
-  // Airtable ID: flduygNAZDw15dcyK
+  // Airtable ID: flduygNAZDw15dcyK (pioneers-profile-book) / fldhgngyzB7U1wwSG (grid-view)
   yourPhoto: text('your_photo'),
+  // Airtable ID: fldWjyfQXL8yBb42s (grid-view)
+  mobileNumber: text('mobile_number'),
+  // Airtable ID: fld6zRqySSIG5UVLD (grid-view)
+  age: text('age'),
 
   // Project Information
   // Airtable ID: fldT1xLAq6sWDdYru
@@ -37,10 +42,22 @@ export const founders = sqliteTable('founders', {
   joiningWithCofounder: text('joining_with_cofounder'),
 
   // Professional Profile
-  // Airtable ID: fldmOlACIX4XSmGfv
+  // Airtable ID: fldmOlACIX4XSmGfv (pioneers-profile-book) / fldJ5Fpec4FBZFqPO (grid-view)
   linkedin: text('linkedin'),
   // Airtable ID: fldJ9yZg6O6kMxJwQ
   techSkills: text('tech_skills'),
+  // Airtable ID: fld8d4Kq5mJjlfi6n (grid-view)
+  introMessage: text('intro_message'),
+  // Airtable ID: fld40Qb2Iy8KxgV0o (grid-view)
+  technical: text('technical'),
+  // Airtable ID: fldkuBIMd9oCG54Sc (grid-view)
+  itExpertise: text('it_expertise'),
+  // Airtable ID: fldBZTfVtUKSR3Ue1 (grid-view)
+  proKeywords: text('pro_keywords'),
+  // Airtable ID: fld7W5FD8dNRjGvu4 (grid-view)
+  personalKeywords: text('personal_keywords'),
+  // Airtable ID: fldANe1v4F7x7SkeD (grid-view)
+  pitch: text('pitch'),
   // Airtable ID: fld0w3PxAafyQtwDx
   industries: text('industries'),
   // Airtable ID: fldcASpXNUhURfM3e
@@ -77,6 +94,8 @@ export const founders = sqliteTable('founders', {
   // Status
   // Airtable ID: fldBepgICe1g9FANb
   leftProgram: text('left_program'),
+  // Airtable ID: fldcjn3YhPoDRT64G (grid-view)
+  batchN: text('batch_n'),
 
   // Timestamps (not from Airtable - managed by database)
   createdAt: integer('created_at', { mode: 'timestamp' })
