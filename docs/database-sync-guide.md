@@ -15,9 +15,9 @@ Before running the sync, you need to verify your Airtable table names/IDs in you
 3. Add these to your `.env` file (if they differ from defaults):
 
 ```bash
-PROFILE_BOOK_TABLE_ID="Pioneers Profile Book" # Or your actual table name
-SESSIONS_TABLE_ID="Sessions & Events 2025"    # Or your actual table name
-STARTUPS_TABLE_ID="Startups 2025"             # Or your actual table name
+SU_2025_FOUNDERS_PROFILE_BOOK_TABLE_ID="your-pioneers-table-id"
+SU_2025_STARTUPS_TABLE_ID="your-pioneers-table-id"
+SU_2025_SESSIONS_EVENTS_TABLE_ID="your-pioneers-table-id"
 ```
 
 ### Option 2: Use Table IDs (More Reliable)
@@ -28,9 +28,9 @@ STARTUPS_TABLE_ID="Startups 2025"             # Or your actual table name
 4. Add to your `.env` file:
 
 ```bash
-PROFILE_BOOK_TABLE_ID="tblYYYYYYYYYYYYYY"
-SESSIONS_TABLE_ID="tblZZZZZZZZZZZZZZ"
-STARTUPS_TABLE_ID="tblAAAAAAAAAAAAA"
+SU_2025_FOUNDERS_PROFILE_BOOK_TABLE_ID="your-pioneers-table-id"
+SU_2025_STARTUPS_TABLE_ID="your-pioneers-table-id"
+SU_2025_SESSIONS_EVENTS_TABLE_ID="your-pioneers-table-id"
 ```
 
 ## Quick Start

@@ -19,6 +19,11 @@ import { db } from './index.js';
 import { founders, sessionEvents, startups } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 import { eq } from 'drizzle-orm';
+import {
+  founderAirtableFieldIds,
+  sessionEventAirtableFieldIds,
+  startupAirtableFieldIds,
+} from '../../lib/airtable-field-ids-ref.js';
 
 const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
@@ -36,9 +41,12 @@ const base = airtable.base(process.env.SU_2025_BASE_ID);
 
 // Table IDs/names - Update these to match your Airtable base structure
 const TABLES = {
-  FOUNDERS: process.env.PROFILE_BOOK_TABLE_ID || 'Pioneers Profile Book',
-  SESSIONS: process.env.SESSIONS_TABLE_ID || 'Sessions & Events 2025',
-  STARTUPS: process.env.STARTUPS_TABLE_ID || 'Startups 2025',
+  FOUNDERS:
+    process.env.SU_2025_FOUNDERS_PROFILE_BOOK_TABLE_ID ||
+    'Pioneers Profile Book',
+  SESSIONS:
+    process.env.SU_2025_SESSIONS_EVENTS_TABLE_ID || 'Sessions & Events 2025',
+  STARTUPS: process.env.SU_2025_STARTUPS_TABLE_ID || 'Startups 2025',
 };
 
 /**
@@ -86,36 +94,43 @@ async function syncFounders(batchFilter?: string) {
     for (const record of records) {
       const fields = record.fields;
 
-      // Transform to founders schema (handling misaligned headers from Airtable)
+      // Helper function to safely parse integer values
+      const safeParseInt = (value: any): number | null => {
+        if (value === null || value === undefined || value === '') return null;
+        const parsed = typeof value === 'number' ? value : parseInt(value, 10);
+        return isNaN(parsed) ? null : parsed;
+      };
+
+      // Transform to founders schema using Airtable field IDs
       const data = {
         id: record.id,
-        name: fields['Email'] as string | undefined, // Misaligned: contains name
-        email: fields['Education'] as string | undefined, // Misaligned: contains email
-        whatsapp: fields['Track record / something I am proud of '] as string | undefined, // Misaligned: contains phone
-        linkedin: fields['Industries'] as string | undefined, // Misaligned: contains LinkedIn
-        nationality: fields['LinkedIn'] as string | undefined, // Misaligned: contains nationality
-        status: fields['Nationality'] as string | undefined, // Misaligned: contains status
+        name: fields[founderAirtableFieldIds.name] as string | undefined,
+        email: fields[founderAirtableFieldIds.email] as string | undefined,
+        whatsapp: fields[founderAirtableFieldIds.whatsapp] as string | undefined,
+        linkedin: fields[founderAirtableFieldIds.linkedin] as string | undefined,
+        nationality: fields[founderAirtableFieldIds.nationality] as string | undefined,
+        status: fields[founderAirtableFieldIds.status] as string | undefined,
         batch: normalizeBatch(fields['Batch'] as string | undefined),
-        yourPhoto: fields['Your Photo'] as string | undefined,
-        techSkills: fields['Roles I could take'] as string | undefined, // Misaligned
-        rolesICouldTake: fields['Name'] as string | undefined, // Misaligned
-        trackRecordProud: fields['Status'] as string | undefined, // Misaligned
-        companiesWorked: fields['Are you open to join another project during the program? '] as string | undefined, // Misaligned
-        degree: fields['Companies Worked'] as string | undefined, // Misaligned
-        existingProjectIdea: fields['Degree'] as string | undefined, // Misaligned
-        education: fields['Do you have an existing project/idea ?'] as string | undefined, // Misaligned
-        gender: fields['Founder'] as string | undefined, // Misaligned
-        leftProgram: fields['Gender'] as string | undefined, // Misaligned
-        industries: fields['"If yes'] as string | undefined, // Misaligned
-        interestedInWorkingOn: fields['Tech Skills'] as string | undefined, // Misaligned
-        yearsOfXp: fields['What I am interested in working on:'] ?
-          parseInt(fields['What I am interested in working on:'] as string, 10) : null,
-        introduction: fields['Introduction:'] as string | undefined,
-        academicField: fields['Academic Field'] as string | undefined,
-        projectExplanation: fields[' explain it in a few words"'] as string | undefined,
-        joiningWithCofounder: fields[' please insert his/her name below."'] as string | undefined,
-        existingCofounderName: fields['"Are you joining with an existing cofounder? If yes'] as string | undefined,
-        openToJoinAnotherProject: fields['I confirm my enrolment to the Pioneers program Batch SU25.'] as string | undefined,
+        yourPhoto: fields[founderAirtableFieldIds.yourPhoto] as string | undefined,
+        techSkills: fields[founderAirtableFieldIds.techSkills] as string | undefined,
+        rolesICouldTake: fields[founderAirtableFieldIds.rolesICouldTake] as string | undefined,
+        trackRecordProud: fields[founderAirtableFieldIds.trackRecordProud] as string | undefined,
+        companiesWorked: fields[founderAirtableFieldIds.companiesWorked] as string | undefined,
+        degree: fields[founderAirtableFieldIds.degree] as string | undefined,
+        existingProjectIdea: fields[founderAirtableFieldIds.existingProjectIdea] as string | undefined,
+        education: fields[founderAirtableFieldIds.education] as string | undefined,
+        gender: fields[founderAirtableFieldIds.gender] as string | undefined,
+        leftProgram: fields[founderAirtableFieldIds.leftProgram] as string | undefined,
+        industries: fields[founderAirtableFieldIds.industries] as string | undefined,
+        interestedInWorkingOn: fields[founderAirtableFieldIds.interestedInWorkingOn] as string | undefined,
+        yearsOfXp: safeParseInt(fields[founderAirtableFieldIds.yearsOfXp]),
+        introduction: fields[founderAirtableFieldIds.introduction] as string | undefined,
+        academicField: fields[founderAirtableFieldIds.academicField] as string | undefined,
+        projectExplanation: fields[founderAirtableFieldIds.projectExplanation] as string | undefined,
+        joiningWithCofounder: fields[founderAirtableFieldIds.joiningWithCofounder] as string | undefined,
+        existingCofounderName: fields[founderAirtableFieldIds.existingCofounderName] as string | undefined,
+        openToJoinAnotherProject: fields[founderAirtableFieldIds.openToJoinAnotherProject] as string | undefined,
+        founder: fields[founderAirtableFieldIds.founder] as string | undefined,
       };
 
       // Check if record exists
@@ -171,18 +186,18 @@ async function syncSessionEvents() {
 
       const data = {
         id: record.id,
-        name: fields['Name'] as string | undefined,
-        date: fields['Date'] ? new Date(fields['Date'] as string) : null,
-        programWeek: fields['Program Week'] as string | undefined,
-        typeOfSession: fields['Type of session'] as string | undefined,
-        speaker: fields['Speaker'] as string | undefined,
-        emails: fields['Emails'] as string | undefined,
-        slackInstructionEmailCommu: fields['Slack Instruction & Email Commu'] as string | undefined,
-        participants: fields['Participants'] as string | undefined,
-        notesFeedback: fields['Notes / Feedback'] as string | undefined,
-        notes2: fields['Notes 2'] as string | undefined,
-        attachments: fields['Attachments'] as string | undefined,
-        nameFromLinked: fields['Name (from Linked)'] as string | undefined,
+        name: fields[sessionEventAirtableFieldIds.name] as string | undefined,
+        date: fields[sessionEventAirtableFieldIds.date] ? new Date(fields[sessionEventAirtableFieldIds.date] as string) : null,
+        programWeek: fields[sessionEventAirtableFieldIds.programWeek] as string | undefined,
+        typeOfSession: fields[sessionEventAirtableFieldIds.typeOfSession] as string | undefined,
+        speaker: fields[sessionEventAirtableFieldIds.speaker] as string | undefined,
+        emails: fields[sessionEventAirtableFieldIds.emails] as string | undefined,
+        slackInstructionEmailCommu: fields[sessionEventAirtableFieldIds.slackInstructionEmailCommu] as string | undefined,
+        participants: fields[sessionEventAirtableFieldIds.participants] as string | undefined,
+        notesFeedback: fields[sessionEventAirtableFieldIds.notesFeedback] as string | undefined,
+        notes2: fields[sessionEventAirtableFieldIds.notes2] as string | undefined,
+        attachments: fields[sessionEventAirtableFieldIds.attachments] as string | undefined,
+        nameFromLinked: fields[sessionEventAirtableFieldIds.nameFromLinked] as string | undefined,
       };
 
       const existing = await db
@@ -235,13 +250,13 @@ async function syncStartups() {
 
       const data = {
         id: record.id,
-        startup: fields['Startup'] as string | undefined,
-        industry: fields['Industry'] as string | undefined,
-        startupInAWord: fields['Startup in a word'] as string | undefined,
-        teamMembers: fields['Team Members'] as string | undefined,
-        tractionSummary: fields['Traction Summary'] as string | undefined,
-        detailedProgress: fields['Detailed Progress'] as string | undefined,
-        previousDecks: fields['Previous Decks'] as string | undefined,
+        startup: fields[startupAirtableFieldIds.startup] as string | undefined,
+        industry: fields[startupAirtableFieldIds.industry] as string | undefined,
+        startupInAWord: fields[startupAirtableFieldIds.startupInAWord] as string | undefined,
+        teamMembers: fields[startupAirtableFieldIds.teamMembers] as string | undefined,
+        tractionSummary: fields[startupAirtableFieldIds.tractionSummary] as string | undefined,
+        detailedProgress: fields[startupAirtableFieldIds.detailedProgress] as string | undefined,
+        previousDecks: fields[startupAirtableFieldIds.previousDecks] as string | undefined,
       };
 
       const existing = await db
