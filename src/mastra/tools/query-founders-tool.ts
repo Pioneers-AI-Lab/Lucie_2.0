@@ -33,12 +33,19 @@ export const queryFoundersTool = createTool({
   description: `Query founder data from the Pioneers accelerator program database.
   Searches Profile Book founders only (detailed professional data with introductions).
 
+  ⚠️⚠️⚠️ CRITICAL FOR COMPARATIVE QUERIES (TOP/BOTTOM/MOST/LEAST) ⚠️⚠️⚠️
+  If the user asks for "top N", "most experienced", "best", "least", "worst", or ANY ranking/comparison:
+  YOU MUST USE: searchType = "all" (NO searchTerm needed)
+  Then YOU must analyze ALL returned founders to find the correct top/bottom N.
+  Parse years_of_xp as numbers before sorting (they are stored as text strings).
+  Example: "Who are the 3 most experienced?" → {searchType: "all"} → analyze ALL years_of_xp → sort descending → return top 3
+
   Available fields from Profile Book (pioneers-profile-book-table-ref.json):
   - Basic: name, status, whatsapp, email, your_photo
   - Project: existing_project_idea, project_explanation, existing_cofounder_name, open_to_join_another_project, joining_with_cofounder
   - Professional: linkedin, tech_skills, industries, roles_i_could_take, track_record_proud, interested_in_working_on, introduction
   - Background: companies_worked
-  - Education: education, nationality, gender, years_of_xp, degree, academic_field
+  - Education: education, nationality, gender, years_of_xp (IMPORTANT: stored as text, parse as number for comparisons!), degree, academic_field
   - Relationships: founder
   - Status: left_program
   - Batch: batch (cohort information like "S25", "F24", "Summer 2025")
@@ -69,6 +76,14 @@ export const queryFoundersTool = createTool({
   - "Find founders interested in AI" → by-project with "AI" or global-search with "AI"
   - "Who studied at MIT?" → by-education with "MIT"
   - "How many active founders?" → active-only + count
+
+  ⚠️ CRITICAL - Examples of COMPARATIVE queries (MUST use searchType="all"):
+  - "Who are the 3 most experienced founders?" → {searchType: "all"} → YOU analyze ALL years_of_xp → sort descending → return top 3
+  - "Top 5 founders by experience?" → {searchType: "all"} → YOU parse years_of_xp as numbers → sort descending → return top 5
+  - "Who has the most experience?" → {searchType: "all"} → YOU find max(years_of_xp) → return that founder
+  - "Least experienced founder?" → {searchType: "all"} → YOU find min(years_of_xp) → return that founder
+
+  DO NOT use filtered searches for ranking queries - you MUST see ALL founders to rank them correctly!
   `,
 
   inputSchema: z.object({
@@ -150,6 +165,9 @@ export const queryFoundersTool = createTool({
 
   execute: async (input) => {
     const { searchType, searchTerm } = input;
+
+    // Debug logging to see what Lucie is requesting
+    console.log('🔍 [queryFoundersTool] Called with:', { searchType, searchTerm });
 
     try {
       // Handle count-only request
@@ -279,6 +297,12 @@ export const queryFoundersTool = createTool({
             count: 0,
             message: `Error: Unknown search type "${searchType}"`,
           };
+      }
+
+      // Debug logging to see what we're returning
+      console.log(`🔍 [queryFoundersTool] Returning ${founders.length} founders`);
+      if (founders.length <= 5) {
+        console.log('🔍 [queryFoundersTool] First few founders:', founders.slice(0, 5).map(f => ({ name: f.name, yearsOfXp: f.yearsOfXp })));
       }
 
       return {
