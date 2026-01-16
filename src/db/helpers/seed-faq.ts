@@ -92,8 +92,15 @@ export async function seedSessionsFAQ() {
 }
 
 /**
- * Seed FAQ data from both general and sessions FAQ files
- * Clears existing data and loads both FAQ sources
+ * Seed FAQ data from startups-faq.json
+ */
+export async function seedStartupsFAQ() {
+  return await seedFAQFromFile('startups-faq.json');
+}
+
+/**
+ * Seed FAQ data from all FAQ files
+ * Clears existing data and loads all FAQ sources
  */
 export async function seedAllFAQs() {
   console.log('🔄 Seeding all FAQ data...\n');
@@ -108,18 +115,23 @@ export async function seedAllFAQs() {
   // Seed sessions FAQ (don't clear again)
   const sessionsResult = await seedFAQFromSessionsWithoutClear();
 
-  const totalFAQs = generalResult.total + sessionsResult.total;
-  const allCategories = [...generalResult.categories, ...sessionsResult.categories];
+  // Seed startups FAQ (don't clear again)
+  const startupsResult = await seedFAQFromStartupsWithoutClear();
+
+  const totalFAQs = generalResult.total + sessionsResult.total + startupsResult.total;
+  const allCategories = [...generalResult.categories, ...sessionsResult.categories, ...startupsResult.categories];
 
   console.log(`\n✅ Successfully seeded ${totalFAQs} total FAQ entries`);
   console.log(`📊 Total categories: ${allCategories.length}`);
   console.log(`   - General FAQs: ${generalResult.total} entries`);
   console.log(`   - Sessions FAQs: ${sessionsResult.total} entries`);
+  console.log(`   - Startups FAQs: ${startupsResult.total} entries`);
 
   return {
     total: totalFAQs,
     general: generalResult,
     sessions: sessionsResult,
+    startups: startupsResult,
   };
 }
 
@@ -196,6 +208,42 @@ async function seedFAQFromSessionsWithoutClear() {
 }
 
 /**
+ * Helper to seed startups FAQs without clearing database
+ */
+async function seedFAQFromStartupsWithoutClear() {
+  console.log('📝 Loading startups-faq.json...');
+  const jsonPath = join(process.cwd(), 'data', 'startups-faq.json');
+  const jsonData = JSON.parse(readFileSync(jsonPath, 'utf-8'));
+
+  const { program, location, knowledge_base, metadata } = jsonData;
+  const faqEntries: any[] = [];
+
+  for (const [category, items] of Object.entries(knowledge_base)) {
+    for (const item of items as any[]) {
+      faqEntries.push({
+        id: randomUUID(),
+        question: item.question,
+        answer: item.answer,
+        category,
+        program,
+        location,
+        intendedUse: metadata.intended_use,
+        answerStyle: metadata.answer_style,
+      });
+    }
+  }
+
+  await db.insert(faq).values(faqEntries);
+  console.log(`✅ Loaded ${faqEntries.length} startups FAQ entries`);
+
+  return {
+    total: faqEntries.length,
+    categories: Object.keys(knowledge_base),
+    metadata,
+  };
+}
+
+/**
  * Get all FAQs by category
  */
 export async function getFAQsByCategory(categoryName: string) {
@@ -250,6 +298,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       break;
     case 'sessions':
       seedPromise = seedSessionsFAQ();
+      break;
+    case 'startups':
+      seedPromise = seedStartupsFAQ();
       break;
     case 'all':
     default:

@@ -2,7 +2,12 @@
 
 ## Overview
 
-The FAQ schema (`src/db/schemas/faq.ts`) stores frequently asked questions from the Pioneers accelerator program. The data is sourced from `data/general-questions.json`.
+The FAQ schema (`src/db/schemas/faq.ts`) stores frequently asked questions from the Pioneers accelerator program. The data is sourced from multiple JSON files:
+- `data/general-questions.json` - General program FAQs (52 entries)
+- `data/sessions-faq.json` - Sessions & events FAQs (34 entries)
+- `data/startups-faq.json` - Startups & entrepreneurship FAQs (39 entries)
+
+**Total: 125 comprehensive FAQ entries across 23 categories**
 
 ## Schema Structure
 
@@ -42,18 +47,32 @@ The following categories are available (from `knowledge_base`):
 
 ### Seeding the FAQ Table
 
-Run the seed script to populate the FAQ table from `general-questions.json`:
+Run the seed script to populate the FAQ table from all FAQ sources:
 
 ```bash
-# Seed FAQ data
+# Seed all FAQs (general + sessions + startups) - DEFAULT
 pnpm db:seed:faq
+
+# Or seed individual sources
+pnpm db:seed:faq:general   # Only general program FAQs
+pnpm db:seed:faq:sessions  # Only sessions & events FAQs
+pnpm db:seed:faq:startups  # Only startups & entrepreneurship FAQs
 ```
 
 This will:
-1. Read `data/general-questions.json`
+1. Read all FAQ JSON files (`general-questions.json`, `sessions-faq.json`, `startups-faq.json`)
 2. Clear existing FAQ data
 3. Insert all FAQ entries with proper categories and metadata
-4. Display breakdown by category
+4. Display breakdown by source and category
+
+**Output Example:**
+```
+✅ Successfully seeded 125 total FAQ entries
+📊 Total categories: 23
+   - General FAQs: 52 entries
+   - Sessions FAQs: 34 entries
+   - Startups FAQs: 39 entries
+```
 
 ### Querying FAQs
 
