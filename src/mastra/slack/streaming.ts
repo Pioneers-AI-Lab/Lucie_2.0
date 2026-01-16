@@ -1,44 +1,36 @@
 /**
- * Slack Streaming Module - Real-time Agent Response Streaming
+ * Slack Streaming Module - SIMPLIFIED (Animation Disabled)
  *
- * This module handles the core streaming logic that displays agent responses
- * in Slack with animated status updates and real-time progress indicators.
+ * ⚠️ ANIMATION AND STATUS UPDATES DISABLED ⚠️
  *
- * Key Features:
+ * This module has been simplified to disable the animated status updates and
+ * real-time progress indicators. It now only:
+ * 1. Posts an initial "thinking" message
+ * 2. Streams agent response in the background
+ * 3. Posts the final response
+ *
+ * DISABLED FEATURES:
+ * - ❌ Animated spinners (Braille pattern animation)
+ * - ❌ Progress indicators for tool calls
+ * - ❌ Live message updates every 300ms
+ * - ❌ Special indicators for workflows/steps
+ * - ❌ Real-time status text updates
+ *
+ * ORIGINAL FEATURES (Commented out below):
  * - Animated spinners while agent is thinking
  * - Progress indicators for tool calls and workflow steps
  * - Live message updates (no message spam)
- * - Graceful error handling with user-friendly messages
+ * - Animation timer (updates message every 300ms)
+ * - State tracking for chunk types
+ * - Special indicators for tools/workflows
  *
- * Flow:
- * 1. Post initial "thinking" message to Slack
- * 2. Start animation timer (updates message every 300ms)
- * 3. Stream chunks from Mastra agent
- * 4. Update state based on chunk type
- * 5. Show special indicators for tools/workflows
- * 6. Stop animation and post final response
- *
- * Chunk Types:
- * - text-delta: Accumulate response text
- * - tool-call: Show tool name with spinner
- * - tool-output: May contain nested workflow events
- * - workflow-execution-start: Show workflow name
- * - workflow-step-start: Show step name with spinner
- *
- * Nested Events:
- * Workflow events come wrapped inside tool-output chunks and must be
- * extracted. The chunk.payload.output object contains the actual workflow
- * event type and data.
- *
- * Animation:
- * - Uses setInterval for smooth spinner animation
- * - Frame counter tracks animation position
- * - Stops when stream completes or errors
- * - Rate limit errors during animation are ignored
+ * Current Flow:
+ * 1. Post initial "⏳ Processing..." message
+ * 2. Stream chunks from Mastra agent (collect text silently)
+ * 3. Post final response once complete
  *
  * Error Handling:
  * - Errors are posted to Slack thread
- * - Animation stops gracefully
  * - Retry logic for final message (3 attempts)
  */
 
@@ -75,16 +67,100 @@ export async function streamToSlack(options: StreamingOptions): Promise<void> {
 		threadId,
 	} = options;
 
+	let messageTs: string | undefined;
+	let responseText = '';
+
+	// ─────────────────────────────────────────────────────────────────────────────
+	// Slack helpers (SIMPLIFIED - No animation)
+	// ─────────────────────────────────────────────────────────────────────────────
+
+	const sendFinalMessage = async (text: string) => {
+		await retrySlackUpdate(slackClient, channel, messageTs!, text);
+	};
+
+	// ─────────────────────────────────────────────────────────────────────────────
+	// Main (SIMPLIFIED - No animation or status updates)
+	// ─────────────────────────────────────────────────────────────────────────────
+
+	try {
+		// Post initial "processing" message (no animation)
+		const initial = await slackClient.chat.postMessage({
+			channel,
+			thread_ts: threadTs,
+			text: '⏳ Processing your request...',
+		});
+		messageTs = initial.ts as string;
+
+		// Get agent and start streaming
+		const agent = mastra.getAgent(agentName);
+		if (!agent) throw new Error(`Agent "${agentName}" not found`);
+
+		const stream = await agent.stream(message, {
+			resourceId,
+			threadId,
+		});
+
+		// Process chunks (SIMPLIFIED - Only collect text, no status updates)
+		for await (const chunk of stream.fullStream) {
+			switch (chunk.type) {
+				case 'text-delta':
+					if (chunk.payload.text) {
+						responseText += chunk.payload.text;
+					}
+					break;
+
+				// Ignore other chunk types (tool-call, workflow events, etc.)
+				// No status updates or progress indicators
+				default:
+					break;
+			}
+		}
+
+		// Done — send final response
+		await sendFinalMessage(
+			responseText || "Sorry, I couldn't generate a response.",
+		);
+		console.log('✅ Response sent to Slack');
+	} catch (error) {
+		console.error('❌ Error streaming to Slack:', error);
+
+		const errorText = `❌ Error: ${
+			error instanceof Error ? error.message : String(error)
+		}`;
+		if (messageTs) {
+			await sendFinalMessage(errorText);
+		} else {
+			await slackClient.chat
+				.postMessage({ channel, thread_ts: threadTs, text: errorText })
+				.catch(() => {});
+		}
+
+		throw error;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ORIGINAL IMPLEMENTATION (DISABLED)
+// ─────────────────────────────────────────────────────────────────────────────
+/*
+export async function streamToSlack_ORIGINAL(options: StreamingOptions): Promise<void> {
+	const {
+		mastra,
+		slackClient,
+		channel,
+		threadTs,
+		agentName,
+		message,
+		resourceId,
+		threadId,
+	} = options;
+
 	const state: StreamState = { text: '', chunkType: 'start' };
 
 	let messageTs: string | undefined;
 	let frame = 0;
 	let animationTimer: NodeJS.Timeout | undefined;
 	let isFinished = false;
-
-	// ─────────────────────────────────────────────────────────────────────────────
-	// Slack helpers
-	// ─────────────────────────────────────────────────────────────────────────────
 
 	const stopAnimation = () => {
 		isFinished = true;
@@ -103,17 +179,13 @@ export async function streamToSlack(options: StreamingOptions): Promise<void> {
 				text: text ?? getStatusText(state, frame),
 			});
 		} catch {
-			/* ignore rate limits during animation */
+			// ignore rate limits during animation
 		}
 	};
 
 	const sendFinalMessage = async (text: string) => {
 		await retrySlackUpdate(slackClient, channel, messageTs!, text);
 	};
-
-	// ─────────────────────────────────────────────────────────────────────────────
-	// Main
-	// ─────────────────────────────────────────────────────────────────────────────
 
 	try {
 		// Post initial "thinking" message
@@ -219,6 +291,7 @@ export async function streamToSlack(options: StreamingOptions): Promise<void> {
 		throw error;
 	}
 }
+*/
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
