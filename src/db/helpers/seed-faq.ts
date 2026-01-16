@@ -106,6 +106,13 @@ export async function seedFoundersFAQ() {
 }
 
 /**
+ * Seed FAQ data from 2025-sessions-events-info-faq.json
+ */
+export async function seedSessionsEventsFAQ() {
+  return await seedFAQFromFile('2025-sessions-events-info-faq.json');
+}
+
+/**
  * Seed FAQ data from all FAQ files
  * Clears existing data and loads all FAQ sources
  */
@@ -128,8 +135,11 @@ export async function seedAllFAQs() {
   // Seed founders FAQ (don't clear again)
   const foundersResult = await seedFAQFromFoundersWithoutClear();
 
-  const totalFAQs = generalResult.total + sessionsResult.total + startupsResult.total + foundersResult.total;
-  const allCategories = [...generalResult.categories, ...sessionsResult.categories, ...startupsResult.categories, ...foundersResult.categories];
+  // Seed 2025 sessions events FAQ (don't clear again)
+  const sessionsEventsResult = await seedFAQFromSessionsEventsWithoutClear();
+
+  const totalFAQs = generalResult.total + sessionsResult.total + startupsResult.total + foundersResult.total + sessionsEventsResult.total;
+  const allCategories = [...generalResult.categories, ...sessionsResult.categories, ...startupsResult.categories, ...foundersResult.categories, ...sessionsEventsResult.categories];
 
   console.log(`\n✅ Successfully seeded ${totalFAQs} total FAQ entries`);
   console.log(`📊 Total categories: ${allCategories.length}`);
@@ -137,6 +147,7 @@ export async function seedAllFAQs() {
   console.log(`   - Sessions FAQs: ${sessionsResult.total} entries`);
   console.log(`   - Startups FAQs: ${startupsResult.total} entries`);
   console.log(`   - Founders FAQs: ${foundersResult.total} entries`);
+  console.log(`   - 2025 Sessions Events FAQs: ${sessionsEventsResult.total} entries`);
 
   return {
     total: totalFAQs,
@@ -144,6 +155,7 @@ export async function seedAllFAQs() {
     sessions: sessionsResult,
     startups: startupsResult,
     founders: foundersResult,
+    sessionsEvents: sessionsEventsResult,
   };
 }
 
@@ -292,6 +304,42 @@ async function seedFAQFromFoundersWithoutClear() {
 }
 
 /**
+ * Helper to seed 2025 sessions events FAQs without clearing database
+ */
+async function seedFAQFromSessionsEventsWithoutClear() {
+  console.log('📝 Loading 2025-sessions-events-info-faq.json...');
+  const jsonPath = join(process.cwd(), 'data', '2025-sessions-events-info-faq.json');
+  const jsonData = JSON.parse(readFileSync(jsonPath, 'utf-8'));
+
+  const { program, location, knowledge_base, metadata } = jsonData;
+  const faqEntries: any[] = [];
+
+  for (const [category, items] of Object.entries(knowledge_base)) {
+    for (const item of items as any[]) {
+      faqEntries.push({
+        id: randomUUID(),
+        question: item.question,
+        answer: item.answer,
+        category,
+        program,
+        location,
+        intendedUse: metadata.intended_use,
+        answerStyle: metadata.answer_style,
+      });
+    }
+  }
+
+  await db.insert(faq).values(faqEntries);
+  console.log(`✅ Loaded ${faqEntries.length} 2025 sessions events FAQ entries`);
+
+  return {
+    total: faqEntries.length,
+    categories: Object.keys(knowledge_base),
+    metadata,
+  };
+}
+
+/**
  * Get all FAQs by category
  */
 export async function getFAQsByCategory(categoryName: string) {
@@ -352,6 +400,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       break;
     case 'founders':
       seedPromise = seedFoundersFAQ();
+      break;
+    case 'sessions-events':
+      seedPromise = seedSessionsEventsFAQ();
       break;
     case 'all':
     default:

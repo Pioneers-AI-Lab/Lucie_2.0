@@ -9,8 +9,9 @@
  * - data/sessions-faq.json (34 FAQs)
  * - data/startups-faq.json (39 FAQs)
  * - data/founders-faq.json (36 FAQs)
+ * - data/2025-sessions-events-info-faq.json (36 FAQs) - Specific 2025 events, speakers, milestones
  *
- * Total: 161 FAQs across 31 categories
+ * Total: 197 FAQs across 40 categories
  */
 
 import { createTool } from '@mastra/core/tools';
@@ -26,7 +27,7 @@ import { eq, like, or, sql } from 'drizzle-orm';
 export const queryFAQTool = createTool({
   id: 'query-faq-turso',
   description: `Query frequently asked questions about the Pioneers accelerator program from the database.
-  Contains 161 comprehensive FAQs across 31 categories in 4 domains:
+  Contains 197 comprehensive FAQs across 40 categories in 5 domains:
 
   📋 GENERAL PROGRAM (52 FAQs, 7 categories):
   - program_overview: General program information, philosophy, and outcomes
@@ -67,6 +68,17 @@ export const queryFAQTool = createTool({
   - background_and_education: Evaluating educational and professional backgrounds
   - communication_and_outreach: How to contact founders, outreach best practices
 
+  🎤 2025 SESSIONS & EVENTS INFO (36 FAQs, 9 categories):
+  - masterclass_speakers: Specific masterclasses and speakers (Alexis Robert/KIMA, Emmanuel Straschnov/Bubble, Salomon Aiach, Bruno Aziza, etc.)
+  - social_events: Community drinks, dinners, board game nights, Lunch Roulette
+  - program_milestones: Selection Day, Pre-IC, IC details and results
+  - group_exercises_challenges: Worst Startup, Startup Challenge, Distribution Machine
+  - friday_pitches: Weekly pitch sessions and formats
+  - theme_sessions: Theme-based events and weekly themes
+  - office_hours_support: Office hours structure and LinkedIn support
+  - program_logistics: Kick-off, Basecamp Day, attendance, weekly updates
+  - special_announcements: Station F perks, feedback forms, alumni info
+
   ⚙️ Search types:
   - "search": Search across questions and answers for keywords (RECOMMENDED - fastest and most targeted)
   - "by-category": Filter by specific category name (use when targeting specific domain)
@@ -88,6 +100,9 @@ export const queryFAQTool = createTool({
   - "Show me AI startups" → Use queryStartupsTool (data)
   - "What is an LOI?" → {searchType: "search", searchTerm: "LOI"} (FAQ)
   - "What does years_of_xp mean?" → {searchType: "search", searchTerm: "years of experience"} (FAQ)
+  - "Who was Emmanuel Straschnov?" → {searchType: "search", searchTerm: "Emmanuel Straschnov"} (FAQ - 2025 speaker info)
+  - "What was the Alexis Robert event?" → {searchType: "search", searchTerm: "Alexis Robert"} (FAQ - 2025 event details)
+  - "Tell me about Selection Day" → {searchType: "search", searchTerm: "Selection Day"} (FAQ - 2025 milestone)
   `,
 
   inputSchema: z.object({
@@ -107,7 +122,8 @@ export const queryFAQTool = createTool({
         'GENERAL: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous | ' +
         'SESSIONS: session_types_overview, office_hours_and_mentorship, attendance_and_participation, program_milestones, schedule_and_logistics, weekly_updates_and_progress | ' +
         'STARTUPS: progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
-        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach',
+        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach | ' +
+        '2025 EVENTS: masterclass_speakers, social_events, program_milestones, group_exercises_challenges, friday_pitches, theme_sessions, office_hours_support, program_logistics, special_announcements',
       ),
     searchTerm: z
       .string()

@@ -19,6 +19,7 @@
     "db:seed:faq:sessions": "tsx src/db/helpers/seed-faq.ts sessions",
     "db:seed:faq:startups": "tsx src/db/helpers/seed-faq.ts startups",
     "db:seed:faq:founders": "tsx src/db/helpers/seed-faq.ts founders",
+    "db:seed:faq:sessions-events": "tsx src/db/helpers/seed-faq.ts sessions-events",
     "db:setup": "pnpm dbp && pnpm db:seed",
     "db:sync": "tsx src/db/sync-from-airtable.ts"
   },
