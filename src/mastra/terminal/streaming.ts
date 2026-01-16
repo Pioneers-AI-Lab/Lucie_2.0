@@ -43,6 +43,7 @@ export async function streamToTerminal(
   const { mastra, agentName, message, resourceId, threadId } = options;
 
   const state: StreamState = { text: '', chunkType: 'start' };
+  let textStarted = false; // Track if we've started writing text (to apply green color once)
 
   try {
     // Display initial thinking indicator
@@ -69,6 +70,11 @@ export async function streamToTerminal(
       switch (chunk.type) {
         case 'text-delta':
           if (chunk.payload.text) {
+            // Apply green color on first text chunk
+            if (!textStarted) {
+              process.stdout.write('\u001B[32m'); // Green color
+              textStarted = true;
+            }
             state.text += chunk.payload.text;
             // Stream text in real-time
             process.stdout.write(chunk.payload.text);
@@ -119,7 +125,10 @@ export async function streamToTerminal(
       }
     }
 
-    // Done
+    // Done - reset color if text was written
+    if (textStarted) {
+      process.stdout.write('\u001B[0m'); // Reset color
+    }
     if (!state.text.trim()) {
       process.stdout.write('\n⚠️  No response generated.\n');
     } else {
