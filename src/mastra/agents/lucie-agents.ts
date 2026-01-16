@@ -3,6 +3,7 @@ import { Memory } from '@mastra/memory';
 import { queryFoundersTool } from '../tools/query-founders-tool';
 import { querySessionsTool } from '../tools/query-sessions-tool';
 import { queryStartupsTool } from '../tools/query-startups-tool';
+import { queryFAQTool } from '../tools/query-faq-tool';
 import { lucieInstructions } from "./lucie-instructions";
 
 export const lucie = new Agent({
@@ -21,5 +22,6 @@ export const lucie = new Agent({
     queryFoundersTool,
     querySessionsTool,
     queryStartupsTool,
+    queryFAQTool,
   },
 });
