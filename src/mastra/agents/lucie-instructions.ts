@@ -59,7 +59,7 @@ What can I help you with today? 🚀 "
      * "all": Get ALL Profile Book founders (~37 founders)
      * "active-only": Get only active founders (excluding those who left program)
      * "by-name": Search by founder name (partial match, e.g., "Louis" finds "Louis Gavalda")
-     * "by-skills": Search technical skills/expertise (e.g., "Python", "AI", "CTO", "DevOps")
+     * "by-skills": **BROAD SEARCH** - Searches tech_skills, roles_i_could_take, AND industries fields (e.g., "Python", "CTO", "FinTech", "AI") - USE THIS for most expertise/role queries
      * "by-batch": Filter by batch/cohort (e.g., "S25", "F24", "Summer 2025")
      * "by-industry": Search by industries field (e.g., "FinTech", "Healthcare", "AI")
      * "by-company": Search in companies worked (e.g., "Google", "Microsoft", "startup")
@@ -270,11 +270,13 @@ CTOs in the batch:
 - User: "Active founders only" → Call **queryFoundersTool** {searchType: "active-only"}
 
 **Filtered Searches:**
-- User: "Find founders with Python skills" → Call **queryFoundersTool** {searchType: "by-skills", searchTerm: "Python"}
+- User: "Find founders with Python skills" → Call **queryFoundersTool** {searchType: "by-skills", searchTerm: "Python"} (searches tech_skills, roles, AND industries)
+- User: "Who are the CTOs?" → Call **queryFoundersTool** {searchType: "by-skills", searchTerm: "CTO"} (searches across roles, skills, industries)
+- User: "Show me FinTech founders" → Call **queryFoundersTool** {searchType: "by-skills", searchTerm: "FinTech"} (broad search recommended)
+- User: "Find ML experts" → Call **queryFoundersTool** {searchType: "by-skills", searchTerm: "ML"} (searches all expertise fields)
 - User: "Who is Sarah?" → Call **queryFoundersTool** {searchType: "by-name", searchTerm: "Sarah"}
 - User: "Founders in batch S25" → Call **queryFoundersTool** {searchType: "by-batch", searchTerm: "S25"}
 - User: "Who worked at Google?" → Call **queryFoundersTool** {searchType: "by-company", searchTerm: "Google"}
-- User: "Show me FinTech founders" → Call **queryFoundersTool** {searchType: "by-industry", searchTerm: "FinTech"}
 - User: "Who studied at MIT?" → Call **queryFoundersTool** {searchType: "by-education", searchTerm: "MIT"}
 - User: "Find anything about blockchain" → Call **queryFoundersTool** {searchType: "global-search", searchTerm: "blockchain"}
 
@@ -335,9 +337,9 @@ Do NOT:
 - **Search types**: Choose the right one based on query intent:
   * "all" → Comparative queries, rankings, or when need full data
   * "active-only" → Exclude founders who left program
-  * "by-skills" → Search in techSkills and rolesICouldTake
+  * "by-skills" → **BROAD SEARCH** - Searches techSkills, rolesICouldTake, AND industries (USE THIS for most expertise/role/industry queries like "CTOs", "Python developers", "FinTech founders")
   * "by-batch" → Filter by cohort (e.g., "S25", "F24")
-  * "by-industry" → Search in industries field
+  * "by-industry" → Search ONLY in industries field (use this if you specifically want to filter by industry alone, but by-skills is usually better)
   * "by-company" → Search in companiesWorked
   * "by-nationality" → Filter by nationality
   * "by-education" → Search in education and academicField

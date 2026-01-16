@@ -54,9 +54,9 @@ export const queryFoundersTool = createTool({
   - "all": Get all Profile Book founders
   - "active-only": Get only active founders (excluding those who left the program)
   - "by-name": Search by founder name (partial match, case-insensitive)
-  - "by-skills": Search in tech_skills and roles_i_could_take fields
+  - "by-skills": Search in tech_skills, roles_i_could_take, AND industries fields (broad search - finds "CTO" in roles, "Python" in skills, "FinTech" in industries)
   - "by-batch": Filter by cohort batch (e.g., "S25", "F24", "Summer 2025")
-  - "by-industry": Search in industries field (e.g., "FinTech", "Healthcare", "AI")
+  - "by-industry": Search in industries field ONLY (e.g., "FinTech", "Healthcare", "AI") - use this for industry-specific queries
   - "by-company": Search in companies_worked field (e.g., "Google", "Microsoft")
   - "by-nationality": Filter by nationality (e.g., "USA", "India", "Brazil")
   - "by-education": Search in education and academic_field (e.g., "Stanford", "Computer Science")
@@ -69,10 +69,12 @@ export const queryFoundersTool = createTool({
   Use this tool for any questions about founders, their skills, backgrounds, or contact information.
 
   Examples of good queries:
-  - "Who are the CTOs?" → by-skills with "CTO"
+  - "Who are the CTOs?" → by-skills with "CTO" (searches roles, skills, industries)
+  - "Find Python developers" → by-skills with "Python" (searches tech skills, roles, industries)
+  - "Show me FinTech founders" → by-skills with "FinTech" OR by-industry with "FinTech" (by-skills is broader)
+  - "Find ML experts" → by-skills with "ML" (searches across roles, skills, and industries)
   - "Find founders from S25 batch" → by-batch with "S25"
   - "Who worked at Google?" → by-company with "Google"
-  - "Show me FinTech founders" → by-industry with "FinTech"
   - "Find founders interested in AI" → by-project with "AI" or global-search with "AI"
   - "Who studied at MIT?" → by-education with "MIT"
   - "How many active founders?" → active-only + count

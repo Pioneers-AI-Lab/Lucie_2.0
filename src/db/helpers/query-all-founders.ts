@@ -172,7 +172,9 @@ export async function getFoundersByName(
 }
 
 /**
- * Get founders by skills (searches in techSkills field, Profile Book only)
+ * Get founders by skills (searches in techSkills, rolesICouldTake, AND industries fields, Profile Book only)
+ * This broad search helps find founders whether they list their expertise in tech skills, roles, or industries
+ * Example: "FinTech" might be in industries, "CTO" in roles, "Python" in tech skills
  */
 export async function getFoundersBySkills(
   skillTerm: string,
@@ -187,6 +189,7 @@ export async function getFoundersBySkills(
         or(
           like(founders.techSkills, pattern),
           like(founders.rolesICouldTake, pattern),
+          like(founders.industries, pattern),
         ),
         sql`${founders.introduction} IS NOT NULL`,
       ),
