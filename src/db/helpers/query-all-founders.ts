@@ -56,12 +56,15 @@ export interface Founder {
 
 /**
  * Get all founders (Profile Book only)
+ * Returns founders sorted by years_of_xp descending (most experienced first)
+ * This makes it easier for LLM to pick top N experienced founders
  */
 export async function getAllFounders(): Promise<Founder[]> {
   const foundersData = await db
     .select()
     .from(founders)
-    .where(sql`${founders.introduction} IS NOT NULL`);
+    .where(sql`${founders.introduction} IS NOT NULL`)
+    .orderBy(sql`CAST(${founders.yearsOfXp} AS INTEGER) DESC`);
 
   return foundersData.map((f) => ({
     id: f.id,
@@ -172,9 +175,9 @@ export async function getFoundersByName(
 }
 
 /**
- * Get founders by skills (searches in techSkills, rolesICouldTake, AND industries fields, Profile Book only)
- * This broad search helps find founders whether they list their expertise in tech skills, roles, or industries
- * Example: "FinTech" might be in industries, "CTO" in roles, "Python" in tech skills
+ * Get founders by skills (searches in techSkills, rolesICouldTake, industries, AND interestedInWorkingOn fields, Profile Book only)
+ * This broad search helps find founders whether they list their expertise in tech skills, roles, industries, or interests
+ * Example: "FinTech" might be in industries, "CTO" in roles, "Python" in tech skills, "AI applications" in interests
  */
 export async function getFoundersBySkills(
   skillTerm: string,
@@ -190,6 +193,7 @@ export async function getFoundersBySkills(
           like(founders.techSkills, pattern),
           like(founders.rolesICouldTake, pattern),
           like(founders.industries, pattern),
+          like(founders.interestedInWorkingOn, pattern),
         ),
         sql`${founders.introduction} IS NOT NULL`,
       ),

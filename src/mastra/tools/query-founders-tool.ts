@@ -51,10 +51,12 @@ export const queryFoundersTool = createTool({
   - Batch: batch (cohort information like "S25", "F24", "Summer 2025")
 
   Search types:
-  - "all": Get all Profile Book founders
+  - "all": Get all Profile Book founders **PRE-SORTED by years_of_xp descending (most experienced first)**
+    → When you need top N most experienced, just take the first N items from the result!
+    → Example: Top 3 experienced = items[0], items[1], items[2]
   - "active-only": Get only active founders (excluding those who left the program)
   - "by-name": Search by founder name (partial match, case-insensitive)
-  - "by-skills": Search in tech_skills, roles_i_could_take, AND industries fields (broad search - finds "CTO" in roles, "Python" in skills, "FinTech" in industries)
+  - "by-skills": Search in tech_skills, roles_i_could_take, industries, AND interested_in_working_on fields (broad search - finds "CTO" in roles, "Python" in skills, "FinTech" in industries, "AI applications" in interests)
   - "by-batch": Filter by cohort batch (e.g., "S25", "F24", "Summer 2025")
   - "by-industry": Search in industries field ONLY (e.g., "FinTech", "Healthcare", "AI") - use this for industry-specific queries
   - "by-company": Search in companies_worked field (e.g., "Google", "Microsoft")
@@ -69,23 +71,25 @@ export const queryFoundersTool = createTool({
   Use this tool for any questions about founders, their skills, backgrounds, or contact information.
 
   Examples of good queries:
-  - "Who are the CTOs?" → by-skills with "CTO" (searches roles, skills, industries)
-  - "Find Python developers" → by-skills with "Python" (searches tech skills, roles, industries)
-  - "Show me FinTech founders" → by-skills with "FinTech" OR by-industry with "FinTech" (by-skills is broader)
-  - "Find ML experts" → by-skills with "ML" (searches across roles, skills, and industries)
+  - "Who are the CTOs?" → by-skills with "CTO" (searches roles, skills, industries, interests)
+  - "Find Python developers" → by-skills with "Python" (searches tech skills, roles, industries, interests)
+  - "Show me FinTech founders" → by-skills with "FinTech" (searches industries AND interested_in_working_on)
+  - "Find ML experts" → by-skills with "ML" (searches across roles, skills, industries, AND interests)
+  - "Who's interested in AI?" → by-skills with "AI" (searches interested_in_working_on field + others)
+  - "Find founders working on blockchain" → by-skills with "blockchain" (searches interests + industries)
   - "Find founders from S25 batch" → by-batch with "S25"
   - "Who worked at Google?" → by-company with "Google"
-  - "Find founders interested in AI" → by-project with "AI" or global-search with "AI"
   - "Who studied at MIT?" → by-education with "MIT"
   - "How many active founders?" → active-only + count
 
   ⚠️ CRITICAL - Examples of COMPARATIVE queries (MUST use searchType="all"):
-  - "Who are the 3 most experienced founders?" → {searchType: "all"} → YOU analyze ALL years_of_xp → sort descending → return top 3
-  - "Top 5 founders by experience?" → {searchType: "all"} → YOU parse years_of_xp as numbers → sort descending → return top 5
-  - "Who has the most experience?" → {searchType: "all"} → YOU find max(years_of_xp) → return that founder
-  - "Least experienced founder?" → {searchType: "all"} → YOU find min(years_of_xp) → return that founder
+  - "Who are the 3 most experienced founders?" → {searchType: "all"} → Results are PRE-SORTED by experience → Take first 3 items
+  - "Top 5 founders by experience?" → {searchType: "all"} → Results are PRE-SORTED by experience → Take first 5 items
+  - "Who has the most experience?" → {searchType: "all"} → Results are PRE-SORTED by experience → Take first item (founders[0])
+  - "Least experienced founder?" → {searchType: "all"} → Results are PRE-SORTED by experience → Take last item (founders[36])
 
-  DO NOT use filtered searches for ranking queries - you MUST see ALL founders to rank them correctly!
+  Results from "all" come PRE-SORTED by years_of_xp descending (most experienced first).
+  Just take the first N items - NO SORTING NEEDED!
   `,
 
   inputSchema: z.object({
