@@ -30,6 +30,7 @@ export const founderAirtableFieldIds = {
   academicField: 'fldzTd96TnSJ90VUm',
   founder: 'fldPCcEhQefOf94Vz',
   leftProgram: 'fldBepgICe1g9FANb',
+  batch: 'fldJdDqVIehLc5JAi',
 } as const;
 
 

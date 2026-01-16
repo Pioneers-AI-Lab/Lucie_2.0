@@ -78,6 +78,10 @@ export const founders = sqliteTable('founders', {
   // Airtable ID: fldBepgICe1g9FANb
   leftProgram: text('left_program'),
 
+  // Batch/Cohort Information
+  // Airtable ID: fldJdDqVIehLc5JAi
+  batch: text('batch'),
+
   // Timestamps (not from Airtable - managed by database)
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
