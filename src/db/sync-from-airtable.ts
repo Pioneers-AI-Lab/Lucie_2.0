@@ -11,7 +11,6 @@
  * Usage:
  *   pnpm db:sync                    # Sync all tables
  *   pnpm db:sync --table founders   # Sync specific table
- *   Note: Batch filtering not available - Batch field not in Profile Book schema
  */
 
 import Airtable from 'airtable';
@@ -46,11 +45,8 @@ const TABLES = {
   STARTUPS: process.env.SU_2025_STARTUPS_TABLE_ID || 'Startups 2025',
 };
 
-// Note: Batch field removed from Profile Book schema - batch filtering not available
-
 /**
  * Sync founders from Airtable
- * Note: Batch filtering not available - Batch field not in Profile Book schema
  */
 async function syncFounders() {
   log('Syncing founders from Airtable...');
@@ -138,6 +134,8 @@ async function syncFounders() {
         founder: arrayToString(fields['Founder']), // (index 24)
         // Status (table-ref index 25)
         leftProgram: arrayToString(fields['Gender']), // Misaligned (index 25)
+        // Batch/Cohort (table-ref index 26)
+        batch: arrayToString(fields['Batch']), // (index 26)
       };
 
       // Check if record exists
@@ -316,11 +314,8 @@ async function main() {
     const batch = batchArg?.split('=')[1];
 
     log('Starting Airtable → Turso sync...');
-    if (batch)
-      log(
-        `⚠️  Batch filtering not available - Batch field not in Profile Book schema`,
-      );
     if (table) log(`Syncing only: ${table}`);
+    if (batch) log(`Note: Batch filtering not implemented in sync script`);
 
     const stats = {
       totalInserted: 0,
@@ -329,7 +324,6 @@ async function main() {
 
     // Sync based on arguments
     if (!table || table === 'founders') {
-      // Note: batch parameter ignored - Batch field not in Profile Book schema
       const result = await syncFounders();
       stats.totalInserted += result.inserted;
       stats.totalUpdated += result.updated;
