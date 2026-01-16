@@ -9,6 +9,11 @@
  * - Speakers and participants
  * - Program weeks
  * - Notes and attachments
+ *
+ * 💡 Note: For guidance on HOW sessions work, attendance policies, or participation expectations,
+ * use queryFAQTool with searchTerm related to sessions (34 FAQs available covering session types,
+ * office hours, attendance, program milestones, schedules, and weekly updates).
+ * This tool returns ACTUAL session data - use queryFAQTool for guidance/explanations.
  */
 
 import { createTool } from '@mastra/core/tools';
@@ -34,6 +39,11 @@ export const querySessionsTool = createTool({
   id: 'query-sessions-turso',
   description: `Query session and event data from the Pioneers accelerator program database.
   Contains a list of session events with dates, speakers, types, and details.
+
+  💡 TOOL SELECTION:
+  - Use THIS TOOL for: "When is the next session?", "Show me workshops...", "List upcoming events..." (actual session data/records)
+  - Use queryFAQTool for: "What are Friday pitches?", "How do office hours work?", "Do I have to attend?" (guidance/explanations)
+  - 34 sessions FAQs available covering session types, office hours, attendance policies, program milestones, schedules
 
   Search types:
   - "all": Get all sessions

@@ -5,6 +5,11 @@
  * Much faster with no rate limits.
  *
  * Searches Profile Book founders only (detailed professional data with introductions).
+ *
+ * 💡 Note: For guidance on HOW to find co-founders, understand profiles, or reach out,
+ * use queryFAQTool with searchTerm related to founders (36 FAQs available covering
+ * Profile Book navigation, co-founder matching strategies, outreach best practices).
+ * This tool returns ACTUAL founder data - use queryFAQTool for guidance/explanations.
  */
 
 import { createTool } from '@mastra/core/tools';
@@ -32,6 +37,11 @@ export const queryFoundersTool = createTool({
   id: 'query-founders-turso',
   description: `Query founder data from the Pioneers accelerator program database.
   Searches Profile Book founders only (detailed professional data with introductions).
+
+  💡 TOOL SELECTION:
+  - Use THIS TOOL for: "Show me founders...", "Who are the CTOs?", "Find developers..." (actual founder data/records)
+  - Use queryFAQTool for: "How do I find a co-founder?", "What should I look for?", "How do I reach out?" (guidance/advice)
+  - 36 founders FAQs available covering Profile Book navigation, co-founder matching, understanding profiles, outreach strategies
 
   ⚠️⚠️⚠️ CRITICAL FOR COMPARATIVE QUERIES (TOP/BOTTOM/MOST/LEAST) ⚠️⚠️⚠️
   If the user asks for "top N", "most experienced", "best", "least", "worst", or ANY ranking/comparison:

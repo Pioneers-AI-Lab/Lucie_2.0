@@ -9,6 +9,12 @@
  * - Team members
  * - Descriptions and taglines
  * - Traction and progress
+ *
+ * 💡 Note: For guidance on HOW to build startups, validate ideas, or prepare pitches,
+ * use queryFAQTool with searchTerm related to startups (39 FAQs available covering
+ * team formation, traction, validation, product development, pitching, investment readiness,
+ * go-to-market strategies, and common challenges).
+ * This tool returns ACTUAL startup data - use queryFAQTool for guidance/explanations.
  */
 
 import { createTool } from '@mastra/core/tools';
@@ -31,6 +37,11 @@ export const queryStartupsTool = createTool({
   id: 'query-startups-turso',
   description: `Query startup data from the Pioneers accelerator program database.
   Contains a list of startups with team info, industries, and traction details.
+
+  💡 TOOL SELECTION:
+  - Use THIS TOOL for: "Show me FinTech startups...", "Which startups are...?", "List companies building..." (actual startup data/records)
+  - Use queryFAQTool for: "How do I validate my idea?", "What is an LOI?", "How do I prepare for IC?" (guidance/advice)
+  - 39 startups FAQs available covering traction, validation, pitching, product development, investment readiness, GTM strategy
 
   Search types:
   - "all": Get all startups

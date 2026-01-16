@@ -4,7 +4,13 @@
  * Queries FAQ data from the local Turso database.
  * Fast queries with no rate limits.
  *
- * Source: data/general-questions.json
+ * Sources:
+ * - data/general-questions.json (52 FAQs)
+ * - data/sessions-faq.json (34 FAQs)
+ * - data/startups-faq.json (39 FAQs)
+ * - data/founders-faq.json (36 FAQs)
+ *
+ * Total: 161 FAQs across 31 categories
  */
 
 import { createTool } from '@mastra/core/tools';
@@ -20,43 +26,68 @@ import { eq, like, or, sql } from 'drizzle-orm';
 export const queryFAQTool = createTool({
   id: 'query-faq-turso',
   description: `Query frequently asked questions about the Pioneers accelerator program from the database.
+  Contains 161 comprehensive FAQs across 31 categories in 4 domains:
 
-  Contains comprehensive FAQ information across 7 categories:
+  📋 GENERAL PROGRAM (52 FAQs, 7 categories):
   - program_overview: General program information, philosophy, and outcomes
   - eligibility_and_profile: Who can apply, requirements, and founder profiles
-  - team_formation: Co-founder matching, team building, and equity guidance
+  - team_formation: Co-founder matching, team building, and equity guidance (general)
   - application_process: How to apply, selection criteria, and timelines
   - funding_and_equity: Funding terms, equity requirements, and fundraising support
   - station_f_and_resources: Station F access, perks, and facilities
   - miscellaneous: Language, contact info, and general questions
 
-  Search types:
-  - "all": Get all FAQ entries (use when user asks broad questions like "tell me about the program")
-  - "by-category": Filter by specific category (e.g., "application_process", "funding_and_equity")
-  - "search": Search across questions and answers for keywords (best for specific topics like "funding", "co-founder", "apply")
+  📅 SESSIONS & EVENTS (34 FAQs, 7 categories):
+  - session_types_overview: Different types of sessions and their purposes
+  - office_hours_and_mentorship: How office hours work, mentor access
+  - attendance_and_participation: Attendance policies, engagement expectations
+  - program_milestones: Key events like Selection Day, Demo Day
+  - schedule_and_logistics: Session timing, locations, formats
+  - weekly_updates_and_progress: Update requirements, progress tracking
+  - miscellaneous: General session-related questions
+
+  🚀 STARTUPS & ENTREPRENEURSHIP (39 FAQs, 9 categories):
+  - team_formation: Building teams, co-founder dynamics (startup-specific)
+  - progress_tracking: How to track and measure progress
+  - traction_and_validation: Customer conversations, LOIs, validation strategies
+  - product_development: MVP, iteration, product-market fit
+  - pitching_and_feedback: Pitch preparation, receiving feedback, IC readiness
+  - market_and_industry: Market sizing, industry research, TAM/SAM/SOM
+  - investment_readiness: Preparing for investment committee, investor conversations
+  - go_to_market_strategy: GTM planning, customer acquisition
+  - common_challenges: Typical founder challenges and solutions
+
+  👥 FOUNDERS & CO-FOUNDER MATCHING (36 FAQs, 8 categories):
+  - profile_book_overview: Understanding the Pioneers Profile Book
+  - finding_cofounders: Strategies for finding co-founders in the program
+  - understanding_profiles: How to read and interpret founder profiles
+  - skills_and_expertise: Finding founders with specific skills/experience
+  - batch_and_timing: Understanding batches, availability, commitments
+  - project_alignment: Finding founders with aligned interests/projects
+  - background_and_education: Evaluating educational and professional backgrounds
+  - communication_and_outreach: How to contact founders, outreach best practices
+
+  ⚙️ Search types:
+  - "search": Search across questions and answers for keywords (RECOMMENDED - fastest and most targeted)
+  - "by-category": Filter by specific category name (use when targeting specific domain)
+  - "all": Get all 161 FAQ entries (use sparingly - only for very broad questions)
   - "count": Get total number of FAQ entries
 
-  Use this tool for:
-  - General program questions ("What is Pioneers?", "How does the program work?")
-  - Eligibility questions ("Can I apply?", "Who is eligible?")
-  - Application questions ("How do I apply?", "When is the deadline?")
-  - Funding questions ("Does Pioneers provide funding?", "How much equity?")
-  - Team questions ("Can I find a co-founder?", "What about solo founders?")
-  - Station F questions ("What is Station F?", "Do I get access?")
-  - Any other general program-related questions
+  🎯 When to use this tool vs data tools:
+  - Use queryFAQTool for: "How do I...?", "What should I...?", "How does X work?", "What is...?" (guidance/explanation)
+  - Use queryFoundersTool for: "Show me founders...", "Who are the CTOs?", "Find developers..." (actual founder data)
+  - Use querySessionsTool for: "When is the next session?", "Show me workshops...", "List upcoming events..." (actual session data)
+  - Use queryStartupsTool for: "Show me FinTech startups...", "Which startups are...?", "List companies..." (actual startup data)
 
-  Choose search strategy:
-  - Use "search" for specific keywords or topics (fastest, most targeted)
-  - Use "by-category" when user asks about a specific area (e.g., "tell me about funding")
-  - Use "all" only when user asks very broad questions or you can't determine the topic
-
-  Examples:
-  - "Does Pioneers provide funding?" → {searchType: "search", searchTerm: "funding"}
-  - "How do I apply?" → {searchType: "by-category", category: "application_process"}
-  - "Can I find a co-founder?" → {searchType: "search", searchTerm: "co-founder"}
-  - "Tell me everything about the program" → {searchType: "all"}
-  - "What are the eligibility requirements?" → {searchType: "by-category", category: "eligibility_and_profile"}
-  - "How many FAQs are there?" → {searchType: "count"}
+  💡 Examples:
+  - "How do I find a co-founder?" → {searchType: "search", searchTerm: "find co-founder"} (FAQ)
+  - "Show me all CTOs" → Use queryFoundersTool (data)
+  - "What should I include in my pitch?" → {searchType: "search", searchTerm: "pitch"} (FAQ)
+  - "When is the next session?" → Use querySessionsTool (data)
+  - "How do I validate my idea?" → {searchType: "search", searchTerm: "validation"} (FAQ)
+  - "Show me AI startups" → Use queryStartupsTool (data)
+  - "What is an LOI?" → {searchType: "search", searchTerm: "LOI"} (FAQ)
+  - "What does years_of_xp mean?" → {searchType: "search", searchTerm: "years of experience"} (FAQ)
   `,
 
   inputSchema: z.object({
@@ -72,7 +103,11 @@ export const queryFAQTool = createTool({
       .string()
       .optional()
       .describe(
-        'Category name (required for "by-category" search). Valid values: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous',
+        'Category name (required for "by-category" search). Valid categories: ' +
+        'GENERAL: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous | ' +
+        'SESSIONS: session_types_overview, office_hours_and_mentorship, attendance_and_participation, program_milestones, schedule_and_logistics, weekly_updates_and_progress | ' +
+        'STARTUPS: progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
+        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach',
       ),
     searchTerm: z
       .string()

@@ -1,0 +1,172 @@
+{
+  "program": "Pioneers Accelerator",
+  "location": "Station F",
+  "knowledge_base": {
+    "profile_book_overview": [
+      {
+        "question": "What is the Pioneers Profile Book?",
+        "answer": "The Profile Book is a database of all founders in the Pioneers accelerator program with detailed professional profiles. It includes ~37 founders with their backgrounds, skills, experience, industries of interest, project ideas, and co-founder preferences. All founders in the Profile Book have detailed introductions showcasing their expertise and track record."
+      },
+      {
+        "question": "How can I access the Profile Book?",
+        "answer": "You can ask Lucie to search the Profile Book using natural language queries like 'Find CTOs', 'Show me founders with Python skills', 'Who's interested in FinTech?', or 'Find founders from batch S25'. Lucie can search by name, skills, roles, industries, batch, education, companies, nationality, and more."
+      },
+      {
+        "question": "What information is included in founder profiles?",
+        "answer": "Each profile includes: name and contact info (email, WhatsApp, LinkedIn), professional background (companies worked, years of experience, education, degree, academic field), skills (technical skills, roles they could take, industries of interest), introduction and track record they're proud of, project ideas and interests, co-founder preferences, batch/cohort, status and availability, and nationality/gender."
+      },
+      {
+        "question": "How often is the Profile Book updated?",
+        "answer": "The Profile Book is synced from Airtable where founders maintain their profiles. For the most current information, especially regarding project status or availability, it's best to reach out directly to founders via email, WhatsApp, or LinkedIn. Profile data reflects information founders provided during onboarding and updates."
+      }
+    ],
+    "finding_cofounders": [
+      {
+        "question": "How do I find a co-founder in the Pioneers program?",
+        "answer": "Ask Lucie to search the Profile Book based on specific criteria: skills you need ('Find CTOs', 'Find Python developers'), industries ('Show me FinTech founders'), experience level ('Who has the most experience?'), or specific attributes ('Find founders open to joining projects'). Review their introductions and track records, then reach out directly via email or WhatsApp."
+      },
+      {
+        "question": "What should I look for in a potential co-founder?",
+        "answer": "Look for: complementary skills (technical if you're business, or vice versa), relevant industry experience or domain expertise, strong track record (past achievements, companies, projects), alignment on industries and project types of interest, similar experience level and commitment, clear communication in their introduction, and openness to collaboration based on their co-founder preferences."
+      },
+      {
+        "question": "How do I reach out to a potential co-founder?",
+        "answer": "Use the contact information in their profile (email, WhatsApp, or LinkedIn). Be specific: mention what you're working on, why you think you'd be a good match based on their profile, what skills/experience you bring, and suggest a time to chat (coffee at Station F, video call, etc.). Reference specific details from their introduction to show genuine interest."
+      },
+      {
+        "question": "What if a founder is already in a team?",
+        "answer": "Check their 'existing_project_idea' and 'open_to_join_another_project' fields. Some founders have projects but are open to better opportunities. Reach out anyway if there's strong fit - team changes happen, especially early in the program. If they're committed to a team, ask if they know other founders who might be a good match."
+      },
+      {
+        "question": "How do I know if a founder is still available?",
+        "answer": "Check the 'status' field which shows their availability (full-time vs other commitments). The 'left_program' field indicates if they've left the program. For current availability, reach out directly as situations change. Some founders marked as having 'other commitments' may still be available depending on timing and project fit."
+      }
+    ],
+    "understanding_profiles": [
+      {
+        "question": "What do the different role types mean?",
+        "answer": "Common roles founders can take: Tech Dev/Prototyping (CTO, technical development), Product (product management, user experience), Design (UI/UX, branding), Operations (logistics, processes, efficiency), Sales (business development, closing deals), Marketing (growth, content, brand), Finance (financial planning, fundraising), People/Culture/Hiring (team building, HR), and Growth (user acquisition, scaling)."
+      },
+      {
+        "question": "What does 'years_of_xp' tell me about a founder?",
+        "answer": "Years of experience ranges from 3-34 years in the cohort, indicating professional maturity and depth of expertise. More experienced founders (15+ years) often bring extensive networks, industry knowledge, and leadership experience. Mid-level (7-15 years) offer strong execution skills and recent industry insights. Early career (3-7 years) bring fresh perspectives, technical skills, and hunger. Match experience level to your needs."
+      },
+      {
+        "question": "How do I interpret the 'tech_skills' field?",
+        "answer": "Tech skills show specific technical capabilities: AI/ML/NLP (machine learning, natural language processing), Full-Stack Development (frontend + backend), DevOps/Security (infrastructure, deployment), Data Analysis/BI (analytics, business intelligence), Low Code/Vibe Code (no-code tools, rapid prototyping), Design tools (Figma, Adobe), IT Infrastructure/Cloud (AWS, servers), and Performance Marketing/Tracking & Analytics (growth tools, metrics)."
+      },
+      {
+        "question": "What does 'industries' tell me?",
+        "answer": "Industries show what sectors a founder is interested in working on: AI/ML, FinTech/InsurTech, HealthTech/BioTech, Enterprise SaaS/B2B Software, Consumer/E-commerce, PropTech/ConstructionTech, LegalTech, EdTech, Logistics/Supply Chain/Mobility, Media/Content/Creators, Travel/Hospitality, GovTech, Space/Aerospace, and more. Multiple industries indicate versatility and broad interests."
+      },
+      {
+        "question": "What should I learn from the 'introduction' field?",
+        "answer": "The introduction is the founder's professional story and personality in their own words. Look for: career highlights and progression, specific achievements and metrics (users, revenue, growth), personality traits and work style (scrappy, analytical, creative), unique skills or perspectives, what motivates them, and how they describe their strengths. This gives you a sense of their identity beyond resume facts."
+      },
+      {
+        "question": "How do I evaluate a founder's 'track_record_proud'?",
+        "answer": "Track record shows their biggest achievements and proof of execution: Look for concrete metrics (users served, revenue generated, growth percentages), leadership experience (team size, hiring, management), technical accomplishments (systems built, scale achieved), entrepreneurial experience (founded companies, successful exits), notable companies or brands worked with, publications or recognition (awards, papers, rankings), and speed of execution (shipped in X days/months)."
+      }
+    ],
+    "skills_and_expertise": [
+      {
+        "question": "How do I find founders with specific technical skills?",
+        "answer": "Ask Lucie to search by skills: 'Find founders with Python skills', 'Show me AI/ML experts', 'Who knows DevOps?', 'Find full-stack developers'. Lucie searches across tech_skills, roles_i_could_take, industries, and interested_in_working_on fields to find matches. You can also combine criteria like 'Find AI founders with FinTech experience'."
+      },
+      {
+        "question": "What if I need a specific combination of skills?",
+        "answer": "Search for the primary skill first, then review the results for secondary qualifications. For example: 'Find CTOs' then look for those with FinTech industry interest, or 'Find product managers' then check for those with healthcare experience. Reach out to 2-3 strong matches rather than waiting for the perfect unicorn."
+      },
+      {
+        "question": "How do I find founders with startup experience?",
+        "answer": "Look in the 'companies_worked' field for startup names or 'Repeat Founder' designation. Check 'track_record_proud' for entrepreneurial achievements like 'founded', 'co-founded', 'launched', 'scaled', or specific startup outcomes (users, revenue, exits). Search for phrases like 'founder', 'startup', or 'entrepreneurship' in their profiles."
+      },
+      {
+        "question": "What if I need domain expertise in a specific industry?",
+        "answer": "Search by industry: 'Show me FinTech founders', 'Find HealthTech experts', 'Who has GovTech experience?'. Check both the 'industries' field (what they're interested in) and 'companies_worked' field (where they've actually worked) for relevant domain expertise. Look for specific company names in target industries in their background."
+      }
+    ],
+    "batch_and_timing": [
+      {
+        "question": "What does the 'batch' field mean?",
+        "answer": "Batch indicates which cohort a founder is part of (e.g., 'S25' for Summer 2025, 'F24' for Fall 2024). Founders in the same batch are going through the program together, share the same schedule and milestones, and have more opportunities to collaborate. Different batches have different timelines and may be at different program stages."
+      },
+      {
+        "question": "Can I team up with founders from different batches?",
+        "answer": "While possible, it's generally easier to team up within your batch since you share the same schedule, milestones, and program timing. Cross-batch collaboration can work if timelines align and both parties can commit to the partnership. The program primarily facilitates connections within the same cohort."
+      },
+      {
+        "question": "What does 'left_program' status mean?",
+        "answer": "The 'left_program' field indicates if a founder has exited the program. Common statuses include confirmation of enrollment, 'left after Selection Day' (not selected to continue), or other departure reasons. Founders who left may still be reachable but aren't actively participating. Focus on founders confirmed enrolled for active collaboration."
+      },
+      {
+        "question": "How do I know if a founder has other commitments?",
+        "answer": "Check the 'status' field: 'Yes, I am available full time' means fully dedicated, while 'No, I have other commitments' indicates part-time or split focus. The 'open_to_join_another_project' field may also mention specific constraints or accommodations needed. Consider availability when evaluating co-founder fit."
+      }
+    ],
+    "project_alignment": [
+      {
+        "question": "How do I find founders interested in similar problem spaces?",
+        "answer": "Search by industry or keywords in their interests: 'Find founders interested in AI', 'Show me FinTech founders', 'Who's working on healthcare?'. Check their 'interested_in_working_on' field which describes their vision and what problems they want to solve. Look for alignment between your idea and their stated interests."
+      },
+      {
+        "question": "What if a founder already has a project idea?",
+        "answer": "Check the 'existing_project_idea' field (Yes/No) and 'project_explanation' for details. Some founders with ideas are open to better opportunities - check 'open_to_join_another_project' field. If there's strong overlap between your ideas, consider merging approaches. Many successful teams formed by combining complementary project concepts."
+      },
+      {
+        "question": "How do I understand a founder's project preferences?",
+        "answer": "Read their 'interested_in_working_on' field carefully - it describes their north star, vision, and what types of problems excite them. Look for themes: building long-term products, solving specific industry problems, using particular technologies (AI, blockchain), targeting certain customers (enterprise, consumers), or focusing on impact areas (sustainability, education)."
+      },
+      {
+        "question": "What's the difference between 'industries' and 'interested_in_working_on'?",
+        "answer": "'Industries' lists sector categories they're interested in (FinTech, HealthTech, etc.), while 'interested_in_working_on' is their free-form description of specific problems, visions, or approaches they want to pursue. Industries are tags; interests show deeper motivation and alignment. Both are important for evaluating fit."
+      }
+    ],
+    "background_and_education": [
+      {
+        "question": "How important is a founder's educational background?",
+        "answer": "Education provides context but isn't the only indicator of capability. Look for: relevant academic field alignment (CS for tech roles, business for operations), prestigious institutions may indicate network access and credentials, advanced degrees (PhD, Masters) show deep expertise, but also consider practical experience, track record, and demonstrated skills often matter more than degrees."
+      },
+      {
+        "question": "What does 'companies_worked' tell me about a founder?",
+        "answer": "Companies worked reveals valuable experience: Big tech companies (Google, Microsoft, Amazon) show scaling experience and engineering excellence. Startups indicate comfort with ambiguity and early-stage building. Scaleups (ManoMano, etc.) show growth-stage expertise. Multiple companies suggest adaptability. Industry-specific companies show domain expertise. 'Repeat Founder' indicates entrepreneurial experience."
+      },
+      {
+        "question": "How do I search for founders from specific companies?",
+        "answer": "Ask Lucie: 'Who worked at Google?', 'Find founders from Microsoft', 'Show me ex-startup founders'. Lucie searches the 'companies_worked' field. This helps you find founders with experience from companies you admire, in your industry, or with relevant scaling experience."
+      },
+      {
+        "question": "What does 'nationality' information help with?",
+        "answer": "Nationality can indicate: language capabilities (native language, cultural context), market knowledge (understanding specific regions), network access (connections in home country), visa/legal considerations for company formation or market expansion, and cultural perspectives that add diversity to teams. The cohort is internationally diverse."
+      }
+    ],
+    "communication_and_outreach": [
+      {
+        "question": "What's the best way to contact a founder?",
+        "answer": "Three contact methods are available: Email (formal, good for detailed pitches), WhatsApp (fast, conversational, good for quick intro), LinkedIn (professional, shows your background). Start with email or WhatsApp. Be concise, specific about why you're reaching out, mention specific details from their profile, and suggest a concrete next step (coffee, call, meeting time)."
+      },
+      {
+        "question": "What should I include in my first message to a potential co-founder?",
+        "answer": "Include: Brief introduction of yourself and your background, what you're working on (problem space, vision), why you think they'd be a great fit (reference their specific skills/experience), what you bring to the table (your skills, track record), a concrete ask (15-min call, coffee at Station F), and genuine enthusiasm. Keep it under 150 words. Make it personal, not a template."
+      },
+      {
+        "question": "How many founders should I reach out to?",
+        "answer": "Reach out to 5-10 potential co-founders to start. Finding the right co-founder takes time and multiple conversations. Don't wait for one person - parallel conversations help you understand fit better. Quality matters more than quantity: focus on founders with strong alignment on skills, vision, and values. Expect 20-30% response rate."
+      },
+      {
+        "question": "What if I don't hear back from a founder?",
+        "answer": "Give founders 2-3 days to respond, then send one polite follow-up. They may be busy with other conversations or projects. If still no response after follow-up, move on to other matches. Don't take it personally - timing and fit matter. Keep searching and stay open to multiple conversations."
+      },
+      {
+        "question": "Should I meet founders before deciding to team up?",
+        "answer": "Absolutely yes. Have multiple conversations: first meeting for general fit (coffee, 30 min), deeper discussion on vision and approach (1-2 hours), work together on a small project or pitch deck (trial collaboration), and discuss working styles, commitment level, and expectations. Take 1-2 weeks to decide. Don't rush into co-founder relationships."
+      }
+    ]
+  },
+  "metadata": {
+    "intended_use": "Slack chatbot knowledge base - Founders & Co-founder Matching",
+    "answer_style": "Practical, focused on helping founders find and evaluate co-founders",
+    "last_updated": "2026-01-16",
+    "source": "Based on pioneers_profile_book_table_records_readable.json - 37 founders in Profile Book"
+  }
+}
