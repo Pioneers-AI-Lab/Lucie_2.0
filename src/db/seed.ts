@@ -14,46 +14,28 @@ import { db } from './index.js';
 import { founders, sessionEvents, startups } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 
-// Wrapper functions that match our usage
 const log = (msg: string) => printLog(msg, '');
 const error = (msg: string) => printError(msg, '');
 
-// CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
-// These mappings must match the actual misaligned data structure from sync-from-airtable.ts
-// Field order matches pioneers-profile-book-table-ref.json
 const FOUNDERS_FIELD_MAP: Record<string, string> = {
-  // Basic Information (table-ref index 0-4)
-  Name: 'name', // Misaligned: contains name (index 0)
-  Status: 'status', // Misaligned: contains status (index 1)
-  Whatsapp: 'whatsapp', // Misaligned: contains phone (index 2)
-  Email: 'email', // Misaligned: contains email (index 3)
-  'Your photo': 'yourPhoto', // Photo is an array of objects (index 4)
-  // Project Information (table-ref index 5-9)
-  'Do you have an existing project/idea ?': 'existingProjectIdea', // Misaligned (index 5)
-  ' explain it in a few words': 'projectExplanation', // Misaligned (partial field name) (index 6)
-  'Are you joining with an existing cofounder? If yes': 'existingCofounderName', // Misaligned (partial field name) (index 7)
-  'I confirm my enrolment to the Pioneers program Batch': 'openToJoinAnotherProject', // (index 8)
-  ' please insert his/her name below': 'joiningWithCofounder', // Misaligned (partial field name) (index 9)
-  // Professional Profile (table-ref index 10-16)
-  LinkedIn: 'linkedin', // Misaligned: contains LinkedIn (index 10)
-  'Roles I could take': 'techSkills', // Misaligned (index 11)
-  Industries: 'industries', // Misaligned (partial field name) (index 12)
-  // Note: 'Name' at index 13 maps to 'rolesICouldTake' but we can't have duplicate keys
-  'Track record / something I am proud of ': 'trackRecordProud', // Misaligned (index 14)
-  'Tech Skills': 'interestedInWorkingOn', // Misaligned (index 15)
-  'Introduction:': 'introduction', // (index 16)
-  // Professional Background (table-ref index 17)
-  'Companies Worked': 'companiesWorked', // Misaligned (index 17)
-  // Education (table-ref index 18-23)
-  Education: 'education', // Misaligned (index 18)
-  Nationality: 'nationality', // Misaligned: contains nationality (index 19)
-  Gender: 'gender', // Misaligned (index 20)
-  YearsofXP: 'yearsOfXp', // Misaligned (index 21)
-  Degree: 'degree', // Misaligned (index 22)
-  AcademicField: 'academicField', // (index 23)
-  // Relationships (table-ref index 24)
-  Founder: 'founder', // (index 24)
-  // Note: 'Gender' at index 25 maps to 'leftProgram' but we can't have duplicate keys
+  Founder: 'founder',
+  Name: 'name',
+  Whatsapp: 'whatsapp',
+  Email: 'email',
+  'Your photo': 'yourPhoto',
+  Education: 'education',
+  Nationality: 'nationality',
+  Gender: 'gender',
+  YearsofXP: 'yearsOfXp',
+  Degree: 'degree',
+  AcademicField: 'academicField',
+  LinkedIn: 'linkedin',
+  Introduction: 'introduction',
+  'Tech Skills': 'techSkills',
+  Industries: 'industries',
+  'Roles I could take': 'rolesICouldTake',
+  'Companies Worked': 'companiesWorked',
+  Batch: 'batch',
 };
 
 const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
@@ -101,7 +83,6 @@ function arrayToString(value: any): string | undefined {
 
 /**
  * Transform JSON record to database format
- * CRITICAL: Matches the transformation logic from sync-from-airtable.ts
  */
 function transformFounder(recordId: string, record: any): any {
   const fields = record.fields || {};
@@ -119,11 +100,8 @@ function transformFounder(recordId: string, record: any): any {
     if (dbKey === 'yourPhoto') {
       // Photo is an array of objects - stringify it
       transformed[dbKey] = JSON.stringify(value);
-    } else if (dbKey === 'yearsOfXp') {
-      // Parse as integer
-      transformed[dbKey] = safeParseInt(value);
     } else if (Array.isArray(value)) {
-      // Convert arrays to comma-separated strings
+      // Convert arrays to comma-separated strings for text fields
       transformed[dbKey] = arrayToString(value);
     } else if (typeof value === 'object' && value !== null) {
       // Skip objects like [object Object]
@@ -132,22 +110,10 @@ function transformFounder(recordId: string, record: any): any {
       // Skip stringified objects
       continue;
     } else {
+      // All fields are text in schema, convert to string
       transformed[dbKey] = typeof value === 'string' ? value : String(value);
     }
   }
-
-  // Handle fields that can't be in the map due to duplicate keys
-  // Note: Due to misaligned headers, some field names appear multiple times
-  // These additional mappings match sync-from-airtable.ts lines 122 and 140
-
-  // rolesICouldTake: maps from 'Name' at index 13 (but we already used 'Name' for name at index 0)
-  // This would need special handling if the JSON structure actually has duplicate keys
-  // For now, commenting out as the standard field map handles the primary occurrence
-  // transformed.rolesICouldTake = arrayToString(fields['Name']); // Would conflict with name field
-
-  // leftProgram: maps from 'Gender' at index 25 (but we already used 'Gender' for gender at index 20)
-  // This would need special handling if the JSON structure actually has duplicate keys
-  // transformed.leftProgram = arrayToString(fields['Gender']); // Would conflict with gender field
 
   return transformed;
 }
