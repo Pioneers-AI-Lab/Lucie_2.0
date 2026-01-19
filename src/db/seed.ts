@@ -44,13 +44,6 @@ const SESSION_EVENTS_FIELD_MAP: Record<string, string> = {
   'Program Week': 'programWeek',
   'Type of session': 'typeOfSession',
   Speaker: 'speaker',
-  Emails: 'emails',
-  'Slack Instruction & Email Commu': 'slackInstructionEmailCommu',
-  Participants: 'participants',
-  'Notes / Feedback': 'notesFeedback',
-  'Notes 2': 'notes2',
-  Attachments: 'attachments',
-  'Name (from Linked)': 'nameFromLinked',
 };
 
 const STARTUPS_FIELD_MAP: Record<string, string> = {
