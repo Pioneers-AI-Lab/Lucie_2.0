@@ -53,7 +53,6 @@ const STARTUPS_FIELD_MAP: Record<string, string> = {
   'Team Members': 'teamMembers',
   'Traction Summary': 'tractionSummary',
   'Detailed Progress': 'detailedProgress',
-  'Previous Decks': 'previousDecks',
 };
 
 /**
