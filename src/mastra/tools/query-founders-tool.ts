@@ -132,46 +132,24 @@ export const queryFoundersTool = createTool({
       .array(
         z.object({
           id: z.string(),
-          // Basic Information
+          founder: z.string().nullable(),
           name: z.string().nullable(),
-          status: z.string().nullable(),
           whatsapp: z.string().nullable(),
           email: z.string().nullable(),
           yourPhoto: z.string().nullable(),
-          // Project Information
-          existingProjectIdea: z.string().nullable(),
-          projectExplanation: z.string().nullable(),
-          existingCofounderName: z.string().nullable(),
-          openToJoinAnotherProject: z.string().nullable(),
-          joiningWithCofounder: z.string().nullable(),
-          // Professional Profile
-          linkedin: z.string().nullable(),
-          techSkills: z.string().nullable(),
-          industries: z.string().nullable(),
-          rolesICouldTake: z.string().nullable(),
-          trackRecordProud: z.string().nullable(),
-          interestedInWorkingOn: z.string().nullable(),
-          introduction: z.string().nullable(),
-          // Professional Background
-          companiesWorked: z.string().nullable(),
-          // Education
           education: z.string().nullable(),
           nationality: z.string().nullable(),
           gender: z.string().nullable(),
           yearsOfXp: z.string().nullable(),
           degree: z.string().nullable(),
           academicField: z.string().nullable(),
-          // Relationships
-          founder: z.string().nullable(),
-          // Status
-          leftProgram: z.string().nullable(),
-          // Batch
+          linkedin: z.string().nullable(),
+          introduction: z.string().nullable(),
+          techSkills: z.string().nullable(),
+          industries: z.string().nullable(),
+          rolesICouldTake: z.string().nullable(),
+          companiesWorked: z.string().nullable(),
           batch: z.string().nullable(),
-          // Convenience fields (aliases for compatibility)
-          phone: z.string().nullable(), // Maps to whatsapp
-          roles: z.string().nullable(), // Maps to rolesICouldTake
-          // Metadata
-          source: z.literal('profile_book'),
         }),
       )
       .optional(),

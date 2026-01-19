@@ -123,7 +123,6 @@ export async function searchSessionsGlobal(searchTerm: string) {
         like(sessionEvents.name, searchPattern),
         like(sessionEvents.speaker, searchPattern),
         like(sessionEvents.typeOfSession, searchPattern),
-        like(sessionEvents.notesFeedback, searchPattern)
       )
     );
 }

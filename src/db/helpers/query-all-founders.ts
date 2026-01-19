@@ -4,7 +4,7 @@
 
 import { db } from '../index.js';
 import { founders } from '../schemas/index.js';
-import { like, or, and, eq, sql } from 'drizzle-orm';
+import { like, and, sql } from 'drizzle-orm';
 
 /**
  * Founder interface (Profile Book only)
@@ -12,46 +12,24 @@ import { like, or, and, eq, sql } from 'drizzle-orm';
  */
 export interface Founder {
   id: string;
-  // Basic Information
+  founder: string | null;
   name: string | null;
-  status: string | null;
   whatsapp: string | null;
   email: string | null;
   yourPhoto: string | null;
-  // Project Information
-  existingProjectIdea: string | null;
-  projectExplanation: string | null;
-  existingCofounderName: string | null;
-  openToJoinAnotherProject: string | null;
-  joiningWithCofounder: string | null;
-  // Professional Profile
-  linkedin: string | null;
-  techSkills: string | null;
-  industries: string | null;
-  rolesICouldTake: string | null;
-  trackRecordProud: string | null;
-  interestedInWorkingOn: string | null;
-  introduction: string | null;
-  // Professional Background
-  companiesWorked: string | null;
-  // Education
   education: string | null;
   nationality: string | null;
   gender: string | null;
   yearsOfXp: string | null;
   degree: string | null;
   academicField: string | null;
-  // Relationships
-  founder: string | null;
-  // Status
-  leftProgram: string | null;
-  // Batch/Cohort
+  linkedin: string | null;
+  introduction: string | null;
+  techSkills: string | null;
+  industries: string | null;
+  rolesICouldTake: string | null;
+  companiesWorked: string | null;
   batch: string | null;
-  // Convenience fields (aliases for compatibility)
-  phone: string | null; // Maps to whatsapp
-  roles: string | null; // Maps to rolesICouldTake
-  // Metadata
-  source: 'profile_book';
 }
 
 /**
@@ -68,46 +46,24 @@ export async function getAllFounders(): Promise<Founder[]> {
 
   return foundersData.map((f) => ({
     id: f.id,
-    // Basic Information
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    // Project Information
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    // Professional Profile
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    // Professional Background
-    companiesWorked: f.companiesWorked,
-    // Education
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    // Relationships
-    founder: f.founder,
-    // Status
-    leftProgram: f.leftProgram,
-    // Batch/Cohort
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    // Convenience fields
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    // Metadata
-    source: 'profile_book' as const,
   }));
 }
 
@@ -131,46 +87,24 @@ export async function getFoundersByName(
 
   return foundersData.map((f) => ({
     id: f.id,
-    // Basic Information
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    // Project Information
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    // Professional Profile
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    // Professional Background
-    companiesWorked: f.companiesWorked,
-    // Education
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    // Relationships
-    founder: f.founder,
-    // Status
-    leftProgram: f.leftProgram,
-    // Batch/Cohort
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    // Convenience fields
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    // Metadata
-    source: 'profile_book' as const,
   }));
 }
 
@@ -189,58 +123,33 @@ export async function getFoundersBySkills(
     .from(founders)
     .where(
       and(
-        or(
-          like(founders.techSkills, pattern),
-          like(founders.rolesICouldTake, pattern),
-          like(founders.industries, pattern),
-          like(founders.interestedInWorkingOn, pattern),
-        ),
+        like(founders.techSkills, pattern),
+        like(founders.rolesICouldTake, pattern),
+        like(founders.industries, pattern),
         sql`${founders.introduction} IS NOT NULL`,
       ),
     );
 
   return foundersData.map((f) => ({
     id: f.id,
-    // Basic Information
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    // Project Information
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    // Professional Profile
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    // Professional Background
-    companiesWorked: f.companiesWorked,
-    // Education
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    // Relationships
-    founder: f.founder,
-    // Status
-    leftProgram: f.leftProgram,
-    // Batch/Cohort
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    // Convenience fields
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    // Metadata
-    source: 'profile_book' as const,
   }));
 }
 
@@ -264,46 +173,24 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
 
   return foundersData.map((f) => ({
     id: f.id,
-    // Basic Information
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    // Project Information
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    // Professional Profile
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    // Professional Background
-    companiesWorked: f.companiesWorked,
-    // Education
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    // Relationships
-    founder: f.founder,
-    // Status
-    leftProgram: f.leftProgram,
-    // Batch/Cohort
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    // Convenience fields
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    // Metadata
-    source: 'profile_book' as const,
   }));
 }
 
@@ -327,36 +214,24 @@ export async function getFoundersByIndustry(
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -380,36 +255,24 @@ export async function getFoundersByCompany(
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -433,36 +296,24 @@ export async function getFoundersByNationality(
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -479,46 +330,32 @@ export async function getFoundersByEducation(
     .from(founders)
     .where(
       and(
-        or(
-          like(founders.education, pattern),
-          like(founders.academicField, pattern),
-        ),
+        like(founders.education, pattern),
+        like(founders.academicField, pattern),
         sql`${founders.introduction} IS NOT NULL`,
       ),
     );
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -535,47 +372,30 @@ export async function getFoundersByProject(
     .from(founders)
     .where(
       and(
-        or(
-          like(founders.existingProjectIdea, pattern),
-          like(founders.projectExplanation, pattern),
-          like(founders.interestedInWorkingOn, pattern),
-        ),
         sql`${founders.introduction} IS NOT NULL`,
       ),
     );
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -592,57 +412,39 @@ export async function searchFoundersGlobal(
     .from(founders)
     .where(
       and(
-        or(
-          like(founders.name, pattern),
-          like(founders.techSkills, pattern),
-          like(founders.rolesICouldTake, pattern),
-          like(founders.industries, pattern),
-          like(founders.companiesWorked, pattern),
-          like(founders.introduction, pattern),
-          like(founders.trackRecordProud, pattern),
-          like(founders.interestedInWorkingOn, pattern),
-          like(founders.existingProjectIdea, pattern),
-          like(founders.projectExplanation, pattern),
-          like(founders.education, pattern),
-          like(founders.academicField, pattern),
-          like(founders.nationality, pattern),
-        ),
+        like(founders.name, pattern),
+        like(founders.techSkills, pattern),
+        like(founders.rolesICouldTake, pattern),
+        like(founders.industries, pattern),
+        like(founders.companiesWorked, pattern),
+        like(founders.introduction, pattern),
+        like(founders.education, pattern),
+        like(founders.academicField, pattern),
+        like(founders.nationality, pattern),
         sql`${founders.introduction} IS NOT NULL`,
       ),
     );
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
@@ -656,45 +458,29 @@ export async function getActiveFounders(): Promise<Founder[]> {
     .where(
       and(
         sql`${founders.introduction} IS NOT NULL`,
-        or(
-          sql`${founders.leftProgram} IS NULL`,
-          sql`${founders.leftProgram} = ''`,
-        ),
       ),
     );
 
   return foundersData.map((f) => ({
     id: f.id,
+    founder: f.founder,
     name: f.name,
-    status: f.status,
     whatsapp: f.whatsapp,
     email: f.email,
     yourPhoto: f.yourPhoto,
-    existingProjectIdea: f.existingProjectIdea,
-    projectExplanation: f.projectExplanation,
-    existingCofounderName: f.existingCofounderName,
-    openToJoinAnotherProject: f.openToJoinAnotherProject,
-    joiningWithCofounder: f.joiningWithCofounder,
-    linkedin: f.linkedin,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
-    trackRecordProud: f.trackRecordProud,
-    interestedInWorkingOn: f.interestedInWorkingOn,
-    introduction: f.introduction,
-    companiesWorked: f.companiesWorked,
     education: f.education,
     nationality: f.nationality,
     gender: f.gender,
     yearsOfXp: f.yearsOfXp,
     degree: f.degree,
     academicField: f.academicField,
-    founder: f.founder,
-    leftProgram: f.leftProgram,
+    linkedin: f.linkedin,
+    introduction: f.introduction,
+    techSkills: f.techSkills,
+    industries: f.industries,
+    rolesICouldTake: f.rolesICouldTake,
+    companiesWorked: f.companiesWorked,
     batch: f.batch,
-    phone: f.whatsapp,
-    roles: f.rolesICouldTake,
-    source: 'profile_book' as const,
   }));
 }
 
