@@ -36,7 +36,7 @@ import {
 
 /**
  * Query sessions and events from Turso database
- * Supports multiple search strategies for flexibility
+ * Suppors multiple search strategies for flexibility
  */
 export const querySessionsTool = createTool({
   id: 'query-sessions-turso',

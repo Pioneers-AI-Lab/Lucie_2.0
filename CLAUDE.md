@@ -46,6 +46,14 @@ pnpm dbs
 # Database - Seed Turso database from JSON files (deletes existing data!)
 pnpm db:seed
 
+# Database - Seed FAQ data from JSON files
+pnpm db:seed:faq                 # Seed all FAQ categories
+pnpm db:seed:faq:general         # Seed general FAQs only
+pnpm db:seed:faq:sessions        # Seed session FAQs only
+pnpm db:seed:faq:startups        # Seed startup FAQs only
+pnpm db:seed:faq:founders        # Seed founder FAQs only
+pnpm db:seed:faq:sessions-events # Seed sessions-events FAQs only
+
 # Database - Setup database: push schema + seed data
 pnpm db:setup
 
@@ -102,8 +110,8 @@ The codebase follows Mastra's agent framework conventions:
 - **`src/mastra/terminal/`** - Terminal CLI and streaming logic
 - **`src/db/`** - Database infrastructure with Turso + Drizzle ORM
   - `src/db/index.ts` - Database client initialization
-  - `src/db/schemas/` - Drizzle ORM schema definitions (founders, session-events, startups)
-  - `src/db/helpers/` - Database query helper functions
+  - `src/db/schemas/` - Drizzle ORM schema definitions (founders, session-events, startups, faq)
+  - `src/db/helpers/` - Database query helper functions and seeding scripts
 - **`lib/`** - Shared utility functions (Airtable client, print helpers, update scripts, field ID mappings)
 
 ### Agent Architecture
@@ -132,9 +140,9 @@ The agent has **three specialized Turso database query tools** that provide fast
 
 1. **queryFoundersTool** (`src/mastra/tools/query-founders-tool.ts`):
    - Queries all founders from Turso database (no rate limits, much faster than Airtable)
-   - **Search types**: `all`, `by-name`, `by-skills`, `by-batch` (broken - see Known Issues), `count`
+   - **Search types**: `all`, `by-name`, `by-skills`, `count`
    - Uses helper functions from `src/db/helpers/query-all-founders.ts`
-   - **Note**: `by-batch` search currently returns all founders (batch field missing from schema)
+   - **Note**: `by-batch` search was removed (batch field not in schema - see TODO.md #2)
 
 2. **querySessionsTool** (`src/mastra/tools/query-sessions-tool.ts`):
    - Queries 100 session/event records from Turso database
@@ -184,6 +192,7 @@ The project has completed migration from direct Airtable querying to a Turso dat
      - `founders` - Founder profiles with comprehensive professional and personal data
      - `session_events` - Session and event information with dates, speakers, and participants
      - `startups` - Startup profiles with team information, industry, and traction data
+     - `faq` - Frequently asked questions organized by category (program overview, eligibility, team formation, application process, funding, Station F resources, miscellaneous)
    - **Field ID Mappings** (`lib/airtable-field-ids-ref.ts`):
      - Maps Drizzle schema field names to Airtable field IDs
      - Three mappings: `founderAirtableFieldIds`, `sessionEventAirtableFieldIds`, `startupAirtableFieldIds`
@@ -251,7 +260,7 @@ The project has completed migration from direct Airtable querying to a Turso dat
 4. Agent processes message using instructions, memory, and available tools
 5. Agent selects appropriate tool and calls it:
    - **Turso tools**: Fast database queries with specialized search types
-     - `queryFoundersTool` - For founder-related queries (by name, skills, batch)
+     - `queryFoundersTool` - For founder-related queries (by name, skills)
      - `querySessionsTool` - For session/event queries (by name, speaker, upcoming/past)
      - `queryStartupsTool` - For startup queries (by name, industry, team member)
 6. Agent generates response based on retrieved data
@@ -261,7 +270,7 @@ The project has completed migration from direct Airtable querying to a Turso dat
 ### Storage and Observability
 
 - **Mastra Storage**: LibSQL in-memory storage (`:memory:`) for observability, scores, and agent metadata. Can be changed to `file:../mastra.db` for persistence.
-- **Application Database**: Turso (hosted LibSQL) via Drizzle ORM for structured application data (founders, sessions, startups)
+- **Application Database**: Turso (hosted LibSQL) via Drizzle ORM for structured application data (founders, sessions, startups, faq)
   - Three Turso query tools actively used by the agent
   - Database helpers in `src/db/helpers/` provide specialized query functions
 - **Logger**: Pino logger at `info` level with default exporter
@@ -311,9 +320,6 @@ The agent has three specialized Turso database query tools that are **much faste
 // Example: Search by skills
 { searchType: 'by-skills', searchTerm: 'Python' }
 
-// Example: Filter by batch (NOTE: Currently returns all founders - batch field not in schema)
-{ searchType: 'by-batch', searchTerm: 'F24' }
-
 // Example: Get count only
 { searchType: 'count' }
 ```
@@ -353,7 +359,7 @@ The agent has three specialized Turso database query tools that are **much faste
 
 **Database Helpers**:
 Each tool uses helper functions from `src/db/helpers/`:
-- `query-all-founders.ts` - Founder queries with SQL filters for name, skills, and batch
+- `query-all-founders.ts` - Founder queries with SQL filters for name and skills
 - `query-sessions.ts` - Session queries with date handling and temporal filters
 - `query-startups.ts` - Startup queries with team member and industry searches
 
@@ -547,12 +553,10 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 
 ### Current State (as of latest changes)
 - **Active Tools**: Agent uses three specialized Turso query tools only (`queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`)
-- **Database Tables**: Three tables in production (founders, session_events, startups)
+- **Database Tables**: Four tables in production (founders, session_events, startups, faq)
 - **Recent Updates**: Query tools and schemas recently refined for optimal performance
 - **Data Source**: All queries served from Turso database, Airtable used only for periodic syncs via `pnpm db:sync`
-- **Known Issues**:
-  - `by-batch` search in queryFoundersTool returns all founders (batch field not in founders schema)
-  - Sync script has field mapping misalignment issues (see TODO.md #1)
+- **Known Issues & Improvements**: See TODO.md for comprehensive list (currently 70% production ready)
 
 ### Build and Deployment
 - The `.mastra` directory is gitignored and contains build artifacts
@@ -590,27 +594,29 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
   - `schemas/founders.ts` - Founder table schema with comprehensive professional and personal data
   - `schemas/session-events.ts` - Session events schema with dates and participants
   - `schemas/startups.ts` - Startup information schema with traction and team data
+  - `schemas/faq.ts` - FAQ table schema with questions organized by category
   - `schemas/index.ts` - Central schema exports
   - `helpers/query-all-founders.ts` - Founder query helper functions
   - `helpers/query-sessions.ts` - Session query helper functions
   - `helpers/query-startups.ts` - Startup query helper functions
+  - `helpers/seed-faq.ts` - FAQ seeding script
 - `drizzle.config.ts` - Drizzle Kit configuration for migrations
 - `migrations/` - Generated SQL migration files (gitignored, auto-generated by drizzle-kit)
 - Agent instructions emphasize concise responses (2-4 sentences) with Slack-friendly formatting
-- **Documentation files**: Root directory contains several migration/status documents (e.g., `TURSO_MIGRATION_COMPLETE.md`, `GRID_DATA_INTEGRATION.md`, `SEED_VERIFICATION.md`) that document completed work - these are historical references and can be safely ignored
+- **Documentation files**: Historical migration/status documents should be archived in `docs/history/` (see TODO.md #11)
 - **Known inconsistencies**:
   - Agent instructions (`lucie-instructions.ts`) mention `getCohortDataTool` which is no longer used by the agent - the agent only uses the three specialized Turso tools
-  - Agent instructions reference an AI Lab tool that doesn't exist yet
-  - `queryFoundersTool` includes `by-batch` search type but batch field is missing from founders schema (returns all founders instead of filtering)
+  - Agent instructions reference an AI Lab tool that doesn't exist yet (see TODO.md #3)
 
 ### Database Migration Status
 - **✅ COMPLETED**:
   - Turso setup and configuration (`drizzle.config.ts`)
   - Drizzle ORM integration (`src/db/index.ts`)
-  - **Three schemas fully defined and seeded**:
+  - **Four schemas fully defined and seeded**:
     - `founders.ts` - Founder profiles with comprehensive data
     - `session-events.ts` - Session and event records
     - `startups.ts` - Startup profiles
+    - `faq.ts` - FAQ knowledge base
   - Field ID mappings for all tables (`lib/airtable-field-ids-ref.ts`)
   - Migration infrastructure (migrations auto-generated in `migrations/` directory, gitignored)
   - **Seed script** (`src/db/seed.ts`) - ✅ PRODUCTION READY, handles misaligned Airtable exports
@@ -624,15 +630,20 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
   - Database helper functions in `src/db/helpers/` for specialized queries
   - Agent exclusively uses Turso tools (no Airtable queries)
   - `getCohortDataTool` refactored to Turso cross-table search (not included in agent configuration)
+  - Data corruption bug fixed (TODO.md #1 ✅)
+  - Broken batch filtering removed (TODO.md #2 ✅)
 - **✅ SYNC MECHANISM IMPLEMENTED**:
   - **Incremental sync script** (`src/db/sync-from-airtable.ts`) fetches data directly from Airtable API
   - Command: `pnpm db:sync` (with optional `--table` and `--batch` filters)
   - Upserts records (insert new, update existing) - never deletes
   - Automatically normalizes batch names ("Summer 2025" → "S25")
   - See `docs/database-sync-guide.md` for detailed instructions
-- **⏳ PENDING**:
-  - Consider removing `cohort-data-tool.ts` entirely if unused
-  - Optional: Set up automated sync (cron job or GitHub Actions)
+- **⏳ PENDING** (See TODO.md for details):
+  - Fix agent instructions to remove non-existent tool references (TODO.md #3)
+  - Add testing infrastructure (TODO.md #4)
+  - Make Mastra storage persistent (TODO.md #5)
+  - Add database indexes (TODO.md #6)
+  - Add rate limiting to Slack webhooks (TODO.md #7)
 - **Important**:
   - Initial setup: Run `pnpm db:setup` to push schema and seed data
   - Regular updates: Run `pnpm db:sync` to fetch new data from Airtable
@@ -641,11 +652,11 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 
 ### Testing & Quality Infrastructure
 
-**Current State**: No testing framework configured
+**Current State**: No testing framework configured (see TODO.md #4)
 - `package.json` test script: `"test": "echo \"Error: no test specified\" && exit 1"`
-- No linting configuration (ESLint, Prettier)
-- No pre-commit hooks (Husky, lint-staged)
-- No CI/CD pipeline
+- No linting configuration (ESLint, Prettier) - see TODO.md #8
+- No pre-commit hooks (Husky, lint-staged) - see TODO.md #9
+- No CI/CD pipeline - see TODO.md #13
 
 **Recommended for Production**:
 - Add Vitest for unit/integration testing
@@ -671,7 +682,7 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 
 **Environment Management**:
 - `.env` file contains all credentials (gitignored via `.env*` pattern - safe from accidental commits)
-- No `.env.example` file - all required variables documented in CLAUDE.md Environment Variables section
+- No `.env.example` file yet - see TODO.md #10 (all required variables documented in Environment Variables section above)
 - Switch models by changing `MODEL` env variable (supports `anthropic/*` and `openai/*` prefixes)
 
 **Debugging Strategies**:
@@ -696,20 +707,22 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 
 ### Incomplete Components & Future Work
 
-**AI Lab Integration** (Infrastructure defined, not implemented):
+See **TODO.md** for comprehensive roadmap. Key items:
+
+**AI Lab Integration** (Infrastructure defined, not implemented - TODO.md #16):
 - Environment variables configured: `AI_LAB_BASE_ID`, `AI_LAB_TABLE_ID`
 - Models and services exist: `bff/ai-lab/models/ai-lab-model.ts`, `bff/ai-lab/services/ai-lab-service.ts`
 - Field ID mappings defined in `lib/airtable-field-ids-ref.ts`
 - Tool not implemented - agent instructions reference it but it doesn't exist
 - **Blocker**: Unclear requirements or prioritization
 
-**Scorers** (Template exists, needs implementation):
+**Scorers** (Template exists, needs implementation - TODO.md #17):
 - `src/mastra/scorers/lucie-scorer.ts` - Copied from weather example
 - Comment: "it needs to be updated to her needs"
 - **Usage**: Define evaluation criteria for agent responses (accuracy, helpfulness, tone)
 - **Implementation needed**: Define scoring functions specific to Lucie's domain
 
-**Workflows** (Infrastructure unused):
+**Workflows** (Infrastructure unused - TODO.md #18):
 - `src/mastra/workflows/weather-workflow.ts` - Example workflow
 - Not integrated with Lucie agent
 - **Potential use cases**: Multi-step data processing, complex query orchestration
@@ -723,14 +736,14 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 - Signature format validation before comparison
 
 **Credential Management**:
-- All secrets in `.env` file (gitignored, no `.env.example` - variables documented in CLAUDE.md)
+- All secrets in `.env` file (gitignored, no `.env.example` yet - see TODO.md #10)
 - No secret rotation strategy documented
 - Turso auth tokens have database-level access
 - Airtable API keys have base-level access
-- **Recommendation**: Use secret management service (AWS Secrets Manager, HashiCorp Vault) for production
+- **Recommendation**: Use secret management service (AWS Secrets Manager, HashiCorp Vault) for production - see TODO.md #15
 
 **Rate Limiting**:
-- No rate limiting implemented on Slack webhooks
+- No rate limiting implemented on Slack webhooks - see TODO.md #7
 - Slack streaming animation errors gracefully ignored to prevent rate limit issues
 - **Recommendation**: Add rate limiting middleware for production
 
@@ -743,13 +756,14 @@ These IDs enable Mastra's Memory to maintain conversation context across turns.
 
 **Database Queries**:
 - All queries served from Turso database (local database connection, no external API calls)
-- No caching needed - Turso queries are fast (<100ms typical) and have no rate limits
+- No caching needed currently - Turso queries are fast (<100ms typical) and have no rate limits
 - Specialized search functions optimized for common query patterns
 - Database helpers use Drizzle ORM for efficient SQL generation
+- **Future**: Consider caching layer for production (see TODO.md #12)
 
 **Memory**:
 - Stores last 20 messages per conversation
-- In-memory storage for Mastra (ephemeral on restart)
+- In-memory storage for Mastra (ephemeral on restart) - see TODO.md #5
 - **Recommendation**: Use persistent storage for production (`file:../mastra.db`)
 
 **Turso Query Performance Benefits**:
@@ -785,7 +799,7 @@ pnpm db:sync                    # Sync data
 - **Database schemas**: `src/db/schemas/*.ts`
 - **Database helpers**: `src/db/helpers/query-*.ts`
 - **Field ID mappings**: `lib/airtable-field-ids-ref.ts`
-- **Known issues**: `TODO.md` (check before making changes)
+- **Known issues & roadmap**: `TODO.md` (check before making changes)
 
 ### Common Debugging Patterns
 ```typescript
