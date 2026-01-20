@@ -32,18 +32,23 @@ export interface Founder {
 }
 
 /**
- * Get all founders (Profile Book only)
- * Returns founders sorted by years_of_xp descending (most experienced first)
- * This makes it easier for LLM to pick top N experienced founders
+ * Helper function to deduplicate founders by ID
+ * Prevents duplicate records from appearing in results
  */
-export async function getAllFounders(): Promise<Founder[]> {
-  const foundersData = await db
-    .select()
-    .from(founders)
-    .where(sql`${founders.introduction} IS NOT NULL`)
-    .orderBy(sql`CAST(${founders.yearsOfXp} AS INTEGER) DESC`);
+function deduplicateFounders(foundersData: any[]): any[] {
+  const seen = new Set<string>();
+  return foundersData.filter(f => {
+    if (seen.has(f.id)) return false;
+    seen.add(f.id);
+    return true;
+  });
+}
 
-  return foundersData.map((f) => ({
+/**
+ * Helper function to map database results to Founder interface
+ */
+function mapToFounder(f: any): Founder {
+  return {
     id: f.id,
     founder: f.founder,
     name: f.name,
@@ -62,7 +67,23 @@ export async function getAllFounders(): Promise<Founder[]> {
     industries: f.industries,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
-  }));
+  };
+}
+
+/**
+ * Get all founders (Profile Book only)
+ * Returns founders sorted by years_of_xp descending (most experienced first)
+ * This makes it easier for LLM to pick top N experienced founders
+ * Fixed: De-duplicates by ID to prevent duplicate names in results
+ */
+export async function getAllFounders(): Promise<Founder[]> {
+  const foundersData = await db
+    .select()
+    .from(founders)
+    .where(sql`${founders.introduction} IS NOT NULL`)
+    .orderBy(sql`CAST(${founders.yearsOfXp} AS INTEGER) DESC`);
+
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -83,26 +104,7 @@ export async function getFoundersByName(
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -131,26 +133,7 @@ export async function getFoundersBySkills(
       )
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -171,26 +154,7 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -211,26 +175,7 @@ export async function getFoundersByIndustry(
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -251,26 +196,7 @@ export async function getFoundersByCompany(
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -291,26 +217,7 @@ export async function getFoundersByNationality(
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -335,26 +242,7 @@ export async function getFoundersByEducation(
       )
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -377,26 +265,7 @@ export async function getFoundersByProject(
       )
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -427,26 +296,7 @@ export async function searchFoundersGlobal(
       )
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
@@ -462,26 +312,7 @@ export async function getActiveFounders(): Promise<Founder[]> {
       ),
     );
 
-  return foundersData.map((f) => ({
-    id: f.id,
-    founder: f.founder,
-    name: f.name,
-    whatsapp: f.whatsapp,
-    email: f.email,
-    yourPhoto: f.yourPhoto,
-    education: f.education,
-    nationality: f.nationality,
-    gender: f.gender,
-    yearsOfXp: f.yearsOfXp,
-    degree: f.degree,
-    academicField: f.academicField,
-    linkedin: f.linkedin,
-    introduction: f.introduction,
-    techSkills: f.techSkills,
-    industries: f.industries,
-    companiesWorked: f.companiesWorked,
-    batch: f.batch,
-  }));
+  return deduplicateFounders(foundersData).map(mapToFounder);
 }
 
 /**
