@@ -1,33 +1,97 @@
 /**
- * Query FAQ Tool - Turso Database
+ * Query FAQ Tool - JSON Knowledge Base
  *
- * Queries FAQ data from the local Turso database.
- * Fast queries with no rate limits.
- *
- * Sources:
- * - data/general-questions.json (52 FAQs)
- * - data/sessions-faq.json (34 FAQs)
- * - data/startups-faq.json (39 FAQs)
- * - data/founders-faq.json (36 FAQs)
- * - data/2025-sessions-events-info-faq.json (36 FAQs) - Specific 2025 events, speakers, milestones
- *
- * Total: 197 FAQs across 40 categories
+ * Queries FAQ data from the local JSON knowledge base (`data/faq.json`).
+ * Fast in-memory queries with no rate limits or database dependency.
  */
 
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import { db } from '../../db/index.js';
-import { faq } from '../../db/schemas/faq.js';
-import { eq, like, or, sql } from 'drizzle-orm';
+import fs from 'node:fs/promises';
+
+// Path to combined FAQ JSON (sections: general, founders, sessions, startups)
+const FAQ_JSON_PATH = new URL('../../../data/faq.json', import.meta.url);
+
+type FaqJsonSection = {
+  id: string;
+  title: string;
+  knowledge_base: Record<
+    string,
+    Array<{
+      question: string;
+      answer: string;
+    }>
+  >;
+  metadata?: {
+    intended_use?: string;
+    answer_style?: string;
+    last_updated?: string;
+    source?: string;
+  };
+};
+
+type FaqJson = {
+  program?: string;
+  location?: string;
+  sections: FaqJsonSection[];
+};
+
+type FlattenedFaq = {
+  id: string;
+  question: string | null;
+  answer: string | null;
+  category: string | null;
+  program: string | null;
+  location: string | null;
+  intendedUse: string | null;
+  answerStyle: string | null;
+};
+
+let cachedFaqs: FlattenedFaq[] | null = null;
+
+async function loadFaqs(): Promise<FlattenedFaq[]> {
+  if (cachedFaqs) return cachedFaqs;
+
+  const raw = await fs.readFile(FAQ_JSON_PATH, 'utf-8');
+  const data = JSON.parse(raw) as FaqJson;
+
+  const program = data.program ?? null;
+  const location = data.location ?? null;
+
+  const faqs: FlattenedFaq[] = [];
+
+  for (const section of data.sections) {
+    const intendedUse = section.metadata?.intended_use ?? null;
+    const answerStyle = section.metadata?.answer_style ?? null;
+
+    for (const [category, items] of Object.entries(section.knowledge_base ?? {})) {
+      items.forEach((item, index) => {
+        faqs.push({
+          id: `${section.id}:${category}:${index}`,
+          question: item.question ?? null,
+          answer: item.answer ?? null,
+          category,
+          program,
+          location,
+          intendedUse,
+          answerStyle,
+        });
+      });
+    }
+  }
+
+  cachedFaqs = faqs;
+  return faqs;
+}
 
 /**
- * Query FAQs from Turso database
- * Supports multiple search strategies for flexibility
+ * Query FAQs from the local JSON knowledge base.
+ * Supports multiple search strategies for flexibility.
  */
 export const queryFAQTool = createTool({
   id: 'query-faq-turso',
-  description: `Query frequently asked questions about the Pioneers accelerator program from the database.
-  Contains 197 comprehensive FAQs across 40 categories in 5 domains:
+  description: `Query frequently asked questions about the Pioneers accelerator program from the local JSON knowledge base (data/faq.json).
+  Contains 161+ comprehensive FAQs across 30+ categories in 4 domains:
 
   📋 GENERAL PROGRAM (52 FAQs, 7 categories):
   - program_overview: General program information, philosophy, and outcomes
@@ -118,12 +182,11 @@ export const queryFAQTool = createTool({
       .string()
       .optional()
       .describe(
-        'Category name (required for "by-category" search). Valid categories: ' +
+        'Category name (required for "by-category" search). Valid categories (see data/faq.json): ' +
         'GENERAL: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous | ' +
         'SESSIONS: session_types_overview, office_hours_and_mentorship, attendance_and_participation, program_milestones, schedule_and_logistics, weekly_updates_and_progress | ' +
-        'STARTUPS: progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
-        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach | ' +
-        '2025 EVENTS: masterclass_speakers, social_events, program_milestones, group_exercises_challenges, friday_pitches, theme_sessions, office_hours_support, program_logistics, special_announcements',
+        'STARTUPS: team_formation, progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
+        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach',
       ),
     searchTerm: z
       .string()
@@ -159,22 +222,22 @@ export const queryFAQTool = createTool({
     console.log('❓ [queryFAQTool] Called with:', { searchType, category, searchTerm });
 
     try {
+      const allFaqs = await loadFaqs();
+
       // Handle count-only request
       if (searchType === 'count') {
-        const result = await db.select({ count: sql<number>`count(*)` }).from(faq);
-        const count = result[0].count;
+        const count = allFaqs.length;
         return {
           count,
-          message: `Total FAQ entries in database: ${count}`,
+          message: `Total FAQ entries in knowledge base: ${count}`,
         };
       }
 
-      // Handle search requests
-      let faqs;
+      let faqs: FlattenedFaq[] = [];
 
       switch (searchType) {
         case 'all':
-          faqs = await db.select().from(faq);
+          faqs = allFaqs;
           break;
 
         case 'by-category':
@@ -185,7 +248,7 @@ export const queryFAQTool = createTool({
               message: 'Error: category is required for by-category search',
             };
           }
-          faqs = await db.select().from(faq).where(eq(faq.category, category));
+          faqs = allFaqs.filter((f) => f.category === category);
           break;
 
         case 'search':
@@ -196,16 +259,14 @@ export const queryFAQTool = createTool({
               message: 'Error: searchTerm is required for search',
             };
           }
-          const pattern = `%${searchTerm}%`;
-          faqs = await db
-            .select()
-            .from(faq)
-            .where(
-              or(
-                like(faq.question, pattern),
-                like(faq.answer, pattern)
-              )
-            );
+          {
+            const term = searchTerm.toLowerCase();
+            faqs = allFaqs.filter((f) => {
+              const q = f.question?.toLowerCase() ?? '';
+              const a = f.answer?.toLowerCase() ?? '';
+              return q.includes(term) || a.includes(term);
+            });
+          }
           break;
 
         default:
@@ -216,7 +277,6 @@ export const queryFAQTool = createTool({
           };
       }
 
-      // Debug logging
       console.log(`❓ [queryFAQTool] Returning ${faqs.length} FAQ entries`);
 
       return {
@@ -228,11 +288,11 @@ export const queryFAQTool = createTool({
             : `Found ${faqs.length} FAQ(s)${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}`,
       };
     } catch (error: any) {
-      console.error('❌ [queryFAQTool] Database error:', error);
+      console.error('❌ [queryFAQTool] Knowledge base error:', error);
       return {
         faqs: [],
         count: 0,
-        message: `Database error: ${error.message}`,
+        message: `Knowledge base error: ${error.message}`,
       };
     }
   },
