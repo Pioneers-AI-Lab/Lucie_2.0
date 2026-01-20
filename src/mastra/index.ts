@@ -10,7 +10,7 @@ export const mastra = new Mastra({
   storage: new LibSQLStore({
     id: 'mastra-storage',
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
-    url: ':memory:',
+    url: '../mastra.db',
   }),
   logger: new PinoLogger({
     name: 'Mastra',
@@ -24,3 +24,6 @@ export const mastra = new Mastra({
     default: { enabled: true },
   }),
 });
+
+// Export as default for Mastra Cloud deployment
+export default mastra;
