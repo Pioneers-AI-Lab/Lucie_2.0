@@ -12,6 +12,7 @@ import { like, and, or, gte, lte, sql } from 'drizzle-orm';
 /**
  * Get all session events
  */
+
 export async function getAllSessions() {
   return await db.select().from(sessionEvents);
 }
