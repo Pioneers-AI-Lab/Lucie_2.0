@@ -27,6 +27,7 @@ import {
   searchFoundersGlobal,
   getActiveFounders,
   getFoundersCount,
+  type Founder,
 } from '../../db/helpers/query-all-founders.js';
 
 /**
@@ -174,15 +175,15 @@ export const queryFoundersTool = createTool({
       }
 
       // Handle search requests
-      let founders;
+      let rawFounders: Founder[];
 
       switch (searchType) {
         case 'all':
-          founders = await getAllFounders();
+          rawFounders = await getAllFounders();
           break;
 
         case 'active-only':
-          founders = await getActiveFounders();
+          rawFounders = await getActiveFounders();
           break;
 
         case 'by-name':
@@ -193,7 +194,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-name search',
             };
           }
-          founders = await getFoundersByName(searchTerm);
+          rawFounders = await getFoundersByName(searchTerm);
           break;
 
         case 'by-skills':
@@ -204,7 +205,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-skills search',
             };
           }
-          founders = await getFoundersBySkills(searchTerm);
+          rawFounders = await getFoundersBySkills(searchTerm);
           break;
 
         case 'by-batch':
@@ -215,7 +216,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-batch search',
             };
           }
-          founders = await getFoundersByBatch(searchTerm);
+          rawFounders = await getFoundersByBatch(searchTerm);
           break;
 
         case 'by-industry':
@@ -226,7 +227,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-industry search',
             };
           }
-          founders = await getFoundersByIndustry(searchTerm);
+          rawFounders = await getFoundersByIndustry(searchTerm);
           break;
 
         case 'by-company':
@@ -237,7 +238,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-company search',
             };
           }
-          founders = await getFoundersByCompany(searchTerm);
+          rawFounders = await getFoundersByCompany(searchTerm);
           break;
 
         case 'by-nationality':
@@ -249,7 +250,7 @@ export const queryFoundersTool = createTool({
                 'Error: searchTerm is required for by-nationality search',
             };
           }
-          founders = await getFoundersByNationality(searchTerm);
+          rawFounders = await getFoundersByNationality(searchTerm);
           break;
 
         case 'by-education':
@@ -260,7 +261,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-education search',
             };
           }
-          founders = await getFoundersByEducation(searchTerm);
+          rawFounders = await getFoundersByEducation(searchTerm);
           break;
 
         case 'by-project':
@@ -271,7 +272,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for by-project search',
             };
           }
-          founders = await getFoundersByProject(searchTerm);
+          rawFounders = await getFoundersByProject(searchTerm);
           break;
 
         case 'global-search':
@@ -282,7 +283,7 @@ export const queryFoundersTool = createTool({
               message: 'Error: searchTerm is required for global-search',
             };
           }
-          founders = await searchFoundersGlobal(searchTerm);
+          rawFounders = await searchFoundersGlobal(searchTerm);
           break;
 
         default:
@@ -292,6 +293,29 @@ export const queryFoundersTool = createTool({
             message: `Error: Unknown search type "${searchType}"`,
           };
       }
+
+      // Map database results to output schema format
+      const founders = rawFounders.map((founder) => ({
+        id: founder.id,
+        founder: founder.founder,
+        name: founder.name,
+        whatsapp: founder.whatsapp,
+        email: founder.email,
+        yourPhoto: founder.yourPhoto,
+        education: founder.education,
+        nationality: founder.nationality,
+        gender: founder.gender,
+        yearsOfXp: founder.yearsOfXp,
+        degree: founder.degree,
+        academicField: founder.academicField,
+        linkedin: founder.linkedin,
+        introduction: founder.introduction,
+        techSkills: founder.techSkills,
+        industries: founder.industries,
+        rolesICouldTake: null, // Not in database schema, set to null
+        companiesWorked: founder.companiesWorked,
+        batch: founder.batch,
+      }));
 
       // Debug logging to see what we're returning
       console.log(`🔍 [queryFoundersTool] Returning ${founders.length} founders`);
