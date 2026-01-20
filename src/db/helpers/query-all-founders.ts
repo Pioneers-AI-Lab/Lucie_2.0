@@ -27,7 +27,6 @@ export interface Founder {
   introduction: string | null;
   techSkills: string | null;
   industries: string | null;
-  rolesICouldTake: string | null;
   companiesWorked: string | null;
   batch: string | null;
 }
@@ -61,7 +60,6 @@ export async function getAllFounders(): Promise<Founder[]> {
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -102,7 +100,6 @@ export async function getFoundersByName(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -124,7 +121,6 @@ export async function getFoundersBySkills(
     .where(
       and(
         like(founders.techSkills, pattern),
-        like(founders.rolesICouldTake, pattern),
         like(founders.industries, pattern),
         sql`${founders.introduction} IS NOT NULL`,
       ),
@@ -147,7 +143,6 @@ export async function getFoundersBySkills(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -188,7 +183,6 @@ export async function getFoundersByBatch(batch: string): Promise<Founder[]> {
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -229,7 +223,6 @@ export async function getFoundersByIndustry(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -270,7 +263,6 @@ export async function getFoundersByCompany(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -311,7 +303,6 @@ export async function getFoundersByNationality(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -353,7 +344,6 @@ export async function getFoundersByEducation(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -393,7 +383,6 @@ export async function getFoundersByProject(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -414,7 +403,6 @@ export async function searchFoundersGlobal(
       and(
         like(founders.name, pattern),
         like(founders.techSkills, pattern),
-        like(founders.rolesICouldTake, pattern),
         like(founders.industries, pattern),
         like(founders.companiesWorked, pattern),
         like(founders.introduction, pattern),
@@ -442,7 +430,6 @@ export async function searchFoundersGlobal(
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));
@@ -478,7 +465,6 @@ export async function getActiveFounders(): Promise<Founder[]> {
     introduction: f.introduction,
     techSkills: f.techSkills,
     industries: f.industries,
-    rolesICouldTake: f.rolesICouldTake,
     companiesWorked: f.companiesWorked,
     batch: f.batch,
   }));

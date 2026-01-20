@@ -17,7 +17,6 @@ export const founders = sqliteTable('founders', {
   introduction: text('introduction'),
   techSkills: text('tech_skills'),
   industries: text('industries'),
-  rolesICouldTake: text('roles_i_could_take'),
   companiesWorked: text('companies_worked'),
   batch: text('batch'),
   createdAt: integer('created_at', { mode: 'timestamp' })
