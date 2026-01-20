@@ -24,6 +24,3 @@ export const mastra = new Mastra({
     default: { enabled: true },
   }),
 });
-
-// Export as default for Mastra Cloud deployment
-export default mastra;
