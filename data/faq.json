@@ -1,0 +1,756 @@
+{
+  "program": "Pioneers Accelerator",
+  "location": "Station F",
+  "sections": [
+    {
+      "id": "general",
+      "title": "General Questions about Pioneers",
+      "knowledge_base": {
+        "program_overview": [
+          {
+            "question": "Hey",
+            "answer": "Hey there :wave:\nI'm Lucie, Program Manager @Pioneers. I'm here to help you navigate the Pioneers program as you work on building the next billion-dollar tech giant!\nYou can ask me about:\nProgram logistics: sessions, milestones, key dates, and deadlines :spiral_calendar_pad:\nProgram requirements: submissions, expected formats, evaluation or selection criteria :page_facing_up:\nFounders profiles: experience, skills, background, and areas of expertise to find your perfect match :busts_in_silhouette:\nThe Pioneers accelerator: how it works, the team, and who to contact :handshake:\nWhat can I help you with today? :rocket:"
+          },
+          {
+            "question": "What is the Pioneers accelerator?",
+            "answer": "Pioneers is an early-stage startup accelerator hosted at Station F, designed to help founders validate, build, and scale their startups through structured support, mentorship, and access to a strong entrepreneurial ecosystem."
+          },
+          {
+            "question": "What problem does the Pioneers program aim to solve for founders?",
+            "answer": "The program aims to reduce early-stage execution risk by helping founders clarify their problem, validate their solution, and accelerate learning through structured guidance and peer support."
+          },
+          {
+            "question": "Who is the Pioneers accelerator designed for?",
+            "answer": "Pioneers is designed for ambitious early-stage founders who are building scalable startups and want hands-on support to reach product-market fit."
+          },
+          {
+            "question": "What stage startups does Pioneers target?",
+            "answer": "The program primarily targets pre-seed and seed-stage startups, including teams at idea, prototype, or early traction stages."
+          },
+          {
+            "question": "Is Pioneers focused on tech startups only?",
+            "answer": "While many startups are technology-driven, Pioneers is generally open to innovative startups across sectors, as long as they demonstrate strong growth potential."
+          },
+          {
+            "question": "What makes Pioneers different from other accelerators at Station F?",
+            "answer": "Pioneers emphasizes close founder support, early validation, and practical execution, often with smaller cohorts and high-touch mentorship."
+          },
+          {
+            "question": "What is the core philosophy behind the Pioneers program?",
+            "answer": "The core philosophy is learning by doing: helping founders move fast, test assumptions, and build sustainable companies through iteration."
+          },
+          {
+            "question": "How hands-on is the Pioneers accelerator?",
+            "answer": "The program is hands-on, with regular check-ins, workshops, and mentor interactions designed to actively support founder progress."
+          },
+          {
+            "question": "What outcomes should founders expect by the end of the program?",
+            "answer": "Founders typically aim to achieve clearer positioning, a stronger product, validated assumptions, and readiness for the next growth or fundraising step."
+          },
+          {
+            "question": "How does Pioneers define success for a startup?",
+            "answer": "Success is generally defined by measurable progress toward product-market fit, founder learning, and increased startup momentum."
+          }
+        ],
+        "eligibility_and_profile": [
+          {
+            "question": "Who is eligible to apply to the Pioneers accelerator?",
+            "answer": "Any startup team or solo founder building an early-stage company with growth potential may apply, subject to cohort-specific criteria."
+          },
+          {
+            "question": "Do solo founders qualify for the program?",
+            "answer": "Yes, solo founders are typically eligible, provided they demonstrate strong execution ability and commitment."
+          },
+          {
+            "question": "Are teams required to have a technical co-founder?",
+            "answer": "A technical co-founder is not always required, but teams must show the ability to build and iterate on their product."
+          },
+          {
+            "question": "Is there a minimum viable product required to apply?",
+            "answer": "An MVP is not always mandatory, but having a prototype or early validation is generally beneficial."
+          },
+          {
+            "question": "Can idea-stage startups apply?",
+            "answer": "Yes, idea-stage startups may apply if they demonstrate a strong problem understanding and execution plan."
+          },
+          {
+            "question": "Are non-European founders eligible?",
+            "answer": "Yes, international founders are typically eligible, subject to logistical and visa considerations."
+          },
+          {
+            "question": "Can students apply to the Pioneers accelerator?",
+            "answer": "Students may apply as long as they can commit sufficient time to the program."
+          },
+          {
+            "question": "Can startups incorporated outside France apply?",
+            "answer": "Yes, incorporation outside France is generally acceptable."
+          },
+          {
+            "question": "Is prior funding required to join Pioneers?",
+            "answer": "No prior funding is required."
+          },
+          {
+            "question": "Are first-time founders preferred?",
+            "answer": "First-time founders are welcome, and prior entrepreneurial experience is not a strict requirement."
+          }
+        ],
+        "team_formation": [
+          {
+            "question": "Does Pioneers help founders find co-founders?",
+            "answer": "The program may facilitate connections between founders, but specific co-founder matching services depend on cohort offerings and program structure."
+          },
+          {
+            "question": "What is the ideal team size for Pioneers?",
+            "answer": "Team size requirements vary, but most accepted teams range from solo founders to small teams of 2 or 3 people for a startup - founders should take into account that the more founders in a team the more risk of misalignment on vision, governance, and work ethic."
+          },
+          {
+            "question": "What skills should a founding team have?",
+            "answer": "Ideal founding teams typically combine technical, business, and domain expertise relevant to their startup, though specific requirements depend on the startup's focus."
+          },
+          {
+            "question": "Can I apply to Pioneers to find a co-founder?",
+            "answer": "While the program may provide networking opportunities, applicants are generally expected to have a clear startup idea and some team structure, even if incomplete."
+          },
+          {
+            "question": "Does Pioneers organize co-founder matching events?",
+            "answer": "The program may include networking events and community activities that facilitate founder connections, but specific co-founder matching events depend on cohort programming."
+          },
+          {
+            "question": "What roles are most important in a founding team?",
+            "answer": "Important roles typically include product development, business development, and domain expertise, though the specific mix depends on the startup's industry and stage."
+          },
+          {
+            "question": "Can I join Pioneers as a solo founder and build my team during the program?",
+            "answer": "Solo founders are typically welcome, and the program's community and networking opportunities may help with team building, though this varies by cohort."
+          },
+          {
+            "question": "How do I evaluate if someone would be a good co-founder?",
+            "answer": "Good co-founders typically share vision alignment, complementary skills, strong commitment, and compatible working styles, though evaluation criteria are personal to each founder."
+          },
+          {
+            "question": "Does Pioneers provide guidance on team structure and equity splits?",
+            "answer": "The program may offer workshops or mentorship on team dynamics and equity, but specific guidance depends on cohort programming and mentor availability."
+          },
+          {
+            "question": "Are there resources for finding technical or business co-founders?",
+            "answer": "The program and Station F ecosystem may provide access to networks and events where founders can connect, though specific matching resources vary by cohort."
+          }
+        ],
+        "application_process": [
+          {
+            "question": "How does the application process work?",
+            "answer": "Founders submit an online application, which is reviewed by the Pioneers team, often followed by interviews for shortlisted candidates."
+          },
+          {
+            "question": "When do applications open for Pioneers?",
+            "answer": "Application timelines vary by cohort and are announced by the Pioneers team."
+          },
+          {
+            "question": "When is the application deadline?",
+            "answer": "Deadlines depend on the specific cohort and are communicated during the application period."
+          },
+          {
+            "question": "How long does the application review process take?",
+            "answer": "The review process typically takes several weeks, depending on application volume."
+          },
+          {
+            "question": "What criteria are used to evaluate applications?",
+            "answer": "Evaluation usually considers team quality, problem clarity, solution potential, and founder motivation."
+          },
+          {
+            "question": "Is there an interview stage in the selection process?",
+            "answer": "Yes, shortlisted teams are usually invited to interviews."
+          },
+          {
+            "question": "Who reviews the applications?",
+            "answer": "Applications are reviewed by the Pioneers team and selected program partners."
+          },
+          {
+            "question": "How competitive is the Pioneers accelerator?",
+            "answer": "The program is selective, with limited spots per cohort."
+          },
+          {
+            "question": "Can rejected applicants reapply in the future?",
+            "answer": "Yes, applicants may reapply for future cohorts."
+          },
+          {
+            "question": "Is feedback provided to unsuccessful applicants?",
+            "answer": "Feedback availability depends on application volume and cohort policies."
+          }
+        ],
+        "funding_and_equity": [
+          {
+            "question": "Does Pioneers provide funding?",
+            "answer": "Funding terms vary by cohort; some programs may include investment opportunities, while others focus on support without direct funding."
+          },
+          {
+            "question": "Is there an equity requirement to join the program?",
+            "answer": "Equity requirements, if any, depend on the specific cohort and terms."
+          },
+          {
+            "question": "How much equity does Pioneers take?",
+            "answer": "Equity terms are cohort-specific and communicated during the selection process."
+          },
+          {
+            "question": "Is participation free for founders?",
+            "answer": "Participation terms vary; founders should refer to the cohort’s official terms."
+          },
+          {
+            "question": "Does Pioneers help startups raise funding?",
+            "answer": "Yes, the program typically provides fundraising guidance and investor exposure."
+          }
+        ],
+        "station_f_and_resources": [
+          {
+            "question": "What is Station F?",
+            "answer": "Station F is the world’s largest startup campus, based in Paris, hosting startups, accelerators, investors, and corporate partners."
+          },
+          {
+            "question": "Do Pioneers startups get access to Station F?",
+            "answer": "Yes, accepted startups typically receive access to Station F facilities during the program."
+          },
+          {
+            "question": "Are there perks or discounts for startups?",
+            "answer": "Startups often receive access to partner perks, tools, and service credits through Station F."
+          }
+        ],
+        "miscellaneous": [
+          {
+            "question": "What language is the program conducted in?",
+            "answer": "The program is primarily conducted in English."
+          },
+          {
+            "question": "How can founders contact the Pioneers team?",
+            "answer": "Founders can contact the team via the official Pioneers or Station F communication channels."
+          },
+          {
+            "question": "Where can I find official updates about the program?",
+            "answer": "Official updates are shared through Pioneers and Station F websites, newsletters, and social channels."
+          }
+        ]
+      },
+      "metadata": {
+        "intended_use": "Slack chatbot knowledge base",
+        "answer_style": "Neutral, informational, non-committal",
+        "last_updated": "2025-12-16",
+        "source": "general-questions.json"
+      }
+    },
+    {
+      "id": "founders",
+      "title": "Founders & Co-founder Matching",
+      "knowledge_base": {
+        "profile_book_overview": [
+          {
+            "question": "What is the Pioneers Profile Book?",
+            "answer": "The Profile Book is a database of all founders in the Pioneers accelerator program with detailed professional profiles. It includes ~37 founders with their backgrounds, skills, experience, industries of interest, project ideas, and co-founder preferences. All founders in the Profile Book have detailed introductions showcasing their expertise and track record."
+          },
+          {
+            "question": "How can I access the Profile Book?",
+            "answer": "You can ask Lucie to search the Profile Book using natural language queries like 'Find CTOs', 'Show me founders with Python skills', 'Who's interested in FinTech?', or 'Find founders from batch S25'. Lucie can search by name, skills, roles, industries, batch, education, companies, nationality, and more."
+          },
+          {
+            "question": "What information is included in founder profiles?",
+            "answer": "Each profile includes: name and contact info (email, WhatsApp, LinkedIn), professional background (companies worked, years of experience, education, degree, academic field), skills (technical skills, roles they could take, industries of interest), introduction and track record they're proud of, project ideas and interests, co-founder preferences, batch/cohort, status and availability, and nationality/gender."
+          },
+          {
+            "question": "How often is the Profile Book updated?",
+            "answer": "The Profile Book is synced from Airtable where founders maintain their profiles. For the most current information, especially regarding project status or availability, it's best to reach out directly to founders via email, WhatsApp, or LinkedIn. Profile data reflects information founders provided during onboarding and updates."
+          }
+        ],
+        "finding_cofounders": [
+          {
+            "question": "How do I find a co-founder in the Pioneers program?",
+            "answer": "Ask Lucie to search the Profile Book based on specific criteria: skills you need ('Find CTOs', 'Find Python developers'), industries ('Show me FinTech founders'), experience level ('Who has the most experience?'), or specific attributes ('Find founders open to joining projects'). Review their introductions and track records, then reach out directly via email or WhatsApp."
+          },
+          {
+            "question": "What should I look for in a potential co-founder?",
+            "answer": "Look for: complementary skills (technical if you're business, or vice versa), relevant industry experience or domain expertise, strong track record (past achievements, companies, projects), alignment on industries and project types of interest, similar experience level and commitment, clear communication in their introduction, and openness to collaboration based on their co-founder preferences."
+          },
+          {
+            "question": "How do I reach out to a potential co-founder?",
+            "answer": "Use the contact information in their profile (email, WhatsApp, or LinkedIn). Be specific: mention what you're working on, why you think you'd be a good match based on their profile, what skills/experience you bring, and suggest a time to chat (coffee at Station F, video call, etc.). Reference specific details from their introduction to show genuine interest."
+          },
+          {
+            "question": "What if a founder is already in a team?",
+            "answer": "Check their 'existing_project_idea' and 'open_to_join_another_project' fields. Some founders have projects but are open to better opportunities. Reach out anyway if there's strong fit - team changes happen, especially early in the program. If they're committed to a team, ask if they know other founders who might be a good match."
+          },
+          {
+            "question": "How do I know if a founder is still available?",
+            "answer": "Check the 'status' field which shows their availability (full-time vs other commitments). The 'left_program' field indicates if they've left the program. For current availability, reach out directly as situations change. Some founders marked as having 'other commitments' may still be available depending on timing and project fit."
+          }
+        ],
+        "understanding_profiles": [
+          {
+            "question": "What do the different role types mean?",
+            "answer": "Common roles founders can take: Tech Dev/Prototyping (CTO, technical development), Product (product management, user experience), Design (UI/UX, branding), Operations (logistics, processes, efficiency), Sales (business development, closing deals), Marketing (growth, content, brand), Finance (financial planning, fundraising), People/Culture/Hiring (team building, HR), and Growth (user acquisition, scaling)."
+          },
+          {
+            "question": "What does 'years_of_xp' tell me about a founder?",
+            "answer": "Years of experience ranges from 3-34 years in the cohort, indicating professional maturity and depth of expertise. More experienced founders (15+ years) often bring extensive networks, industry knowledge, and leadership experience. Mid-level (7-15 years) offer strong execution skills and recent industry insights. Early career (3-7 years) bring fresh perspectives, technical skills, and hunger. Match experience level to your needs."
+          },
+          {
+            "question": "How do I interpret the 'tech_skills' field?",
+            "answer": "Tech skills show specific technical capabilities: AI/ML/NLP (machine learning, natural language processing), Full-Stack Development (frontend + backend), DevOps/Security (infrastructure, deployment), Data Analysis/BI (analytics, business intelligence), Low Code/Vibe Code (no-code tools, rapid prototyping), Design tools (Figma, Adobe), IT Infrastructure/Cloud (AWS, servers), and Performance Marketing/Tracking & Analytics (growth tools, metrics)."
+          },
+          {
+            "question": "What does 'industries' tell me?",
+            "answer": "Industries show what sectors a founder is interested in working on: AI/ML, FinTech/InsurTech, HealthTech/BioTech, Enterprise SaaS/B2B Software, Consumer/E-commerce, PropTech/ConstructionTech, LegalTech, EdTech, Logistics/Supply Chain/Mobility, Media/Content/Creators, Travel/Hospitality, GovTech, Space/Aerospace, and more. Multiple industries indicate versatility and broad interests."
+          },
+          {
+            "question": "What should I learn from the 'introduction' field?",
+            "answer": "The introduction is the founder's professional story and personality in their own words. Look for: career highlights and progression, specific achievements and metrics (users, revenue, growth), personality traits and work style (scrappy, analytical, creative), unique skills or perspectives, what motivates them, and how they describe their strengths. This gives you a sense of their identity beyond resume facts."
+          },
+          {
+            "question": "How do I evaluate a founder's 'track_record_proud'?",
+            "answer": "Track record shows their biggest achievements and proof of execution: Look for concrete metrics (users served, revenue generated, growth percentages), leadership experience (team size, hiring, management), technical accomplishments (systems built, scale achieved), entrepreneurial experience (founded companies, successful exits), notable companies or brands worked with, publications or recognition (awards, papers, rankings), and speed of execution (shipped in X days/months)."
+          }
+        ],
+        "skills_and_expertise": [
+          {
+            "question": "How do I find founders with specific technical skills?",
+            "answer": "Ask Lucie to search by skills: 'Find founders with Python skills', 'Show me AI/ML experts', 'Who knows DevOps?', 'Find full-stack developers'. Lucie searches across tech_skills, roles_i_could_take, industries, and interested_in_working_on fields to find matches. You can also combine criteria like 'Find AI founders with FinTech experience'."
+          },
+          {
+            "question": "What if I need a specific combination of skills?",
+            "answer": "Search for the primary skill first, then review the results for secondary qualifications. For example: 'Find CTOs' then look for those with FinTech industry interest, or 'Find product managers' then check for those with healthcare experience. Reach out to 2-3 strong matches rather than waiting for the perfect unicorn."
+          },
+          {
+            "question": "How do I find founders with startup experience?",
+            "answer": "Look in the 'companies_worked' field for startup names or 'Repeat Founder' designation. Check 'track_record_proud' for entrepreneurial achievements like 'founded', 'co-founded', 'launched', 'scaled', or specific startup outcomes (users, revenue, exits). Search for phrases like 'founder', 'startup', or 'entrepreneurship' in their profiles."
+          },
+          {
+            "question": "What if I need domain expertise in a specific industry?",
+            "answer": "Search by industry: 'Show me FinTech founders', 'Find HealthTech experts', 'Who has GovTech experience?'. Check both the 'industries' field (what they're interested in) and 'companies_worked' field (where they've actually worked) for relevant domain expertise. Look for specific company names in target industries in their background."
+          }
+        ],
+        "batch_and_timing": [
+          {
+            "question": "What does the 'batch' field mean?",
+            "answer": "Batch indicates which cohort a founder is part of (e.g., 'S25' for Summer 2025, 'F24' for Fall 2024). Founders in the same batch are going through the program together, share the same schedule and milestones, and have more opportunities to collaborate. Different batches have different timelines and may be at different program stages."
+          },
+          {
+            "question": "Can I team up with founders from different batches?",
+            "answer": "While possible, it's generally easier to team up within your batch since you share the same schedule, milestones, and program timing. Cross-batch collaboration can work if timelines align and both parties can commit to the partnership. The program primarily facilitates connections within the same cohort."
+          },
+          {
+            "question": "What does 'left_program' status mean?",
+            "answer": "The 'left_program' field indicates if a founder has exited the program. Common statuses include confirmation of enrollment, 'left after Selection Day' (not selected to continue), or other departure reasons. Founders who left may still be reachable but aren't actively participating. Focus on founders confirmed enrolled for active collaboration."
+          },
+          {
+            "question": "How do I know if a founder has other commitments?",
+            "answer": "Check the 'status' field: 'Yes, I am available full time' means fully dedicated, while 'No, I have other commitments' indicates part-time or split focus. The 'open_to_join_another_project' field may also mention specific constraints or accommodations needed. Consider availability when evaluating co-founder fit."
+          }
+        ],
+        "project_alignment": [
+          {
+            "question": "How do I find founders interested in similar problem spaces?",
+            "answer": "Search by industry or keywords in their interests: 'Find founders interested in AI', 'Show me FinTech founders', 'Who's working on healthcare?'. Check their 'interested_in_working_on' field which describes their vision and what problems they want to solve. Look for alignment between your idea and their stated interests."
+          },
+          {
+            "question": "What if a founder already has a project idea?",
+            "answer": "Check the 'existing_project_idea' field (Yes/No) and 'project_explanation' for details. Some founders with ideas are open to better opportunities - check 'open_to_join_another_project' field. If there's strong overlap between your ideas, consider merging approaches. Many successful teams formed by combining complementary project concepts."
+          },
+          {
+            "question": "How do I understand a founder's project preferences?",
+            "answer": "Read their 'interested_in_working_on' field carefully - it describes their north star, vision, and what types of problems excite them. Look for themes: building long-term products, solving specific industry problems, using particular technologies (AI, blockchain), targeting certain customers (enterprise, consumers), or focusing on impact areas (sustainability, education)."
+          },
+          {
+            "question": "What's the difference between 'industries' and 'interested_in_working_on'?",
+            "answer": "'Industries' lists sector categories they're interested in (FinTech, HealthTech, etc.), while 'interested_in_working_on' is their free-form description of specific problems, visions, or approaches they want to pursue. Industries are tags; interests show deeper motivation and alignment. Both are important for evaluating fit."
+          }
+        ],
+        "background_and_education": [
+          {
+            "question": "How important is a founder's educational background?",
+            "answer": "Education provides context but isn't the only indicator of capability. Look for: relevant academic field alignment (CS for tech roles, business for operations), prestigious institutions may indicate network access and credentials, advanced degrees (PhD, Masters) show deep expertise, but also consider practical experience, track record, and demonstrated skills often matter more than degrees."
+          },
+          {
+            "question": "What does 'companies_worked' tell me about a founder?",
+            "answer": "Companies worked reveals valuable experience: Big tech companies (Google, Microsoft, Amazon) show scaling experience and engineering excellence. Startups indicate comfort with ambiguity and early-stage building. Scaleups (ManoMano, etc.) show growth-stage expertise. Multiple companies suggest adaptability. Industry-specific companies show domain expertise. 'Repeat Founder' indicates entrepreneurial experience."
+          },
+          {
+            "question": "How do I search for founders from specific companies?",
+            "answer": "Ask Lucie: 'Who worked at Google?', 'Find founders from Microsoft', 'Show me ex-startup founders'. Lucie searches the 'companies_worked' field. This helps you find founders with experience from companies you admire, in your industry, or with relevant scaling experience."
+          },
+          {
+            "question": "What does 'nationality' information help with?",
+            "answer": "Nationality can indicate: language capabilities (native language, cultural context), market knowledge (understanding specific regions), network access (connections in home country), visa/legal considerations for company formation or market expansion, and cultural perspectives that add diversity to teams. The cohort is internationally diverse."
+          }
+        ],
+        "communication_and_outreach": [
+          {
+            "question": "What's the best way to contact a founder?",
+            "answer": "Three contact methods are available: Email (formal, good for detailed pitches), WhatsApp (fast, conversational, good for quick intro), LinkedIn (professional, shows your background). Start with email or WhatsApp. Be concise, specific about why you're reaching out, mention specific details from their profile, and suggest a concrete next step (coffee, call, meeting time)."
+          },
+          {
+            "question": "What should I include in my first message to a potential co-founder?",
+            "answer": "Include: Brief introduction of yourself and your background, what you're working on (problem space, vision), why you think they'd be a great fit (reference their specific skills/experience), what you bring to the table (your skills, track record), a concrete ask (15-min call, coffee at Station F), and genuine enthusiasm. Keep it under 150 words. Make it personal, not a template."
+          },
+          {
+            "question": "How many founders should I reach out to?",
+            "answer": "Reach out to 5-10 potential co-founders to start. Finding the right co-founder takes time and multiple conversations. Don't wait for one person - parallel conversations help you understand fit better. Quality matters more than quantity: focus on founders with strong alignment on skills, vision, and values. Expect 20-30% response rate."
+          },
+          {
+            "question": "What if I don't hear back from a founder?",
+            "answer": "Give founders 2-3 days to respond, then send one polite follow-up. They may be busy with other conversations or projects. If still no response after follow-up, move on to other matches. Don't take it personally - timing and fit matter. Keep searching and stay open to multiple conversations."
+          },
+          {
+            "question": "Should I meet founders before deciding to team up?",
+            "answer": "Absolutely yes. Have multiple conversations: first meeting for general fit (coffee, 30 min), deeper discussion on vision and approach (1-2 hours), work together on a small project or pitch deck (trial collaboration), and discuss working styles, commitment level, and expectations. Take 1-2 weeks to decide. Don't rush into co-founder relationships."
+          }
+        ]
+      },
+      "metadata": {
+        "intended_use": "Slack chatbot knowledge base - Founders & Co-founder Matching",
+        "answer_style": "Practical, focused on helping founders find and evaluate co-founders",
+        "last_updated": "2026-01-16",
+        "source": "founders-faq.json"
+      }
+    },
+    {
+      "id": "sessions",
+      "title": "Sessions & Events",
+      "knowledge_base": {
+        "session_types_overview": [
+          {
+            "question": "What types of sessions and events does Pioneers offer?",
+            "answer": "Pioneers offers a variety of sessions including masterclasses (expert-led workshops on specific topics), office hours (1-on-1 or small group mentorship), group exercises (hands-on team challenges), Friday pitches (weekly team presentations), theme sessions (peer-led knowledge sharing on specific topics), social events (networking and community building), and milestone events like Selection Day and Investment Committee."
+          },
+          {
+            "question": "What are masterclasses?",
+            "answer": "Masterclasses are expert-led sessions typically lasting 1-2 hours, covering topics like sales, GTM strategy, fundraising, product development, and technical skills. They feature external speakers or industry experts and often include Q&A segments. Examples include AWS for new founders, sales and GTM sessions, and technical workshops."
+          },
+          {
+            "question": "What are theme sessions?",
+            "answer": "Theme sessions are peer-led knowledge sharing sessions where cohort members present on topics they're experts in. Sessions typically last 25-30 minutes and cover subjects like AI, robotics, product management, or other specialized topics. These are opportunities for founders to learn from each other's expertise."
+          },
+          {
+            "question": "What are group exercises?",
+            "answer": "Group exercises are hands-on, collaborative challenges designed to help founders practice startup skills in a low-stakes environment. Examples include the Startup Challenge where teams compete to complete various startup tasks (user interviews, pitch decks, landing pages, LOIs) for points, and other team-building activities."
+          },
+          {
+            "question": "What are Friday pitches?",
+            "answer": "Friday pitches are weekly presentations where teams pitch their startups to the cohort and Pioneers team. They typically happen at 3-5 PM on Fridays and are only for founders who are in teams. This is an opportunity to practice pitching, get feedback, and share progress with the community."
+          },
+          {
+            "question": "What social events are available?",
+            "answer": "Pioneers organizes various social events including lunch roulettes (randomly assigned lunch groups for networking), board game nights, dinners, and other community-building activities. These events help founders connect beyond work and build strong relationships within the cohort."
+          }
+        ],
+        "office_hours_and_mentorship": [
+          {
+            "question": "What are office hours?",
+            "answer": "Office hours are 1-on-1 or small group mentorship sessions with either the Pioneers team or external mentors and experts. They provide personalized guidance on specific challenges, strategic decisions, or technical questions. Office hours can be booked by messaging the Pioneers team."
+          },
+          {
+            "question": "How do I book office hours with the Pioneers team?",
+            "answer": "To book office hours with the Pioneers team, send a direct message to the Pioneers team member (typically via Slack) requesting a time slot. Office hours are often scheduled during designated times, and you'll be given specific time slots to choose from."
+          },
+          {
+            "question": "What's the difference between Pioneers office hours and external office hours?",
+            "answer": "Pioneers office hours are held by the internal Pioneers team and cover program guidance, strategy, and general startup advice. External office hours are with industry experts, investors, or specialists (like lawyers, AWS engineers, or domain experts) who provide specialized knowledge in specific areas relevant to your startup."
+          },
+          {
+            "question": "Can I get 1-on-1 feedback from the Pioneers team?",
+            "answer": "Yes, the Pioneers team offers 1-on-1 feedback sessions, especially after major milestones like Selection Day or when teams are not selected to move forward. You can request these sessions by direct messaging the team to schedule a slot during office hours."
+          }
+        ],
+        "attendance_and_participation": [
+          {
+            "question": "Are sessions mandatory?",
+            "answer": "Yes, participation is a core part of the Pioneers experience. Attendance is expected for exercises, masterclasses, and key program events. If you cannot attend a session, you must message the Pioneers team ideally 12 hours before the session starts. Certain days, like Basecamp Day, are mandatory for all founders."
+          },
+          {
+            "question": "What happens if I can't attend a session?",
+            "answer": "If you cannot attend a session, you must notify the Pioneers team (via Slack message) ideally 12 hours before the session starts. If the team doesn't hear from you, they'll assume you're attending. Repeated absences without notice may affect your standing in the program."
+          },
+          {
+            "question": "Which sessions are most important to attend?",
+            "answer": "All sessions are valuable, but certain milestone events are particularly important: Basecamp Day (mandatory), Friday pitches (if you're in a team), Selection Day, Investment Committee presentations, and masterclasses with external experts. Group exercises and theme sessions are also highly valuable for learning and networking."
+          },
+          {
+            "question": "Can I attend sessions remotely?",
+            "answer": "Some sessions offer remote participation via Google Meet links, especially for those who cannot be physically present. However, in-person attendance is strongly preferred, and certain events (like pitch days and Selection Day) are fully in-person only. Check the calendar or session announcements for remote participation options."
+          },
+          {
+            "question": "Are sessions recorded?",
+            "answer": "Session recording policies vary. Some masterclasses and key presentations may be recorded and shared with the cohort, while office hours and feedback sessions are typically private. Check with the Pioneers team if you need access to a recording of a specific session you missed."
+          }
+        ],
+        "program_milestones": [
+          {
+            "question": "What is Basecamp Day?",
+            "answer": "Basecamp Day is a key mandatory session, typically held early in the program (around Week 1), designed to set up founders for success throughout the accelerator. It covers essential program information, expectations, and foundational topics. All founders in Paris are required to attend."
+          },
+          {
+            "question": "What is Selection Day?",
+            "answer": "Selection Day is a major milestone where teams pitch to the Pioneers team and investment committee to be selected for the next phase of the program (sprint phase). Teams present their progress, traction, and plans, and decisions are made on which teams advance to continue receiving support and potential investment."
+          },
+          {
+            "question": "What is the Investment Committee (IC)?",
+            "answer": "The Investment Committee (IC) is the final milestone where selected teams pitch for potential investment from Pioneers. Teams typically have 5 minutes to pitch followed by 7 minutes of Q&A. The IC evaluates teams based on execution (GTM traction and product progress), team quality (background, cohesion, founder-product fit), and market size/potential."
+          },
+          {
+            "question": "What is Pre-IC?",
+            "answer": "Pre-IC is a practice session before the actual Investment Committee, where teams present their pitches to the Pioneers team for feedback and refinement. It's an opportunity to rehearse, get feedback on pitch content and delivery, and make final improvements before the real IC presentation."
+          },
+          {
+            "question": "How are teams selected to move forward in the program?",
+            "answer": "Teams are selected based on three main criteria in order of importance: (1) Execution - GTM traction and product progress, (2) Team - background, cohesion, and founder-product fit, and (3) Market - size and potential. The Pioneers team evaluates teams at key milestones like Selection Day and makes decisions on which teams advance."
+          },
+          {
+            "question": "What happens if my team is not selected to move forward?",
+            "answer": "If your team is not selected, the Pioneers team offers 1-on-1 feedback sessions to explain the decision and provide guidance. You can stay at Station F until the end of November (at your own cost of €259 + VAT/month/seat after the program ends). You become part of the Pioneers alumni community with access to events, workshops, and fast-tracked consideration for future cohorts."
+          }
+        ],
+        "schedule_and_logistics": [
+          {
+            "question": "How intensive is the program schedule?",
+            "answer": "The program schedule varies by week. The first few weeks (especially Week 2) are the most intensive with daily sessions including masterclasses, group exercises, and workshops. After the initial weeks, the schedule becomes lighter with more time for founders to work on their startups, though key sessions like Friday pitches and office hours continue regularly."
+          },
+          {
+            "question": "What is the typical weekly schedule like?",
+            "answer": "A typical week includes masterclasses or theme sessions (often on Wednesdays), office hours (scheduled throughout the week), group exercises or workshops (varies), Friday pitches at 3-5 PM (for teams), and time for independent work. The specific schedule depends on the program week and is shared via the Pioneers calendar and Slack announcements."
+          },
+          {
+            "question": "Where do sessions take place?",
+            "answer": "Sessions take place at various locations within Station F. Common venues include the Creativity Room, Batmobile Room, Hogwarts Express Room (next to Pioneers space), Share Zone rooms, and AWS room. Some sessions are in the main Pioneers space. Specific locations are shared in session announcements and the program calendar."
+          },
+          {
+            "question": "How far in advance are sessions announced?",
+            "answer": "Sessions are typically announced several days to a week in advance via Slack and the Pioneers calendar. Major milestones (like Selection Day or IC) are announced weeks in advance. For urgent sessions or last-minute changes, announcements may come 1-2 days before or even the same day."
+          },
+          {
+            "question": "Where can I find the session schedule?",
+            "answer": "The session schedule is available in the Pioneers shared calendar (link provided during onboarding). Sessions are also announced in the Slack channel with details on time, location, and any preparation needed. Check both the calendar and Slack announcements regularly to stay updated."
+          }
+        ],
+        "weekly_updates_and_progress": [
+          {
+            "question": "Do I need to submit weekly updates?",
+            "answer": "Yes, teams are required to submit weekly updates every Monday before end of day. These updates track progress and inform the investment committee about your startup's development. Updates are submitted through an Airtable form, and the link is shared in Slack."
+          },
+          {
+            "question": "What should I include in weekly updates?",
+            "answer": "Weekly updates should include your progress on key metrics (customer conversations, product development, traction), challenges you're facing, plans for the upcoming week, and any areas where you need support. The updates help the Pioneers team understand where you are and how they can help."
+          },
+          {
+            "question": "Why are weekly updates important?",
+            "answer": "Weekly updates are essential for tracking progress and keeping the investment committee informed about your startup's trajectory. They also help the Pioneers team identify when teams need support, spot trends across the cohort, and make informed decisions about which teams to advance at Selection Day and IC."
+          }
+        ],
+        "miscellaneous": [
+          {
+            "question": "Can I host or lead a session?",
+            "answer": "Yes! Founders are encouraged to share their expertise through theme sessions. If you have specialized knowledge in areas like AI, product management, technical domains, or industry expertise, you can propose leading a theme session. Reach out to the Pioneers team to coordinate scheduling."
+          },
+          {
+            "question": "Are there opportunities to practice pitching?",
+            "answer": "Yes, there are multiple opportunities to practice pitching including Friday pitches (weekly), Pre-IC sessions (practice before Investment Committee), group exercises where you pitch to teammates, and informal practice sessions. Practice rooms are often available for teams to rehearse before major presentations."
+          },
+          {
+            "question": "How can I get feedback on my startup?",
+            "answer": "You can get feedback through multiple channels: office hours with the Pioneers team, Friday pitches with cohort feedback, 1-on-1 feedback sessions after milestones, external office hours with experts, peer feedback during group exercises and theme sessions, and weekly update responses from the team."
+          },
+          {
+            "question": "What external experts visit Pioneers?",
+            "answer": "Pioneers hosts various external experts including corporate partners (AWS, Google engineers), investors, successful founders, domain specialists (sales, legal, technical), and industry leaders. Recent examples include AWS specialists for technical workshops and industry experts for masterclasses on sales, GTM, and fundraising."
+          },
+          {
+            "question": "Are there networking opportunities outside of structured sessions?",
+            "answer": "Yes! Networking opportunities include lunch roulettes (randomized lunch groups), social events (board game nights, dinners), informal time at Station F, peer-led theme sessions, group exercises, and spontaneous connections within the Pioneers space. The cohort community is tight-knit and founders often collaborate outside of formal sessions."
+          }
+        ]
+      },
+      "metadata": {
+        "intended_use": "Slack chatbot knowledge base - Sessions & Events",
+        "answer_style": "Informative, practical, based on actual program structure",
+        "last_updated": "2026-01-16",
+        "source": "sessions-faq.json"
+      }
+    },
+    {
+      "id": "startups",
+      "title": "Startups & Entrepreneurship",
+      "knowledge_base": {
+        "team_formation": [
+          {
+            "question": "How does team formation work in the Pioneers program?",
+            "answer": "Team formation typically happens in the first few weeks of the program. Teams are formed based on complementary skills, shared interests in problem spaces, and alignment on vision. Most teams consist of 2-3 co-founders with technical, business, and domain expertise. The program facilitates connections between solo founders and helps teams find the right co-founder fit."
+          },
+          {
+            "question": "Can I change teams or pivot during the program?",
+            "answer": "Yes, team changes and pivots are possible during the program. Some teams experience co-founder departures or additions as they validate their ideas and find the right fit. The Pioneers team provides support during these transitions. Breakups aren't taboo - the program prioritizes finding the right team composition over maintaining original arrangements."
+          },
+          {
+            "question": "What happens if there's a co-founder conflict?",
+            "answer": "Co-founder conflicts do arise and the Pioneers team provides support to address them. Common issues include communication breakdowns, unclear role divisions, and misalignment on vision. The team offers mediation, frameworks for resolving conflicts, and guidance on when to make difficult decisions. Addressing conflicts early is crucial, especially before major milestones like the Investment Committee."
+          }
+        ],
+        "progress_tracking": [
+          {
+            "question": "How is startup progress tracked during the program?",
+            "answer": "Startup progress is tracked through multiple channels: weekly updates submitted via Airtable form, Friday pitches where teams present to the cohort, office hours with the Pioneers team for detailed feedback, and milestone presentations at Selection Day and Investment Committee. Teams maintain detailed progress timelines documenting customer conversations, product development, traction metrics, and key learnings."
+          },
+          {
+            "question": "What should be included in weekly updates?",
+            "answer": "Weekly updates should include: key metrics (customer conversations, LOIs signed, revenue), product development milestones, traction summary (paying customers, design partners, pipeline), challenges and blockers you're facing, plans for the upcoming week, and specific areas where you need support. Updates inform the investment committee about your trajectory."
+          },
+          {
+            "question": "How often do teams pitch during the program?",
+            "answer": "Teams pitch regularly throughout the program. Friday pitches happen weekly at 3-5 PM where teams in the sprint phase present their progress to the cohort and Pioneers team. Major milestone pitches include Selection Day (for advancing to sprint phase) and Pre-IC/Investment Committee presentations. Teams receive feedback after each pitch to refine their story and strategy."
+          },
+          {
+            "question": "What's the typical startup journey during the accelerator?",
+            "answer": "The typical journey: Week 1-4: Team formation, customer discovery (50-100 interviews), problem validation. Week 4-8: MVP development, design partners, early traction (LOIs, pilots). Week 8+: Sprint phase with paying customers, refining product-market fit, scaling customer acquisition. Milestones include Selection Day (Week 8) and Investment Committee (Week 13-14) for selected teams."
+          }
+        ],
+        "traction_and_validation": [
+          {
+            "question": "What counts as meaningful traction?",
+            "answer": "Meaningful traction includes: paying customers or paid pilots (even small amounts like €250-500/month show commitment), signed LOIs (Letters of Intent) with clear next steps, design partners actively using your product, concrete revenue pipeline with validated pricing, and measurable user engagement metrics. The key is demonstrating real customer willingness to pay, not just interest."
+          },
+          {
+            "question": "How many customer conversations should I have?",
+            "answer": "Successful teams typically conduct 50-100+ customer conversations during the program. Early stage (Weeks 1-4): 50-100 interviews for problem validation. Growth stage (Weeks 4-8): 20-50 conversations with qualified prospects. Examples: Teams reaching IC often have 100+ outreach attempts, 15-25 engaged prospects, and 4-7 serious leads or design partners."
+          },
+          {
+            "question": "What's an LOI and why is it important?",
+            "answer": "An LOI (Letter of Intent) is a signed document indicating a prospect's serious interest in becoming a paying customer. It demonstrates validation beyond verbal interest. Strong LOIs include: digital or physical signature (emails don't count), specific pricing or pilot terms, clear timeline for conversion, and commitment from decision-makers. Converting LOIs to paid pilots/customers is the key milestone."
+          },
+          {
+            "question": "What's a design partner?",
+            "answer": "A design partner is an early customer who works closely with you to shape the product in exchange for discounted or free access. They provide detailed feedback, test iterations, and validate product-market fit. Design partners should be highly engaged, representative of your target market, and willing to become paying customers once the product matures. Aim for 2-5 design partners before scaling."
+          },
+          {
+            "question": "How do I validate my market opportunity?",
+            "answer": "Market validation involves: conducting customer interviews with target users, identifying clear pain points they're willing to pay to solve, getting LOIs or paid pilots to prove willingness to pay, sizing your addressable market (realistic TAM/SAM/SOM), identifying 3-5 competitors and your differentiation, and demonstrating early traction with target customers. The best validation is customers paying for your solution."
+          }
+        ],
+        "product_development": [
+          {
+            "question": "When should I start building my product?",
+            "answer": "Start building after validating the problem through customer interviews (typically 30-50 conversations). Many teams begin with a demo or MVP in Weeks 2-4 to test with prospects. The key is not to build in isolation - show prototypes early, gather feedback continuously, and iterate quickly. Some teams launch alpha/beta versions within 4-6 weeks of starting."
+          },
+          {
+            "question": "What's the difference between alpha, beta, and MVP?",
+            "answer": "Alpha is an early internal version for initial testing and feedback, often with core features incomplete. Beta is a more polished version released to design partners and early users for real-world testing. MVP (Minimum Viable Product) is the simplest version that delivers core value and can be sold to customers. Most teams launch beta versions within 6-8 weeks."
+          },
+          {
+            "question": "Should I use external developers or build in-house?",
+            "answer": "This depends on your team's technical capabilities and the product complexity. Having a technical co-founder is strongly preferred as it enables fast iteration and reduces costs. If using external developers: negotiate carefully on equity (5%+ deals can be risky), consider alternatives like BPI grants or angel funding, ensure you maintain IP control, and plan to bring development in-house eventually."
+          },
+          {
+            "question": "How do I know if my product is ready to launch?",
+            "answer": "Your product is ready when: it solves the core problem identified in customer interviews, 2-3 design partners can use it successfully and provide feedback, it delivers clear value that customers will pay for, and you can demonstrate it in pitches and demos. Don't wait for perfection - launch early, gather feedback, and iterate. Many successful teams launch alpha versions within 4-6 weeks."
+          }
+        ],
+        "pitching_and_feedback": [
+          {
+            "question": "How should I structure my pitch?",
+            "answer": "Effective pitch structure: Problem (1-2 slides, focus on pain point not just market stats), Solution (1-2 slides, show product clearly), Traction (2-3 slides with metrics: customers, revenue, pipeline), Market (1 slide with realistic sizing), Business Model (1 slide with unit economics), Team (1 slide with relevant background), and Ask (funding amount and use of funds). Spend 50%+ time on traction and differentiation."
+          },
+          {
+            "question": "What are common pitch mistakes to avoid?",
+            "answer": "Common mistakes: spending too much time on problem/market (more than 30-40% of slides), not showing clear traction metrics, unclear differentiation from competitors, vague or unrealistic market sizing, weak team credentials presentation, missing 'ask' slide (funding amount and use), poor demo or no product shown, and talking about features instead of customer value and outcomes."
+          },
+          {
+            "question": "How should I respond to feedback during pitches?",
+            "answer": "Listen actively and take notes during feedback sessions. Don't be defensive - investors and mentors are helping you see blind spots. Ask clarifying questions to understand the concern. Implement feedback before the next pitch if it's valid. Track which feedback themes repeat across multiple people. Focus on feedback about traction, differentiation, and market sizing as these are most critical for investment decisions."
+          },
+          {
+            "question": "What do investors look for in pitches?",
+            "answer": "Investors prioritize: (1) Execution - real traction with paying customers or strong pipeline, (2) Team - relevant background, cohesion, and founder-product fit, (3) Market - large addressable market with clear growth potential, (4) Differentiation - what you do better than competitors, (5) Business model - path to profitability with strong unit economics, and (6) Vision - ambitious but achievable roadmap."
+          }
+        ],
+        "market_and_industry": [
+          {
+            "question": "What industries do Pioneers startups typically focus on?",
+            "answer": "Pioneers startups span diverse industries including FinTech (credit scoring, payments), HR Tech (staffing, recruitment), GovTech (procurement intelligence), Health/Fitness (nutrition, wellness), LegalTech (legal automation), PropTech (real estate technology), DevTools (developer infrastructure), Logistics (supply chain), and Social Tech (AI companions). The program is industry-agnostic but focuses on scalable tech solutions."
+          },
+          {
+            "question": "How do I size my market correctly?",
+            "answer": "Use the TAM-SAM-SOM framework: TAM (Total Addressable Market) is the total market revenue if you had 100% market share. SAM (Serviceable Addressable Market) is the portion you can realistically reach with your product. SOM (Serviceable Obtainable Market) is what you can capture in 3-5 years. Be realistic and bottom-up: count actual customers you can reach, not just top-down industry statistics."
+          },
+          {
+            "question": "How do I handle a crowded market?",
+            "answer": "In crowded markets: focus on a specific niche or sub-segment where you can dominate, demonstrate clear differentiation (10x better, not 10% better), show strong early traction that proves your approach works, build unique distribution channels or partnerships that competitors can't easily replicate, and emphasize your team's unique insights or expertise. Investors want to see why you'll win despite competition."
+          },
+          {
+            "question": "Should I focus on B2B or B2C?",
+            "answer": "B2B is generally easier to validate and scale in an accelerator timeframe as you can reach paying customers faster, have shorter sales cycles with SMBs, charge more per customer (higher ACV), and demonstrate clear ROI. B2C can work but requires strong distribution (partnerships with gyms, platforms, etc.) or viral growth mechanics. Many successful teams use B2B2C models to leverage existing customer bases."
+          }
+        ],
+        "investment_readiness": [
+          {
+            "question": "What's the Investment Committee (IC) and how does it work?",
+            "answer": "The Investment Committee is the final milestone where selected teams pitch for potential investment from Pioneers. Teams typically present a 5-minute pitch followed by 7 minutes of Q&A. The IC evaluates based on execution (traction and product progress), team quality (background, cohesion, founder-product fit), and market potential. Teams selected at Pre-IC (Week 13-14) advance to the IC."
+          },
+          {
+            "question": "What traction do I need to be investment-ready?",
+            "answer": "Investment-ready traction typically includes: 1-3 paying customers or paid pilots (even small amounts show validation), €20-50K ARR or strong revenue pipeline, 3-5 design partners actively using the product, clear unit economics and path to profitability, proven customer acquisition channel, and measurable growth trajectory. The exact metrics vary by industry and business model."
+          },
+          {
+            "question": "How do I prepare for the Investment Committee?",
+            "answer": "IC preparation includes: refining your pitch deck with emphasis on traction (spend 50%+ time on this), practicing your pitch multiple times, preparing for tough questions on differentiation and market sizing, having a clear 'ask' slide (funding amount and use of funds), attending Pre-IC for feedback, demonstrating your product with a strong demo, addressing previous feedback from pitches, and showing momentum and growth trajectory."
+          },
+          {
+            "question": "What happens if I'm not selected for the IC?",
+            "answer": "If not selected at Selection Day: you receive 1-on-1 feedback from the Pioneers team explaining the decision and providing guidance, you can stay at Station F until November (at your own cost: €259 + VAT/month/seat), you join the Pioneers alumni community with access to events and workshops, and you're fast-tracked for consideration in future cohorts if you show progress. The team may schedule a follow-up IC if you demonstrate strong traction."
+          },
+          {
+            "question": "What are the selection criteria for advancing in the program?",
+            "answer": "Selection criteria in order of importance: (1) Execution - GTM traction (paying customers, LOIs, pipeline) and product progress (working MVP, design partners), (2) Team - relevant background, cohesion, and strong founder-product fit, (3) Market - large addressable market with realistic sizing and clear growth potential. Teams are evaluated at Selection Day (Week 8) and Pre-IC (Week 13-14)."
+          }
+        ],
+        "go_to_market_strategy": [
+          {
+            "question": "How do I find my first customers?",
+            "answer": "Effective customer acquisition strategies: cold outreach (emails, LinkedIn) to 100+ prospects - expect 10-20% response rate, warm introductions through advisors, program mentors, or the Pioneers network, attending industry events and conferences, partnerships with companies that have your target customers (B2B2C model), and content marketing or social proof (Twitter validation, influencer support). The key is high-volume outreach with personalized messaging."
+          },
+          {
+            "question": "What's a realistic customer acquisition timeline?",
+            "answer": "Typical timelines: First conversations (Week 1-2): 50-100 cold calls/emails → 10-20 responses. Design partners (Week 4-6): 15-25 engaged prospects → 2-5 design partners. Paid pilots (Week 6-10): Clear value demonstration → 1-3 paid pilots at €250-500/month. First full customers (Week 10-14): Proven ROI → 1-5 paying customers at target pricing. B2B cycles are faster (4-12 weeks) than enterprise sales (3-6 months)."
+          },
+          {
+            "question": "Should I focus on product or sales first?",
+            "answer": "Balance both simultaneously: Do customer discovery and sales outreach from Day 1 - don't wait for a perfect product. Build an MVP or demo within 2-4 weeks to show prospects. Continue sales conversations while iterating on product based on feedback. The best products emerge from tight customer feedback loops. Teams that focus only on building often miss market needs."
+          },
+          {
+            "question": "How do I price my product?",
+            "answer": "Pricing strategies: Start with customer interviews to understand willingness to pay and budget ranges. For design partners, charge something (even €250-500/month) to ensure commitment. Calculate unit economics: customer acquisition cost (CAC), lifetime value (LTV), aim for LTV:CAC ratio of 3:1+. Price based on value delivered, not just cost. Start higher than you think - you can always discount. Test pricing with early customers and iterate."
+          },
+          {
+            "question": "What's the difference between a pilot and a paying customer?",
+            "answer": "A pilot is a trial period (typically 4-12 weeks) where customers test your product, usually at reduced pricing or for free. A paying customer pays full or near-full price for ongoing usage. Pilots should have clear success metrics and timelines for conversion to paid. The best pilots include some payment (€250-500) to demonstrate commitment. Aim to convert 50%+ of pilots to paying customers within 3 months."
+          }
+        ],
+        "common_challenges": [
+          {
+            "question": "What are common reasons startups struggle in the program?",
+            "answer": "Common challenges: Insufficient customer validation (building before talking to 50+ customers), weak traction (no paying customers or LOIs after 8 weeks), unclear differentiation (me-too product in crowded market), team issues (co-founder conflicts, skill gaps, poor cohesion), poor execution (slow iteration, missed milestones), and unrealistic market sizing or go-to-market strategy. The most critical is failing to demonstrate paying customer traction."
+          },
+          {
+            "question": "How do I know if I should pivot?",
+            "answer": "Consider pivoting when: customers consistently don't see value in your solution after 30+ conversations, you can't get design partners or paying customers after 2-3 months of outreach, your team lacks passion or domain expertise for the problem, the market is too small or declining, or you discover a bigger problem during customer interviews. Discuss pivots early with the Pioneers team - they can provide guidance."
+          },
+          {
+            "question": "What if I'm falling behind the cohort?",
+            "answer": "If you're behind: identify the specific gap (customer conversations? Product? Traction?), prioritize ruthlessly - focus only on activities that lead to paying customers, book office hours with the Pioneers team for guidance, leverage the cohort for intros and feedback, and set aggressive but achievable weekly goals. Many successful teams have slow starts but accelerate later. The key is demonstrating momentum and learning velocity."
+          },
+          {
+            "question": "How do I balance product development and customer acquisition?",
+            "answer": "Effective balancing: Dedicate 50% of time to customer conversations and sales outreach (this is your primary job), 30% to product development based on customer feedback, and 20% to fundraising prep, team building, and learning. Don't go silent on customers while building - keep them engaged with updates. Ship small iterations weekly rather than waiting for perfection. Customer feedback should drive product decisions."
+          }
+        ]
+      },
+      "metadata": {
+        "intended_use": "Slack chatbot knowledge base - Startups & Entrepreneurship",
+        "answer_style": "Practical, actionable, based on actual program experience",
+        "last_updated": "2026-01-16",
+        "source": "startups-faq.json"
+      }
+    }
+  ]
+}
