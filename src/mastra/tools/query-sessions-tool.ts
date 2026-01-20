@@ -33,6 +33,7 @@ import {
   getTotalSessionsCount,
   searchSessionsGlobal,
 } from '../../db/helpers/query-sessions.js';
+import type { SessionEvent } from '../../db/schemas/session-events.js';
 
 /**
  * Query sessions and events from Turso database
@@ -157,19 +158,32 @@ export const querySessionsTool = createTool({
             message: 'No upcoming sessions found',
           };
         }
+
+        const mappedNextSession = {
+          id: nextSession.id,
+          name: nextSession.name,
+          date: nextSession.date,
+          programWeek: nextSession.programWeek,
+          typeOfSession: nextSession.typeOfSession,
+          speaker: nextSession.speaker,
+          participants: null,
+          notesFeedback: null,
+          attachments: null,
+        };
+
         return {
-          sessions: [nextSession],
+          sessions: [mappedNextSession],
           count: 1,
           message: 'Next upcoming session',
         };
       }
 
       // Handle search requests
-      let sessions;
+      let rawSessions: SessionEvent[];
 
       switch (searchType) {
         case 'all':
-          sessions = await getAllSessions();
+          rawSessions = await getAllSessions();
           break;
 
         case 'by-name':
@@ -180,7 +194,7 @@ export const querySessionsTool = createTool({
               message: 'Error: searchTerm is required for by-name search',
             };
           }
-          sessions = await searchSessionsByName(searchTerm);
+          rawSessions = await searchSessionsByName(searchTerm);
           break;
 
         case 'by-speaker':
@@ -191,7 +205,7 @@ export const querySessionsTool = createTool({
               message: 'Error: searchTerm is required for by-speaker search',
             };
           }
-          sessions = await searchSessionsBySpeaker(searchTerm);
+          rawSessions = await searchSessionsBySpeaker(searchTerm);
           break;
 
         case 'by-type':
@@ -202,7 +216,7 @@ export const querySessionsTool = createTool({
               message: 'Error: searchTerm is required for by-type search',
             };
           }
-          sessions = await getSessionsByType(searchTerm);
+          rawSessions = await getSessionsByType(searchTerm);
           break;
 
         case 'by-week':
@@ -213,15 +227,15 @@ export const querySessionsTool = createTool({
               message: 'Error: searchTerm is required for by-week search',
             };
           }
-          sessions = await getSessionsByWeek(searchTerm);
+          rawSessions = await getSessionsByWeek(searchTerm);
           break;
 
         case 'upcoming':
-          sessions = await getUpcomingSessions();
+          rawSessions = await getUpcomingSessions();
           break;
 
         case 'past':
-          sessions = await getPastSessions();
+          rawSessions = await getPastSessions();
           break;
 
         case 'global-search':
@@ -232,7 +246,7 @@ export const querySessionsTool = createTool({
               message: 'Error: searchTerm is required for global-search',
             };
           }
-          sessions = await searchSessionsGlobal(searchTerm);
+          rawSessions = await searchSessionsGlobal(searchTerm);
           break;
 
         default:
@@ -242,6 +256,18 @@ export const querySessionsTool = createTool({
             message: `Error: Unknown search type "${searchType}"`,
           };
       }
+
+      const sessions = rawSessions.map((session) => ({
+        id: session.id,
+        name: session.name,
+        date: session.date,
+        programWeek: session.programWeek,
+        typeOfSession: session.typeOfSession,
+        speaker: session.speaker,
+        participants: null,
+        notesFeedback: null,
+        attachments: null,
+      }));
 
       return {
         sessions,
