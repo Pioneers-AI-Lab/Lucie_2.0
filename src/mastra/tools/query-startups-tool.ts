@@ -28,6 +28,7 @@ import {
   getTotalStartupsCount,
   searchStartupsGlobal,
 } from '../../db/helpers/query-startups.js';
+import type { Startup } from '../../db/schemas/startups.js';
 
 /**
  * Query startups from Turso database
@@ -97,11 +98,11 @@ export const queryStartupsTool = createTool({
       }
 
       // Handle search requests
-      let startups;
+      let rawStartups: Startup[];
 
       switch (searchType) {
         case 'all':
-          startups = await getAllStartups();
+          rawStartups = await getAllStartups();
           break;
 
         case 'by-name':
@@ -112,7 +113,7 @@ export const queryStartupsTool = createTool({
               message: 'Error: searchTerm is required for by-name search',
             };
           }
-          startups = await searchStartupsByName(searchTerm);
+          rawStartups = await searchStartupsByName(searchTerm);
           break;
 
         case 'by-industry':
@@ -123,7 +124,7 @@ export const queryStartupsTool = createTool({
               message: 'Error: searchTerm is required for by-industry search',
             };
           }
-          startups = await searchStartupsByIndustry(searchTerm);
+          rawStartups = await searchStartupsByIndustry(searchTerm);
           break;
 
         case 'by-team-member':
@@ -134,7 +135,7 @@ export const queryStartupsTool = createTool({
               message: 'Error: searchTerm is required for by-team-member search',
             };
           }
-          startups = await searchStartupsByTeamMember(searchTerm);
+          rawStartups = await searchStartupsByTeamMember(searchTerm);
           break;
 
         case 'by-description':
@@ -145,7 +146,7 @@ export const queryStartupsTool = createTool({
               message: 'Error: searchTerm is required for by-description search',
             };
           }
-          startups = await searchStartupsByDescription(searchTerm);
+          rawStartups = await searchStartupsByDescription(searchTerm);
           break;
 
         case 'global-search':
@@ -156,7 +157,7 @@ export const queryStartupsTool = createTool({
               message: 'Error: searchTerm is required for global-search',
             };
           }
-          startups = await searchStartupsGlobal(searchTerm);
+          rawStartups = await searchStartupsGlobal(searchTerm);
           break;
 
         default:
@@ -166,6 +167,17 @@ export const queryStartupsTool = createTool({
             message: `Error: Unknown search type "${searchType}"`,
           };
       }
+
+      const startups = rawStartups.map((startup) => ({
+        id: startup.id,
+        startup: startup.startup,
+        industry: startup.industry,
+        startupInAWord: startup.startupInAWord,
+        teamMembers: startup.teamMembers,
+        tractionSummary: startup.tractionSummary,
+        detailedProgress: startup.detailedProgress,
+        previousDecks: null,
+      }));
 
       return {
         startups,
