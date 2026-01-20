@@ -191,7 +191,15 @@ async function syncSessionEvents() {
     for (const record of records) {
       const fields = record.fields;
 
+      // Helper function to convert arrays to comma-separated strings
+      const arrayToString = (value: any): string | undefined => {
+        if (value === null || value === undefined) return undefined;
+        if (Array.isArray(value)) return value.join(', ');
+        return String(value);
+      };
+
       // Use human-readable field names (Airtable API returns these, not field IDs)
+      // Fixed: Field names now match schema (notesFeedback, slackInstructions, participants, emails)
       const data = {
         id: record.id,
         name: fields['Name'] as string | undefined,
@@ -199,15 +207,10 @@ async function syncSessionEvents() {
         programWeek: fields['Program Week'] as string | undefined,
         typeOfSession: fields['Type of session'] as string | undefined,
         speaker: fields['Speaker'] as string | undefined,
-        emails: fields['Emails'] as string | undefined,
-        slackInstructionEmailCommu: fields[
-          'Slack Instruction & Email Commu'
-        ] as string | undefined,
-        participants: fields['Participants'] as string | undefined,
         notesFeedback: fields['Notes / Feedback'] as string | undefined,
-        notes2: fields['Notes 2'] as string | undefined,
-        attachments: fields['Attachments'] as string | undefined,
-        nameFromLinked: fields['Name (from Linked)'] as string | undefined,
+        slackInstructions: fields['Slack Instruction & Email Commu'] as string | undefined,
+        participants: arrayToString(fields['Participants']),  // Convert array to string
+        emails: fields['Emails'] as string | undefined,
       };
 
       const existing = await db

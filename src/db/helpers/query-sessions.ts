@@ -1,5 +1,8 @@
 /**
  * Helper functions to query session events
+ *
+ * ⚠️ IMPORTANT: All queries in this file fetch data ONLY from the session_events table.
+ * No other database tables (founders, startups, faq) are queried.
  */
 
 import { db } from '../index.js';
@@ -15,22 +18,55 @@ export async function getAllSessions() {
 
 /**
  * Search sessions by name (partial match, case-insensitive)
+ * Improved: Splits multi-word searches and matches if ANY word is found
+ * Example: "Alexis Robert" finds sessions with "Alexis" OR "Robert" in name
  */
 export async function searchSessionsByName(searchTerm: string) {
-  const searchPattern = `%${searchTerm}%`;
+  const words = searchTerm.trim().split(/\s+/);
+
+  // If single word, use simple LIKE
+  if (words.length === 1) {
+    const searchPattern = `%${searchTerm}%`;
+    return await db.select()
+      .from(sessionEvents)
+      .where(like(sessionEvents.name, searchPattern));
+  }
+
+  // If multiple words, search for any word match
+  const conditions = words.map(word =>
+    like(sessionEvents.name, `%${word}%`)
+  );
+
   return await db.select()
     .from(sessionEvents)
-    .where(like(sessionEvents.name, searchPattern));
+    .where(or(...conditions));
 }
 
 /**
  * Search sessions by speaker (partial match, case-insensitive)
+ * Improved: Splits multi-word searches and matches if ANY word is found
+ * Example: "Alexis Robert" finds speakers with "Alexis" OR "Robert"
+ * This solves: searching "Alexis Robert" will now find "Alexis - Kima Ventures"
  */
 export async function searchSessionsBySpeaker(searchTerm: string) {
-  const searchPattern = `%${searchTerm}%`;
+  const words = searchTerm.trim().split(/\s+/);
+
+  // If single word, use simple LIKE
+  if (words.length === 1) {
+    const searchPattern = `%${searchTerm}%`;
+    return await db.select()
+      .from(sessionEvents)
+      .where(like(sessionEvents.speaker, searchPattern));
+  }
+
+  // If multiple words, search for any word match
+  const conditions = words.map(word =>
+    like(sessionEvents.speaker, `%${word}%`)
+  );
+
   return await db.select()
     .from(sessionEvents)
-    .where(like(sessionEvents.speaker, searchPattern));
+    .where(or(...conditions));
 }
 
 /**
@@ -115,8 +151,7 @@ export async function getTotalSessionsCount() {
 }
 
 /**
- * Search sessions across multiple fields (name, speaker, type, week)
- * Improved: Now also searches programWeek field for comprehensive results
+ * Search sessions across ALL text fields (name, speaker, type, week)
  */
 export async function searchSessionsGlobal(searchTerm: string) {
   const searchPattern = `%${searchTerm}%`;

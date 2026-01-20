@@ -4,6 +4,9 @@
  * Queries session/event data from the local Turso database instead of Airtable.
  * Much faster with no rate limits.
  *
+ * ⚠️ IMPORTANT: This tool fetches data ONLY from the session_events database table.
+ * All queries use the sessionEvents schema - no other tables (founders, startups, faq) are accessed.
+ *
  * Contains 100+ session events with information about:
  * - Session names, dates, and types
  * - Speakers and participants
@@ -125,9 +128,6 @@ export const querySessionsTool = createTool({
           programWeek: z.string().nullable(),
           typeOfSession: z.string().nullable(),
           speaker: z.string().nullable(),
-          participants: z.string().nullable(),
-          notesFeedback: z.string().nullable(),
-          attachments: z.string().nullable(),
         }),
       )
       .optional(),
@@ -166,9 +166,6 @@ export const querySessionsTool = createTool({
           programWeek: nextSession.programWeek,
           typeOfSession: nextSession.typeOfSession,
           speaker: nextSession.speaker,
-          participants: null,
-          notesFeedback: null,
-          attachments: null,
         };
 
         return {
@@ -264,9 +261,6 @@ export const querySessionsTool = createTool({
         programWeek: session.programWeek,
         typeOfSession: session.typeOfSession,
         speaker: session.speaker,
-        participants: null,
-        notesFeedback: null,
-        attachments: null,
       }));
 
       return {
