@@ -106,9 +106,10 @@ export async function getFoundersByName(
 }
 
 /**
- * Get founders by skills (searches in techSkills, rolesICouldTake, industries, AND interestedInWorkingOn fields, Profile Book only)
- * This broad search helps find founders whether they list their expertise in tech skills, roles, industries, or interests
- * Example: "FinTech" might be in industries, "CTO" in roles, "Python" in tech skills, "AI applications" in interests
+ * Get founders by skills (searches in techSkills, industries, introduction, AND academicField fields, Profile Book only)
+ * This broad search helps find founders whether they list their expertise in tech skills, industries, introductions, or academic background
+ * Example: "FinTech" might be in industries, "Python" in tech skills, "AI applications" in introduction, "Computer Science" in academic field
+ * Fixed: Uses OR logic so founders match if ANY field contains the search term
  */
 export async function getFoundersBySkills(
   skillTerm: string,
@@ -120,10 +121,14 @@ export async function getFoundersBySkills(
     .from(founders)
     .where(
       and(
-        like(founders.techSkills, pattern),
-        like(founders.industries, pattern),
-        sql`${founders.introduction} IS NOT NULL`,
-      ),
+        sql`(
+          ${founders.techSkills} LIKE ${pattern} OR
+          ${founders.industries} LIKE ${pattern} OR
+          ${founders.introduction} LIKE ${pattern} OR
+          ${founders.academicField} LIKE ${pattern}
+        )`,
+        sql`${founders.introduction} IS NOT NULL`
+      )
     );
 
   return foundersData.map((f) => ({
@@ -310,6 +315,7 @@ export async function getFoundersByNationality(
 
 /**
  * Get founders by education (searches in education and academicField fields, Profile Book only)
+ * Fixed: Uses OR logic so founders match if EITHER field contains the search term
  */
 export async function getFoundersByEducation(
   educationTerm: string,
@@ -321,10 +327,12 @@ export async function getFoundersByEducation(
     .from(founders)
     .where(
       and(
-        like(founders.education, pattern),
-        like(founders.academicField, pattern),
-        sql`${founders.introduction} IS NOT NULL`,
-      ),
+        sql`(
+          ${founders.education} LIKE ${pattern} OR
+          ${founders.academicField} LIKE ${pattern}
+        )`,
+        sql`${founders.introduction} IS NOT NULL`
+      )
     );
 
   return foundersData.map((f) => ({
@@ -350,7 +358,9 @@ export async function getFoundersByEducation(
 }
 
 /**
- * Get founders by project (searches in project-related fields, Profile Book only)
+ * Get founders by project (searches in introduction field for project mentions, Profile Book only)
+ * Fixed: Actually searches introduction field for project-related keywords
+ * Note: No dedicated project fields in schema, so we search introductions where founders describe their projects
  */
 export async function getFoundersByProject(
   projectTerm: string,
@@ -362,8 +372,9 @@ export async function getFoundersByProject(
     .from(founders)
     .where(
       and(
-        sql`${founders.introduction} IS NOT NULL`,
-      ),
+        like(founders.introduction, pattern),
+        sql`${founders.introduction} IS NOT NULL`
+      )
     );
 
   return foundersData.map((f) => ({
@@ -390,6 +401,7 @@ export async function getFoundersByProject(
 
 /**
  * Global search across all text fields (Profile Book only)
+ * Fixed: Uses OR logic so founders match if ANY field contains the search term
  */
 export async function searchFoundersGlobal(
   searchTerm: string,
@@ -401,16 +413,18 @@ export async function searchFoundersGlobal(
     .from(founders)
     .where(
       and(
-        like(founders.name, pattern),
-        like(founders.techSkills, pattern),
-        like(founders.industries, pattern),
-        like(founders.companiesWorked, pattern),
-        like(founders.introduction, pattern),
-        like(founders.education, pattern),
-        like(founders.academicField, pattern),
-        like(founders.nationality, pattern),
-        sql`${founders.introduction} IS NOT NULL`,
-      ),
+        sql`(
+          ${founders.name} LIKE ${pattern} OR
+          ${founders.techSkills} LIKE ${pattern} OR
+          ${founders.industries} LIKE ${pattern} OR
+          ${founders.companiesWorked} LIKE ${pattern} OR
+          ${founders.introduction} LIKE ${pattern} OR
+          ${founders.education} LIKE ${pattern} OR
+          ${founders.academicField} LIKE ${pattern} OR
+          ${founders.nationality} LIKE ${pattern}
+        )`,
+        sql`${founders.introduction} IS NOT NULL`
+      )
     );
 
   return foundersData.map((f) => ({
