@@ -4,7 +4,7 @@
 
 import { db } from '../index.js';
 import { sessionEvents } from '../schemas/index.js';
-import { like, eq, and, or, gte, lte, sql } from 'drizzle-orm';
+import { like, and, or, gte, lte, sql } from 'drizzle-orm';
 
 /**
  * Get all session events
@@ -34,21 +34,25 @@ export async function searchSessionsBySpeaker(searchTerm: string) {
 }
 
 /**
- * Get sessions by type
+ * Get sessions by type (partial match, case-insensitive)
+ * Fixed: Uses LIKE for flexible matching instead of exact match
  */
 export async function getSessionsByType(sessionType: string) {
+  const searchPattern = `%${sessionType}%`;
   return await db.select()
     .from(sessionEvents)
-    .where(eq(sessionEvents.typeOfSession, sessionType));
+    .where(like(sessionEvents.typeOfSession, searchPattern));
 }
 
 /**
- * Get sessions by program week
+ * Get sessions by program week (partial match, case-insensitive)
+ * Fixed: Uses LIKE for flexible matching (finds "Week 1", "1", "week 1")
  */
 export async function getSessionsByWeek(week: string) {
+  const searchPattern = `%${week}%`;
   return await db.select()
     .from(sessionEvents)
-    .where(eq(sessionEvents.programWeek, week));
+    .where(like(sessionEvents.programWeek, searchPattern));
 }
 
 /**
@@ -111,7 +115,8 @@ export async function getTotalSessionsCount() {
 }
 
 /**
- * Search sessions across multiple fields (name, speaker, notes)
+ * Search sessions across multiple fields (name, speaker, type, week)
+ * Improved: Now also searches programWeek field for comprehensive results
  */
 export async function searchSessionsGlobal(searchTerm: string) {
   const searchPattern = `%${searchTerm}%`;
@@ -123,6 +128,7 @@ export async function searchSessionsGlobal(searchTerm: string) {
         like(sessionEvents.name, searchPattern),
         like(sessionEvents.speaker, searchPattern),
         like(sessionEvents.typeOfSession, searchPattern),
+        like(sessionEvents.programWeek, searchPattern),
       )
     );
 }

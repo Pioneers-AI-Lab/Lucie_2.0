@@ -4,7 +4,7 @@
 
 import { db } from '../index.js';
 import { startups } from '../schemas/index.js';
-import { like, eq, or, sql } from 'drizzle-orm';
+import { like, or, sql } from 'drizzle-orm';
 
 /**
  * Get all startups
