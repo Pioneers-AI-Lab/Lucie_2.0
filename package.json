@@ -14,12 +14,7 @@
     "dbp": "npx drizzle-kit push",
     "dbs": "npx drizzle-kit studio",
     "db:seed": "tsx src/db/seed.ts",
-    "db:seed:faq": "tsx src/db/helpers/seed-faq.ts all",
-    "db:seed:faq:general": "tsx src/db/helpers/seed-faq.ts general",
-    "db:seed:faq:sessions": "tsx src/db/helpers/seed-faq.ts sessions",
-    "db:seed:faq:startups": "tsx src/db/helpers/seed-faq.ts startups",
-    "db:seed:faq:founders": "tsx src/db/helpers/seed-faq.ts founders",
-    "db:seed:faq:sessions-events": "tsx src/db/helpers/seed-faq.ts sessions-events",
+    "db:seed:faq": "tsx src/db/seed-faq-only.ts",
     "db:setup": "pnpm dbp && pnpm db:seed",
     "db:sync": "tsx src/db/sync-from-airtable.ts"
   },
