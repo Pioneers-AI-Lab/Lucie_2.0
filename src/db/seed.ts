@@ -57,6 +57,21 @@ const STARTUPS_FIELD_MAP: Record<string, string> = {
 };
 
 /**
+ * FAQ field mapping - FAQ data comes from a structured JSON file
+ * with sections containing knowledge_base objects. Fields are mapped directly
+ * from the JSON structure to the database schema.
+ */
+const FAQ_FIELD_MAP = {
+  question: 'question',       // Question text from FAQ
+  answer: 'answer',           // Answer text from FAQ
+  category: 'category',       // Derived from section:category format
+  program: 'program',         // Program name (e.g., "Summer 2025")
+  location: 'location',       // Program location (e.g., "Amsterdam")
+  intendedUse: 'intendedUse', // Metadata: intended use description
+  answerStyle: 'answerStyle', // Metadata: answer style guidance
+} as const;
+
+/**
  * Helper function to safely parse integer values
  */
 function safeParseInt(value: any): number | null {
@@ -192,7 +207,7 @@ function readJsonFile(filePath: string): any {
 async function seedFounders() {
   log('Seeding founders...');
 
-  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/pioneers_profile_book_table_records_readable.json');
+  const jsonData = readJsonFile('data/pioneers_profile_book_table_records_readable.json');
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
@@ -229,7 +244,7 @@ async function seedFounders() {
 async function seedSessionEvents() {
   log('Seeding session events...');
 
-  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/sessions_events_2025_readable.json');
+  const jsonData = readJsonFile('data/session_events_records_readable.json');
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
@@ -266,7 +281,7 @@ async function seedSessionEvents() {
 async function seedStartups() {
   log('Seeding startups...');
 
-  const jsonData = readJsonFile('data/2025-Cohort_Data/JSON/founders/startups_2025_readable.json');
+  const jsonData = readJsonFile('data/startups_table_records_readable.json');
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
