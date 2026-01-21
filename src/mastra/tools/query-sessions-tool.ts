@@ -26,14 +26,14 @@ import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import {
   getAllSessions,
-  searchSessionsByName,
-  searchSessionsBySpeaker,
+  getNextSession,
+  getPastSessions,
   getSessionsByType,
   getSessionsByWeek,
-  getUpcomingSessions,
-  getPastSessions,
-  getNextSession,
   getTotalSessionsCount,
+  getUpcomingSessions,
+  searchSessionsByName,
+  searchSessionsBySpeaker,
   searchSessionsGlobal,
 } from '../../db/helpers/query-sessions.js';
 import type { SessionEvent } from '../../db/schemas/session-events.js';

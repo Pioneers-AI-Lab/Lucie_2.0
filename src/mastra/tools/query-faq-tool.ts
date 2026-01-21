@@ -1,98 +1,27 @@
 /**
- * Query FAQ Tool - JSON Knowledge Base
+ * Query FAQ Tool - Turso Database
  *
- * Queries FAQ data from the local JSON knowledge base (`data/faq.json`).
- * Fast in-memory queries with no rate limits or database dependency.
+ * Queries FAQ data from the Turso database.
+ * Fast database queries with no rate limits, seeded from JSON files.
  */
 
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-
-// Path to combined FAQ JSON (sections: general, founders, sessions, startups)
-// Use process.cwd() to resolve from project root, works in both dev and production
-const FAQ_JSON_PATH = path.join(process.cwd(), 'data', 'faq.json');
-
-type FaqJsonSection = {
-  id: string;
-  title: string;
-  knowledge_base: Record<
-    string,
-    Array<{
-      question: string;
-      answer: string;
-    }>
-  >;
-  metadata?: {
-    intended_use?: string;
-    answer_style?: string;
-    last_updated?: string;
-    source?: string;
-  };
-};
-
-type FaqJson = {
-  program?: string;
-  location?: string;
-  sections: FaqJsonSection[];
-};
-
-type FlattenedFaq = {
-  id: string;
-  question: string | null;
-  answer: string | null;
-  category: string | null;
-  program: string | null;
-  location: string | null;
-  intendedUse: string | null;
-  answerStyle: string | null;
-};
-
-let cachedFaqs: FlattenedFaq[] | null = null;
-
-async function loadFaqs(): Promise<FlattenedFaq[]> {
-  if (cachedFaqs) return cachedFaqs;
-
-  const raw = await fs.readFile(FAQ_JSON_PATH, 'utf-8');
-  const data = JSON.parse(raw) as FaqJson;
-
-  const program = data.program ?? null;
-  const location = data.location ?? null;
-
-  const faqs: FlattenedFaq[] = [];
-
-  for (const section of data.sections) {
-    const intendedUse = section.metadata?.intended_use ?? null;
-    const answerStyle = section.metadata?.answer_style ?? null;
-
-    for (const [category, items] of Object.entries(section.knowledge_base ?? {})) {
-      items.forEach((item, index) => {
-        faqs.push({
-          id: `${section.id}:${category}:${index}`,
-          question: item.question ?? null,
-          answer: item.answer ?? null,
-          category,
-          program,
-          location,
-          intendedUse,
-          answerStyle,
-        });
-      });
-    }
-  }
-
-  cachedFaqs = faqs;
-  return faqs;
-}
+import {
+  getAllFAQs,
+  searchFAQs,
+  getFAQsByCategory,
+  getFAQCount,
+  type FAQ as FaqType,
+} from '../../db/helpers/query-faq.js';
 
 /**
- * Query FAQs from the local JSON knowledge base.
+ * Query FAQs from the Turso database.
  * Supports multiple search strategies for flexibility.
  */
 export const queryFAQTool = createTool({
   id: 'query-faq-turso',
-  description: `Query frequently asked questions about the Pioneers accelerator program from the local JSON knowledge base (data/faq.json).
+  description: `Query frequently asked questions about the Pioneers accelerator program from the Turso database.
   Contains 161+ comprehensive FAQs across 30+ categories in 4 domains:
 
   📋 GENERAL PROGRAM (52 FAQs, 7 categories):
@@ -203,13 +132,15 @@ export const queryFAQTool = createTool({
       .array(
         z.object({
           id: z.string(),
-          question: z.string().nullable(),
-          answer: z.string().nullable(),
-          category: z.string().nullable(),
+          question: z.string(),
+          answer: z.string(),
+          category: z.string(),
           program: z.string().nullable(),
           location: z.string().nullable(),
           intendedUse: z.string().nullable(),
           answerStyle: z.string().nullable(),
+          createdAt: z.date(),
+          updatedAt: z.date(),
         }),
       )
       .optional(),
@@ -224,22 +155,20 @@ export const queryFAQTool = createTool({
     console.log('❓ [queryFAQTool] Called with:', { searchType, category, searchTerm });
 
     try {
-      const allFaqs = await loadFaqs();
-
       // Handle count-only request
       if (searchType === 'count') {
-        const count = allFaqs.length;
+        const count = await getFAQCount();
         return {
           count,
-          message: `Total FAQ entries in knowledge base: ${count}`,
+          message: `Total FAQ entries in database: ${count}`,
         };
       }
 
-      let faqs: FlattenedFaq[] = [];
+      let faqs: FaqType[] = [];
 
       switch (searchType) {
         case 'all':
-          faqs = allFaqs;
+          faqs = await getAllFAQs();
           break;
 
         case 'by-category':
@@ -250,7 +179,7 @@ export const queryFAQTool = createTool({
               message: 'Error: category is required for by-category search',
             };
           }
-          faqs = allFaqs.filter((f) => f.category === category);
+          faqs = await getFAQsByCategory(category);
           break;
 
         case 'search':
@@ -261,14 +190,7 @@ export const queryFAQTool = createTool({
               message: 'Error: searchTerm is required for search',
             };
           }
-          {
-            const term = searchTerm.toLowerCase();
-            faqs = allFaqs.filter((f) => {
-              const q = f.question?.toLowerCase() ?? '';
-              const a = f.answer?.toLowerCase() ?? '';
-              return q.includes(term) || a.includes(term);
-            });
-          }
+          faqs = await searchFAQs(searchTerm);
           break;
 
         default:
@@ -290,11 +212,11 @@ export const queryFAQTool = createTool({
             : `Found ${faqs.length} FAQ(s)${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}`,
       };
     } catch (error: any) {
-      console.error('❌ [queryFAQTool] Knowledge base error:', error);
+      console.error('❌ [queryFAQTool] Database error:', error);
       return {
         faqs: [],
         count: 0,
-        message: `Knowledge base error: ${error.message}`,
+        message: `Database error: ${error.message}`,
       };
     }
   },

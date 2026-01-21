@@ -67,10 +67,11 @@ pnpm db:seed:faq:general        # Seed specific category
 
 **When working with database:**
 - Schemas: `src/db/schemas/*.ts` (founders, session-events, startups, faq)
-- Query helpers: `src/db/helpers/query-*.ts`
+- Query helpers: `src/db/helpers/query-*.ts` (query-all-founders, query-sessions, query-startups, query-faq)
 - Field ID mappings: `lib/airtable-field-ids-ref.ts`
 - Sync script: `src/db/sync-from-airtable.ts`
 - Seed script: `src/db/seed.ts`
+- FAQ seed script: `src/db/seed-faq-only.ts`
 
 **When debugging:**
 - Print helpers: `lib/print-helpers.ts` - use `log()`, `message()`, `error()`
