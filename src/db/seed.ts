@@ -3,15 +3,16 @@
  * Seed script to populate Turso database from JSON files
  *
  * This script reads the readable JSON exports from Airtable and populates
- * the Turso database with founders, session events, and startups data.
+ * the Turso database with founders, session events, startups, and FAQ data.
  *
  * Usage: tsx src/db/seed.ts
  */
 
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { randomUUID } from 'crypto';
 import { db } from './index.js';
-import { founders, sessionEvents, startups } from './schemas/index.js';
+import { founders, sessionEvents, startups, faq } from './schemas/index.js';
 import { message, error as printError, log as printLog } from '../../lib/print-helpers.js';
 
 const log = (msg: string) => printLog(msg, '');
@@ -297,6 +298,89 @@ async function seedStartups() {
 }
 
 /**
+ * Seed FAQ table from unified faq.json
+ */
+async function seedFAQ() {
+  log('Seeding FAQ...');
+
+  const jsonData = readJsonFile('data/faq.json');
+
+  if (!jsonData.sections || !Array.isArray(jsonData.sections)) {
+    error('Invalid FAQ structure: missing sections array');
+    return;
+  }
+
+  const { program, location, sections } = jsonData;
+  const allFAQEntries: any[] = [];
+
+  // Process each section
+  for (const section of sections) {
+    const { id: sectionId, knowledge_base, metadata } = section;
+
+    if (!knowledge_base) {
+      log(`Warning: Section ${sectionId} has no knowledge_base`);
+      continue;
+    }
+
+    // Flatten all Q&As from all categories in this section
+    for (const [category, items] of Object.entries(knowledge_base)) {
+      if (!Array.isArray(items)) {
+        log(`Warning: Category ${category} in section ${sectionId} is not an array`);
+        continue;
+      }
+
+      for (const item of items as any[]) {
+        if (!item.question || !item.answer) {
+          log(`Warning: Invalid FAQ item in ${category} (section: ${sectionId})`);
+          continue;
+        }
+
+        allFAQEntries.push({
+          id: randomUUID(),
+          question: item.question,
+          answer: item.answer,
+          category: `${sectionId}:${category}`, // Prefix category with section ID for uniqueness
+          program,
+          location,
+          intendedUse: metadata?.intended_use || metadata?.intendedUse,
+          answerStyle: metadata?.answer_style || metadata?.answerStyle,
+        });
+      }
+    }
+  }
+
+  if (allFAQEntries.length === 0) {
+    log('No valid FAQ entries to insert');
+    return;
+  }
+
+  log(`Found ${allFAQEntries.length} total FAQ entries from ${sections.length} sections`);
+
+  // Delete existing records
+  await db.delete(faq);
+
+  // Insert in batches of 100
+  const batchSize = 100;
+  for (let i = 0; i < allFAQEntries.length; i += batchSize) {
+    const batch = allFAQEntries.slice(i, i + batchSize);
+    await db.insert(faq).values(batch);
+    log(`Inserted ${Math.min(i + batchSize, allFAQEntries.length)}/${allFAQEntries.length} FAQ entries`);
+  }
+
+  // Show breakdown by section
+  const sectionBreakdown = sections.map((section: any) => {
+    const sectionCount = allFAQEntries.filter(entry =>
+      entry.category.startsWith(`${section.id}:`)
+    ).length;
+    return `  - ${section.title}: ${sectionCount} FAQs`;
+  });
+
+  message(`✓ Successfully seeded ${allFAQEntries.length} FAQ entries`);
+  log('FAQ breakdown by section:');
+  sectionBreakdown.forEach((line: string) => log(line));
+}
+
+/**
  * Main seed function
  */
 async function main() {
@@ -306,6 +390,7 @@ async function main() {
     await seedFounders();
     await seedSessionEvents();
     await seedStartups();
+    await seedFAQ();
 
     message('✓ Database seeding completed successfully!');
     process.exit(0);
