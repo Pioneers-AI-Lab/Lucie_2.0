@@ -12,10 +12,12 @@ export const mastra = new Mastra({
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
     url: ':memory:',
   }),
+
   logger: new PinoLogger({
     name: 'Mastra',
     level: 'info',
   }),
+
   server: {
     apiRoutes: slackRoutes,
   },
