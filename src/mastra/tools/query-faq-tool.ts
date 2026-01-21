@@ -8,9 +8,11 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import fs from 'node:fs/promises';
+import path from 'node:path';
 
 // Path to combined FAQ JSON (sections: general, founders, sessions, startups)
-const FAQ_JSON_PATH = new URL('../../../data/faq.json', import.meta.url);
+// Use process.cwd() to resolve from project root, works in both dev and production
+const FAQ_JSON_PATH = path.join(process.cwd(), 'data', 'faq.json');
 
 type FaqJsonSection = {
   id: string;

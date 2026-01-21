@@ -11,11 +11,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm dev:cli        # Test agent locally (preferred - no Slack rate limits)
 pnpm dev            # Start Mastra dev server for Slack integration
 pnpm db:sync        # Sync new data from Airtable to Turso
+pnpm db:seed:faq    # Seed FAQ data (general, founders, sessions, startups)
 pnpm dbs            # Open Drizzle Studio (GUI at localhost:4983)
 ```
 
 **Key architectural facts:**
 - Agent uses **3 specialized Turso query tools** (NOT Airtable directly): `queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`
+- **4th table: FAQ system** - Seeded from JSON files, contains general/founders/sessions/startups FAQs
 - All imports MUST use `.js` extensions (ESM requirement): `from './file.js'` not `from './file.ts'`
 - **Production status: 70% ready** - see TODO.md for known issues
 - No testing infrastructure yet (TODO.md #4)
@@ -174,6 +176,11 @@ Required variables (see `.env`):
 - `src/db/schemas/` - Drizzle ORM schemas (founders, session_events, startups, faq)
 - `src/db/helpers/` - Query helper functions and seeding scripts
 - `lib/airtable-field-ids-ref.ts` - Field ID mappings (Airtable ↔ Turso sync)
+
+**Utility Layer:**
+- `bff/ai-lab/` - AI Lab infrastructure (models, services) - **NOT YET IMPLEMENTED** (TODO.md #16)
+- `lib/print-helpers.ts` - Logging utilities (use `log()`, `message()`, `error()`)
+- `lib/airtable.ts` - Airtable client utilities
 
 ### Agent Configuration
 
@@ -386,7 +393,11 @@ export async function searchByName(name: string) {
 - Fast queries (<100ms typical)
 - No rate limits (database connection, not API)
 - Type-safe with Drizzle ORM
-- Four tables: founders, session_events, startups, faq
+- **Four tables:**
+  - `founders` - Founder profiles (synced from Airtable)
+  - `session_events` - Sessions/events data (synced from Airtable)
+  - `startups` - Startup profiles (synced from Airtable)
+  - `faq` - FAQ entries (seeded from JSON files in `data/2025-Cohort_Data/JSON/faq/`)
 
 **Airtable (Source of Truth):**
 - Used only for periodic data sync via `pnpm db:sync`
@@ -492,6 +503,16 @@ pnpm dbg && pnpm dbm  # Generate and apply migrations
 8. **Update field ID mappings** when touching Airtable sync
 9. **Production readiness: 70%** - see TODO.md for blockers
 10. **Use `log()` from print-helpers** for debugging (not console.log)
+
+## Intentionally Disabled Features
+
+The following features are documented but **intentionally disabled** (see `docs/DISABLED-FEATURES-SUMMARY.md`):
+
+1. **queryFaqTool** - FAQ queries disabled, FAQs embedded in tool responses instead
+2. **Slack streaming animations** - Causes rate limit issues, gracefully ignored
+3. **Batch filtering** - `by-batch` search type in queryFoundersTool (broken, commented out)
+
+Check the `docs/` folder for detailed explanations of each disabled feature.
 
 ---
 
