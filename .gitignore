@@ -33,6 +33,7 @@
 # mastra
 .mastra
 /migrations
+mastra.db
 
 # typescript
 *.tsbuildinfo
