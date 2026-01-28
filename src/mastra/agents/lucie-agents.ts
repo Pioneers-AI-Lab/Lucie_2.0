@@ -18,7 +18,7 @@ export const lucie = new Agent({
   instructions: lucieInstructions,
 
   // model: 'anthropic/claude-3-haiku-20240307',
-  model: 'anthropic/claude-3-haiku-latest',
+  model: 'anthropic/claude-haiku-4-5-20251001',
   tools: {
     queryFoundersTool,
     querySessionsTool,
