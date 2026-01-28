@@ -5,22 +5,22 @@
  * Fast database queries with no rate limits, seeded from JSON files.
  */
 
-import { createTool } from '@mastra/core/tools';
-import { z } from 'zod';
+import { createTool } from '@mastra/core/tools'; // Mastra tool creation helper
+import { z } from 'zod'; // Schema validation library
 import {
   getAllFAQs,
   searchFAQs,
   getFAQsByCategory,
   getFAQCount,
   type FAQ as FaqType,
-} from '../../db/helpers/query-faq.js';
+} from '../../db/helpers/query-faq.js'; // Database query helper functions
 
 /**
  * Query FAQs from the Turso database.
  * Supports multiple search strategies for flexibility.
  */
 export const queryFAQTool = createTool({
-  id: 'query-faq-turso',
+  id: 'query-faq-turso', // Unique tool identifier for Mastra
   description: `Query frequently asked questions about the Pioneers accelerator program from the Turso database.
   Contains 161+ comprehensive FAQs across 30+ categories in 4 domains:
 
@@ -103,25 +103,25 @@ export const queryFAQTool = createTool({
   inputSchema: z.object({
     searchType: z
       .union([
-        z.literal('all'),
-        z.literal('by-category'),
-        z.literal('search'),
-        z.literal('count'),
+        z.literal('all'), // Get all FAQs
+        z.literal('by-category'), // Filter by category
+        z.literal('search'), // Keyword search
+        z.literal('count'), // Just return count
       ])
       .describe('Type of search to perform'),
     category: z
       .string()
-      .optional()
+      .optional() // Required only for 'by-category' search type
       .describe(
         'Category name (required for "by-category" search). Valid categories (see data/faq.json): ' +
-        'GENERAL: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous | ' +
-        'SESSIONS: session_types_overview, office_hours_and_mentorship, attendance_and_participation, program_milestones, schedule_and_logistics, weekly_updates_and_progress | ' +
-        'STARTUPS: team_formation, progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
-        'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach',
+          'GENERAL: program_overview, eligibility_and_profile, team_formation, application_process, funding_and_equity, station_f_and_resources, miscellaneous | ' +
+          'SESSIONS: session_types_overview, office_hours_and_mentorship, attendance_and_participation, program_milestones, schedule_and_logistics, weekly_updates_and_progress | ' +
+          'STARTUPS: team_formation, progress_tracking, traction_and_validation, product_development, pitching_and_feedback, market_and_industry, investment_readiness, go_to_market_strategy, common_challenges | ' +
+          'FOUNDERS: profile_book_overview, finding_cofounders, understanding_profiles, skills_and_expertise, batch_and_timing, project_alignment, background_and_education, communication_and_outreach',
       ),
     searchTerm: z
       .string()
-      .optional()
+      .optional() // Required only for 'search' search type
       .describe(
         'Search term (required for "search" type). Searches in both questions and answers.',
       ),
@@ -131,44 +131,48 @@ export const queryFAQTool = createTool({
     faqs: z
       .array(
         z.object({
-          id: z.string(),
-          question: z.string(),
-          answer: z.string(),
-          category: z.string(),
-          program: z.string().nullable(),
-          location: z.string().nullable(),
-          intendedUse: z.string().nullable(),
-          answerStyle: z.string().nullable(),
-          createdAt: z.date(),
-          updatedAt: z.date(),
+          id: z.string(), // FAQ unique identifier
+          question: z.string(), // The FAQ question text
+          answer: z.string(), // The FAQ answer text
+          category: z.string(), // Category classification
+          program: z.string().nullable(), // Program name if applicable
+          location: z.string().nullable(), // Location if applicable
+          intendedUse: z.string().nullable(), // Use case metadata
+          answerStyle: z.string().nullable(), // Answer formatting style
+          createdAt: z.date(), // Creation timestamp
+          updatedAt: z.date(), // Last update timestamp
         }),
       )
-      .optional(),
-    count: z.number(),
-    message: z.string().optional(),
+      .optional(), // May be empty for count-only queries
+    count: z.number(), // Total number of FAQs found
+    message: z.string().optional(), // Human-readable result message
   }),
 
   execute: async (input) => {
-    const { searchType, category, searchTerm } = input;
+    const { searchType, category, searchTerm } = input; // Destructure input parameters
 
     // Debug logging
-    console.log('❓ [queryFAQTool] Called with:', { searchType, category, searchTerm });
+    console.log('❓ [queryFAQTool] Called with:', {
+      searchType,
+      category,
+      searchTerm,
+    });
 
     try {
-      // Handle count-only request
+      // Handle count-only request (early return for performance)
       if (searchType === 'count') {
-        const count = await getFAQCount();
+        const count = await getFAQCount(); // Query database for total count
         return {
           count,
           message: `Total FAQ entries in database: ${count}`,
         };
       }
 
-      let faqs: FaqType[] = [];
+      let faqs: FaqType[] = []; // Initialize empty array for results
 
       switch (searchType) {
         case 'all':
-          faqs = await getAllFAQs();
+          faqs = await getAllFAQs(); // Fetch all FAQs from database
           break;
 
         case 'by-category':
@@ -179,7 +183,7 @@ export const queryFAQTool = createTool({
               message: 'Error: category is required for by-category search',
             };
           }
-          faqs = await getFAQsByCategory(category);
+          faqs = await getFAQsByCategory(category); // Filter FAQs by category name
           break;
 
         case 'search':
@@ -190,7 +194,7 @@ export const queryFAQTool = createTool({
               message: 'Error: searchTerm is required for search',
             };
           }
-          faqs = await searchFAQs(searchTerm);
+          faqs = await searchFAQs(searchTerm); // Search FAQs by keyword in questions/answers
           break;
 
         default:
@@ -205,18 +209,18 @@ export const queryFAQTool = createTool({
 
       return {
         faqs,
-        count: faqs.length,
+        count: faqs.length, // Return count of results
         message:
           faqs.length === 0
-            ? `No FAQs found${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}`
-            : `Found ${faqs.length} FAQ(s)${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}`,
+            ? `No FAQs found${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}` // Empty result message
+            : `Found ${faqs.length} FAQ(s)${searchTerm ? ` matching "${searchTerm}"` : ''}${category ? ` in category "${category}"` : ''}`, // Success message with context
       };
     } catch (error: any) {
       console.error('❌ [queryFAQTool] Database error:', error);
       return {
         faqs: [],
         count: 0,
-        message: `Database error: ${error.message}`,
+        message: `Database error: ${error.message}`, // Return error message to agent
       };
     }
   },
