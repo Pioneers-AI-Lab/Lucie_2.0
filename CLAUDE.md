@@ -17,7 +17,7 @@ pnpm dbs            # Open Drizzle Studio (GUI at localhost:4983)
 
 **Key architectural facts:**
 - Agent uses **3 specialized Turso query tools** (NOT Airtable directly): `queryFoundersTool`, `querySessionsTool`, `queryStartupsTool`
-- **4th table: FAQ system** - Seeded from JSON files, contains general/founders/sessions/startups FAQs
+- **4th table: FAQ system** - Seeded from JSON files (197 FAQs total), but queryFaqTool is currently disabled (see Intentionally Disabled Features section)
 - All imports MUST use `.js` extensions (ESM requirement): `from './file.js'` not `from './file.ts'`
 - **Production status: 70% ready** - see TODO.md for known issues
 - No testing infrastructure yet (TODO.md #4)
@@ -509,9 +509,9 @@ pnpm dbg && pnpm dbm  # Generate and apply migrations
 
 The following features are documented but **intentionally disabled** (see `docs/DISABLED-FEATURES-SUMMARY.md`):
 
-1. **queryFaqTool** - FAQ queries disabled, FAQs embedded in tool responses instead
-2. **Slack streaming animations** - Causes rate limit issues, gracefully ignored
-3. **Batch filtering** - `by-batch` search type in queryFoundersTool (broken, commented out)
+1. **queryFaqTool** - FAQ queries disabled due to returning too many results for short queries (e.g., "IC" returned 149 FAQs), causing poor UX. The 197 curated FAQs (general, founders, sessions, startups) exist in the database but are no longer accessible to the agent. Can be re-enabled by uncommenting in `lucie-agents.ts`.
+2. **Slack streaming animations** - Animated spinners and real-time progress indicators disabled per user request. Reduces Slack API calls by ~95% (from 10-50 calls to 2 calls per response). Original implementation preserved as commented code in `src/mastra/slack/streaming.ts`.
+3. **Batch filtering** - `by-batch` search type in queryFoundersTool (broken, commented out until batch field is added to schema)
 
 Check the `docs/` folder for detailed explanations of each disabled feature.
 
