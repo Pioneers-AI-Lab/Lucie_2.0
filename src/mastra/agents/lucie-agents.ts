@@ -17,7 +17,7 @@ export const lucie = new Agent({
   }),
   instructions: lucieInstructions,
 
-  model: process.env.MODEL || 'anthropic/claude-3-haiku-20240307',
+  model: 'anthropic/claude-3-haiku-20240307',
   tools: {
     queryFoundersTool,
     querySessionsTool,
