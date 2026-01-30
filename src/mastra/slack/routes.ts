@@ -121,6 +121,9 @@ function createSlackEventsRoute(config: SlackAppConfig) {
 
 						(async () => {
 							try {
+								// Define resourceId for thread-based context (allows multi-user collaboration)
+								const resourceId = `slack-${teamId}-${channelId}-${threadTs}`;
+
 								await streamToSlack({
 									mastra,
 									slackClient,
@@ -128,8 +131,8 @@ function createSlackEventsRoute(config: SlackAppConfig) {
 									threadTs,
 									agentName: config.agentName,
 									message: messageText,
-									resourceId: `slack-${teamId}-${userId}`,
-									threadId: `slack-${channelId}-${threadTs}`,
+									resourceId,
+									threadId: resourceId,
 								});
 							} catch (error) {
 								console.error(
