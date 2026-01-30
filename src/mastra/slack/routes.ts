@@ -99,7 +99,8 @@ function createSlackEventsRoute(config: SlackAppConfig) {
 						event.type === 'message'
 					) {
 						let messageText = event.text || '';
-						const userId = event.user;
+						// const userId = event.user;
+						const userId = event.thread_ts;
 						const channelId = event.channel;
 						const threadTs = event.thread_ts || event.ts;
 						const teamId = payload.team_id;
