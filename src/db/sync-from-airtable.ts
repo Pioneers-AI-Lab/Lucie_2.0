@@ -65,77 +65,65 @@ async function syncFounders() {
     let inserted = 0;
     let updated = 0;
 
-    // Process each record
+    // Helper: convert arrays/selects to comma-separated string
+    const arrayToString = (value: any): string | undefined => {
+      if (value === null || value === undefined) return undefined;
+      if (Array.isArray(value)) return value.join(', ');
+      return String(value);
+    };
+
     for (const record of records) {
       const fields = record.fields;
 
-      // Helper function to safely parse integer values
-      const safeParseInt = (value: any): number | null => {
-        if (value === null || value === undefined || value === '') return null;
-        const parsed = typeof value === 'number' ? value : parseInt(value, 10);
-        return isNaN(parsed) ? null : parsed;
-      };
-
-      // Helper function to convert arrays to comma-separated strings
-      const arrayToString = (value: any): string | undefined => {
-        if (value === null || value === undefined) return undefined;
-        if (Array.isArray(value)) return value.join(', ');
-        return String(value);
-      };
-
-      // Transform to founders schema using Airtable human-readable field names
-      // CRITICAL: The Airtable JSON export has SEVERELY MISALIGNED column headers!
-      // These mappings match seed.ts and must match the actual misaligned data!
-      // Field order matches pioneers-profile-book-table-ref.json
+      // Airtable field names from pnpm run db:pull-columns (Onboarding Form 2026)
       const data = {
         id: record.id,
-        // Basic Information (table-ref index 0-4)
-        name: arrayToString(fields['Name']), // Misaligned: contains name (index 0)
-        email: arrayToString(fields['Email']), // Misaligned: contains email (index 3)
-        status: arrayToString(fields['Status']), // Misaligned: contains status (index 1)
-        whatsapp: arrayToString(fields['Whatsapp']), // Misaligned: contains phone (index 2)
-        yourPhoto: fields['Your photo']
-          ? JSON.stringify(fields['Your photo'])
-          : undefined, // Photo is an array of objects (index 4)
-        // Project Information (table-ref index 5-9)
+        name: arrayToString(fields['Full Name']),
+        email: arrayToString(fields['Email']),
+        whatsapp: arrayToString(fields['Whatsapp']),
+        yourPhoto:
+          fields['Your photo'] != null
+            ? JSON.stringify(fields['Your photo'])
+            : undefined,
+        gender: arrayToString(fields['Gender']),
+        linkedin: arrayToString(fields['LinkedIn']),
+        nationality: arrayToString(fields['Nationality']),
+        introduction: arrayToString(fields['Introduce yourself']),
+        techSkills: arrayToString(fields['Hard Skills']),
+        industries: arrayToString(fields['Industries']),
+        companiesWorked: arrayToString(fields['Notable companies worked at']),
+        education: arrayToString(fields['Main education']),
+        degree: arrayToString(fields['Degree']),
+        academicField: arrayToString(fields['Field of study']),
+        founder: arrayToString(fields['Founder']),
+        batch: 'W26',
+        yearsOfXp: arrayToString(fields['Years of XP']),
+        status: arrayToString(fields['Status']),
+        leftProgram: arrayToString(fields['left program']),
+        trackRecord: arrayToString(fields['Track record']),
+        rolesICouldTake: arrayToString(fields['Roles I could take']),
+        interestedInWorkingOn: arrayToString(
+          fields['What I am interested in working on:'],
+        ),
+        confirmEnrolment: arrayToString(fields['Status']),
         existingProjectIdea: arrayToString(
           fields['Do you have an existing project/idea ?'],
-        ), // Misaligned (index 5)
-        projectExplanation: arrayToString(fields[' explain it in a few words']), // Misaligned (partial field name) (index 6)
+        ),
+        projectExplanation: arrayToString(
+          fields['If yes, explain it in a few words'],
+        ),
         existingCofounderName: arrayToString(
-          fields['Are you joining with an existing cofounder? If yes'],
-        ), // Misaligned (partial field name) (index 7)
-        openToJoinAnotherProject: arrayToString(
-          fields['I confirm my enrolment to the Pioneers program Batch'],
-        ), // (index 8)
+          fields['If yes, write their names below.'],
+        ),
         joiningWithCofounder: arrayToString(
-          fields[' please insert his/her name below'],
-        ), // Misaligned (partial field name) (index 9)
-        // Professional Profile (table-ref index 10-16)
-        linkedin: arrayToString(fields['LinkedIn']), // Misaligned: contains LinkedIn (index 10)
-        techSkills: arrayToString(fields['Roles I could take']), // Misaligned (index 11)
-        industries: arrayToString(fields['Industries']), // Misaligned (partial field name) (index 12)
-        rolesICouldTake: arrayToString(fields['Name']), // Misaligned (index 13)
-        trackRecordProud: arrayToString(
-          fields['Track record / something I am proud of '],
-        ), // Misaligned (index 14)
-        interestedInWorkingOn: arrayToString(fields['Tech Skills']), // Misaligned (index 15)
-        introduction: arrayToString(fields['Introduction:']), // (index 16)
-        // Professional Background (table-ref index 17)
-        companiesWorked: arrayToString(fields['Companies Worked']), // Misaligned (index 17)
-        // Education (table-ref index 18-23)
-        education: arrayToString(fields['Education']), // Misaligned (index 18)
-        nationality: arrayToString(fields['Nationality']), // Misaligned: contains nationality (index 19)
-        gender: arrayToString(fields['Gender']), // Misaligned (index 20)
-        yearsOfXp: arrayToString(fields['Years of XP']), // Misaligned (index 21)
-        degree: arrayToString(fields['Degree']), // Misaligned (index 22)
-        academicField: arrayToString(fields['Academic Field']), // (index 23)
-        // Relationships (table-ref index 24)
-        founder: arrayToString(fields['Founder']), // (index 24)
-        // Status (table-ref index 25)
-        leftProgram: arrayToString(fields['Gender']), // Misaligned (index 25)
-        // Batch/Cohort (table-ref index 26)
-        batch: arrayToString(fields['Batch']), // (index 26)
+          fields['Do you have existing co-founders in the batch ?'],
+        ),
+        openToJoinAnotherProject: arrayToString(
+          fields['Are you open to join another project during the program? '],
+        ),
+        anythingToLetUsKnow: arrayToString(
+          fields['Anything else worth mentioning'],
+        ),
       };
 
       // Check if record exists
@@ -188,28 +176,25 @@ async function syncSessionEvents() {
     let inserted = 0;
     let updated = 0;
 
+    const arrayToString = (value: any): string | undefined => {
+      if (value === null || value === undefined) return undefined;
+      if (Array.isArray(value)) return value.join(', ');
+      return String(value);
+    };
+
     for (const record of records) {
       const fields = record.fields;
 
-      // Helper function to convert arrays to comma-separated strings
-      const arrayToString = (value: any): string | undefined => {
-        if (value === null || value === undefined) return undefined;
-        if (Array.isArray(value)) return value.join(', ');
-        return String(value);
-      };
-
-      // Use human-readable field names (Airtable API returns these, not field IDs)
-      // Fixed: Field names now match schema (notesFeedback, slackInstructions, participants, emails)
+      // Airtable field names from pnpm run db:pull-columns (session_event_feb26)
       const data = {
         id: record.id,
         name: fields['Name'] as string | undefined,
         date: fields['Date'] ? new Date(fields['Date'] as string) : null,
         programWeek: fields['Program Week'] as string | undefined,
-        typeOfSession: fields['Type of session'] as string | undefined,
+        typeOfSession: arrayToString(fields['Type of session']),
         speaker: fields['Speaker'] as string | undefined,
         notesFeedback: fields['Notes / Feedback'] as string | undefined,
         slackInstructions: fields['Slack Instruction & Email Commu'] as string | undefined,
-        participants: arrayToString(fields['Participants']),  // Convert array to string
         emails: fields['Emails'] as string | undefined,
       };
 

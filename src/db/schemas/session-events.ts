@@ -7,6 +7,9 @@ export const sessionEvents = sqliteTable('session_events', {
   programWeek: text('program_week'),
   typeOfSession: text('type_of_session'),
   speaker: text('speaker'),
+  notesFeedback: text('notes_feedback'),
+  slackInstructions: text('slack_instruction_email_commu'),
+  emails: text('emails'),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .$defaultFn(() => new Date()),

@@ -7,22 +7,22 @@ import { queryFAQTool } from '../tools/query-faq-tool';
 import { lucieInstructions } from "./lucie-instructions";
 
 export const lucie = new Agent({
-  id: 'lucie',
-  name: 'lucie',
-  description: 'Lucie is the Pioneers Program Manager',
-  memory: new Memory({
-    options: {
-      lastMessages: 20,
-    },
-  }),
-  instructions: lucieInstructions,
+    id: 'lucie',
+    name: 'lucie',
+    description: 'Lucie is the Pioneers Program Manager',
+    memory: new Memory({
+        options: {
+            lastMessages: 20,
+        },
+    }),
+    instructions: lucieInstructions,
 
-  // model: 'anthropic/claude-3-haiku-20240307',
-  model: 'anthropic/claude-haiku-4-5-20251001',
-  tools: {
-    queryFoundersTool,
-    querySessionsTool,
-    queryStartupsTool,
-    queryFAQTool,
-  },
+    // model: 'anthropic/claude-3-haiku-20240307',
+    model: 'anthropic/claude-haiku-4-5-20251001',
+    tools: {
+        queryFoundersTool,
+        querySessionsTool,
+        queryStartupsTool,
+        queryFAQTool,
+    },
 });

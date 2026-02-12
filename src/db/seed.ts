@@ -8,7 +8,7 @@
  * Usage: tsx src/db/seed.ts
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { randomUUID } from 'crypto';
 import { db } from './index.js';
@@ -187,12 +187,47 @@ function transformStartup(recordId: string, record: any): any {
   return transformed;
 }
 
+/** Candidate paths for seed JSON (first existing wins) */
+const SEED_PATHS = {
+  founders: [
+    'data/pioneers_profile_book_table_records_readable.json',
+    'data/data-helpers-functions/old-data/pioneers_profile_book_table_records_readable.json',
+  ],
+  sessionEvents: [
+    'data/session_events_records_readable.json',
+    'data/data-helpers-functions/old-data/session_events_records_readable.json',
+  ],
+  startups: [
+    'data/startups_table_records_readable.json',
+    'data/data-helpers-functions/old-data/startups_table_records_readable.json',
+  ],
+} as const;
+
 /**
- * Read and parse JSON file
+ * Try to read and parse JSON from the first existing path. Returns null if none exist.
+ */
+function tryReadJsonFile(candidatePaths: readonly string[]): any | null {
+  for (const filePath of candidatePaths) {
+    const fullPath = resolve(process.cwd(), filePath);
+    if (existsSync(fullPath)) {
+      try {
+        const content = readFileSync(fullPath, 'utf-8');
+        return JSON.parse(content);
+      } catch (err: any) {
+        error(`Failed to read ${filePath}: ${err.message}`);
+        throw err;
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Read and parse JSON file (throws if missing)
  */
 function readJsonFile(filePath: string): any {
+  const fullPath = resolve(process.cwd(), filePath);
   try {
-    const fullPath = resolve(process.cwd(), filePath);
     const content = readFileSync(fullPath, 'utf-8');
     return JSON.parse(content);
   } catch (err: any) {
@@ -207,7 +242,11 @@ function readJsonFile(filePath: string): any {
 async function seedFounders() {
   log('Seeding founders...');
 
-  const jsonData = readJsonFile('data/pioneers_profile_book_table_records_readable.json');
+  const jsonData = tryReadJsonFile(SEED_PATHS.founders);
+  if (!jsonData) {
+    log('Founders JSON not found (tried data/ and data/data-helpers-functions/old-data/). Skipping. Use pnpm db:sync to load from Airtable.');
+    return;
+  }
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
@@ -244,7 +283,11 @@ async function seedFounders() {
 async function seedSessionEvents() {
   log('Seeding session events...');
 
-  const jsonData = readJsonFile('data/session_events_records_readable.json');
+  const jsonData = tryReadJsonFile(SEED_PATHS.sessionEvents);
+  if (!jsonData) {
+    log('Session events JSON not found. Skipping. Use pnpm db:sync to load from Airtable.');
+    return;
+  }
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
@@ -281,7 +324,11 @@ async function seedSessionEvents() {
 async function seedStartups() {
   log('Seeding startups...');
 
-  const jsonData = readJsonFile('data/startups_table_records_readable.json');
+  const jsonData = tryReadJsonFile(SEED_PATHS.startups);
+  if (!jsonData) {
+    log('Startups JSON not found. Skipping. Use pnpm db:sync to load from Airtable.');
+    return;
+  }
   const records = Object.entries(jsonData);
 
   if (records.length === 0) {
@@ -318,7 +365,11 @@ async function seedStartups() {
 async function seedFAQ() {
   log('Seeding FAQ...');
 
-  const jsonData = readJsonFile('data/faq.json');
+  const jsonData = tryReadJsonFile(['data/faq.json']);
+  if (!jsonData) {
+    log('data/faq.json not found. Skipping FAQ seed.');
+    return;
+  }
 
   if (!jsonData.sections || !Array.isArray(jsonData.sections)) {
     error('Invalid FAQ structure: missing sections array');

@@ -12,11 +12,14 @@
     "dbg": "npx drizzle-kit generate",
     "dbm": "npx drizzle-kit migrate",
     "dbp": "npx drizzle-kit push",
+    "db:push": "pnpm dbp",
     "dbs": "npx drizzle-kit studio",
     "db:seed": "tsx src/db/seed.ts",
     "db:seed:faq": "tsx src/db/seed-faq-only.ts",
-    "db:setup": "pnpm dbp && pnpm db:seed",
-    "db:sync": "tsx src/db/sync-from-airtable.ts"
+    "db:setup": "pnpm dbm && pnpm db:seed",
+    "db:reset": "tsx src/db/reset-turso.ts",
+    "db:sync": "tsx src/db/sync-from-airtable.ts",
+    "db:pull-columns": "tsx src/db/pull-airtable-columns.ts"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +51,7 @@
     "@types/node": "^25.0.3",
     "drizzle-kit": "1.0.0-beta.10-4a43a22",
     "mastra": "1.0.0-beta.12",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

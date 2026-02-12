@@ -15,19 +15,19 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import {
-  getAllFounders,
-  getFoundersByName,
-  getFoundersBySkills,
-  getFoundersByBatch,
-  getFoundersByIndustry,
-  getFoundersByCompany,
-  getFoundersByNationality,
-  getFoundersByEducation,
-  getFoundersByProject,
-  searchFoundersGlobal,
-  getActiveFounders,
-  getFoundersCount,
-  type Founder,
+    getAllFounders,
+    getFoundersByName,
+    getFoundersBySkills,
+    getFoundersByBatch,
+    getFoundersByIndustry,
+    getFoundersByCompany,
+    getFoundersByNationality,
+    getFoundersByEducation,
+    getFoundersByProject,
+    searchFoundersGlobal,
+    getActiveFounders,
+    getFoundersCount,
+    type Founder,
 } from '../../db/helpers/query-all-founders.js';
 
 /**
@@ -35,8 +35,8 @@ import {
  * Supports multiple search strategies for flexibility
  */
 export const queryFoundersTool = createTool({
-  id: 'query-founders-turso',
-  description: `Query founder data from the Pioneers accelerator program database.
+    id: 'query-founders-turso',
+    description: `Query founder data from the Pioneers accelerator program database.
   Searches Profile Book founders only (detailed professional data with introductions).
 
   💡 TOOL SELECTION:
@@ -51,18 +51,15 @@ export const queryFoundersTool = createTool({
   Parse years_of_xp as numbers before sorting (they are stored as text strings).
   Example: "Who are the 3 most experienced?" → {searchType: "all"} → analyze ALL years_of_xp → sort descending → return top 3
 
-  Available fields from Profile Book (pioneers-profile-book-table-ref.json):
-  - Basic: name, status, whatsapp, email, your_photo
-  - Project: existing_project_idea, project_explanation, existing_cofounder_name, open_to_join_another_project, joining_with_cofounder
-  - Professional: linkedin, tech_skills, industries, roles_i_could_take, track_record_proud, interested_in_working_on, introduction
-  - Background: companies_worked
-  - Education: education, nationality, gender, years_of_xp (IMPORTANT: stored as text, parse as number for comparisons!), degree, academic_field
+  Available fields from Profile Book:
+  - Basic: name, status, whatsapp, email, your_photo, linkedin, nationality, gender, batch
+  - Professional: tech_skills, roles_i_could_take, industries, introduction, companies_worked, track_record, interested_in_working_on
+  - Education: education, degree, academic_field, years_of_xp (stored as text; parse as number for comparisons; may be null)
   - Relationships: founder
-  - Status: left_program
-  - Batch: batch (cohort information like "S25", "F24", "Summer 2025")
+  - Status: left_program (excludes from active-only when value contains "left")
 
   Search types:
-  - "all": Get all Profile Book founders **PRE-SORTED by years_of_xp descending (most experienced first)**
+  - "all": Get all Profile Book founders **PRE-SORTED by years_of_xp descending when available, else by name**
     → When you need top N most experienced, just take the first N items from the result!
     → Example: Top 3 experienced = items[0], items[1], items[2]
   - "active-only": Get only active founders (excluding those who left the program)
@@ -103,240 +100,262 @@ export const queryFoundersTool = createTool({
   Just take the first N items - NO SORTING NEEDED!
   `,
 
-  inputSchema: z.object({
-    searchType: z
-      .union([
-        z.literal('all'),
-        z.literal('active-only'),
-        z.literal('by-name'),
-        z.literal('by-skills'),
-        z.literal('by-batch'),
-        z.literal('by-industry'),
-        z.literal('by-company'),
-        z.literal('by-nationality'),
-        z.literal('by-education'),
-        z.literal('by-project'),
-        z.literal('global-search'),
-        z.literal('count'),
-      ])
-      .describe('Type of search to perform'),
-    searchTerm: z
-      .string()
-      .optional()
-      .describe(
-        'Search term (required for all searches except "all", "active-only", and "count")',
-      ),
-  }),
+    inputSchema: z.object({
+        searchType: z
+            .union([
+                z.literal('all'),
+                z.literal('active-only'),
+                z.literal('by-name'),
+                z.literal('by-skills'),
+                z.literal('by-batch'),
+                z.literal('by-industry'),
+                z.literal('by-company'),
+                z.literal('by-nationality'),
+                z.literal('by-education'),
+                z.literal('by-project'),
+                z.literal('global-search'),
+                z.literal('count'),
+            ])
+            .describe('Type of search to perform'),
+        searchTerm: z
+            .string()
+            .optional()
+            .describe(
+                'Search term (required for all searches except "all", "active-only", and "count")',
+            ),
+    }),
 
-  outputSchema: z.object({
-    founders: z
-      .array(
-        z.object({
-          id: z.string(),
-          founder: z.string().nullable(),
-          name: z.string().nullable(),
-          whatsapp: z.string().nullable(),
-          email: z.string().nullable(),
-          yourPhoto: z.string().nullable(),
-          education: z.string().nullable(),
-          nationality: z.string().nullable(),
-          gender: z.string().nullable(),
-          yearsOfXp: z.string().nullable(),
-          degree: z.string().nullable(),
-          academicField: z.string().nullable(),
-          linkedin: z.string().nullable(),
-          introduction: z.string().nullable(),
-          techSkills: z.string().nullable(),
-          industries: z.string().nullable(),
-          rolesICouldTake: z.string().nullable(),
-          companiesWorked: z.string().nullable(),
-          batch: z.string().nullable(),
-        }),
-      )
-      .optional(),
-    count: z.number(),
-    message: z.string().optional(),
-  }),
+    outputSchema: z.object({
+        founders: z
+            .array(
+                z.object({
+                    id: z.string(),
+                    founder: z.string().nullable(),
+                    name: z.string().nullable(),
+                    whatsapp: z.string().nullable(),
+                    email: z.string().nullable(),
+                    yourPhoto: z.string().nullable(),
+                    education: z.string().nullable(),
+                    nationality: z.string().nullable(),
+                    gender: z.string().nullable(),
+                    yearsOfXp: z.string().nullable(),
+                    degree: z.string().nullable(),
+                    academicField: z.string().nullable(),
+                    linkedin: z.string().nullable(),
+                    introduction: z.string().nullable(),
+                    techSkills: z.string().nullable(),
+                    industries: z.string().nullable(),
+                    rolesICouldTake: z.string().nullable(),
+                    companiesWorked: z.string().nullable(),
+                    batch: z.string().nullable(),
+                    status: z.string().nullable(),
+                    leftProgram: z.string().nullable(),
+                    trackRecord: z.string().nullable(),
+                    interestedInWorkingOn: z.string().nullable(),
+                    confirmEnrolment: z.string().nullable(),
+                    existingProjectIdea: z.string().nullable(),
+                    projectExplanation: z.string().nullable(),
+                    existingCofounderName: z.string().nullable(),
+                    joiningWithCofounder: z.string().nullable(),
+                    openToJoinAnotherProject: z.string().nullable(),
+                    anythingToLetUsKnow: z.string().nullable(),
+                }),
+            )
+            .optional(),
+        count: z.number(),
+        message: z.string().optional(),
+    }),
 
-  execute: async (input) => {
-    const { searchType, searchTerm } = input;
+    execute: async (input) => {
+        const { searchType, searchTerm } = input;
 
-    // Debug logging to see what Lucie is requesting
-    console.log('🔍 [queryFoundersTool] Called with:', { searchType, searchTerm });
+        // Debug logging to see what Lucie is requesting
+        console.log('🔍 [queryFoundersTool] Called with:', { searchType, searchTerm });
 
-    try {
-      // Handle count-only request
-      if (searchType === 'count') {
-        const count = await getFoundersCount();
-        return {
-          count,
-          message: `Total Profile Book founders in database: ${count}`,
-        };
-      }
+        try {
+            // Handle count-only request
+            if (searchType === 'count') {
+                const count = await getFoundersCount();
+                return {
+                    count,
+                    message: `Total Profile Book founders in database: ${count}`,
+                };
+            }
 
-      // Handle search requests
-      let rawFounders: Founder[];
+            // Handle search requests
+            let rawFounders: Founder[];
 
-      switch (searchType) {
-        case 'all':
-          rawFounders = await getAllFounders();
-          break;
+            switch (searchType) {
+                case 'all':
+                    rawFounders = await getAllFounders();
+                    break;
 
-        case 'active-only':
-          rawFounders = await getActiveFounders();
-          break;
+                case 'active-only':
+                    rawFounders = await getActiveFounders();
+                    break;
 
-        case 'by-name':
-          if (!searchTerm) {
+                case 'by-name':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-name search',
+                        };
+                    }
+                    rawFounders = await getFoundersByName(searchTerm);
+                    break;
+
+                case 'by-skills':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-skills search',
+                        };
+                    }
+                    rawFounders = await getFoundersBySkills(searchTerm);
+                    break;
+
+                case 'by-batch':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-batch search',
+                        };
+                    }
+                    rawFounders = await getFoundersByBatch(searchTerm);
+                    break;
+
+                case 'by-industry':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-industry search',
+                        };
+                    }
+                    rawFounders = await getFoundersByIndustry(searchTerm);
+                    break;
+
+                case 'by-company':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-company search',
+                        };
+                    }
+                    rawFounders = await getFoundersByCompany(searchTerm);
+                    break;
+
+                case 'by-nationality':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message:
+                                'Error: searchTerm is required for by-nationality search',
+                        };
+                    }
+                    rawFounders = await getFoundersByNationality(searchTerm);
+                    break;
+
+                case 'by-education':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-education search',
+                        };
+                    }
+                    rawFounders = await getFoundersByEducation(searchTerm);
+                    break;
+
+                case 'by-project':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for by-project search',
+                        };
+                    }
+                    rawFounders = await getFoundersByProject(searchTerm);
+                    break;
+
+                case 'global-search':
+                    if (!searchTerm) {
+                        return {
+                            founders: [],
+                            count: 0,
+                            message: 'Error: searchTerm is required for global-search',
+                        };
+                    }
+                    rawFounders = await searchFoundersGlobal(searchTerm);
+                    break;
+
+                default:
+                    return {
+                        founders: [],
+                        count: 0,
+                        message: `Error: Unknown search type "${searchType}"`,
+                    };
+            }
+
+            // Map database results to output schema format (yearsOfXp as string so LLM gets consistent "text" format per instructions)
+            const founders = rawFounders.map((founder) => ({
+                id: founder.id,
+                founder: founder.founder,
+                name: founder.name,
+                whatsapp: founder.whatsapp,
+                email: founder.email,
+                yourPhoto: founder.yourPhoto,
+                education: founder.education,
+                nationality: founder.nationality,
+                gender: founder.gender,
+                yearsOfXp: founder.yearsOfXp != null ? String(founder.yearsOfXp) : null,
+                degree: founder.degree,
+                academicField: founder.academicField,
+                linkedin: founder.linkedin,
+                introduction: founder.introduction,
+                techSkills: founder.techSkills,
+                industries: founder.industries,
+                rolesICouldTake: founder.rolesICouldTake,
+                companiesWorked: founder.companiesWorked,
+                batch: founder.batch,
+                status: founder.status,
+                leftProgram: founder.leftProgram,
+                trackRecord: founder.trackRecord,
+                interestedInWorkingOn: founder.interestedInWorkingOn,
+                confirmEnrolment: founder.confirmEnrolment,
+                existingProjectIdea: founder.existingProjectIdea,
+                projectExplanation: founder.projectExplanation,
+                existingCofounderName: founder.existingCofounderName,
+                joiningWithCofounder: founder.joiningWithCofounder,
+                openToJoinAnotherProject: founder.openToJoinAnotherProject,
+                anythingToLetUsKnow: founder.anythingToLetUsKnow,
+            }));
+
+            // Debug logging to see what we're returning
+            console.log(`🔍 [queryFoundersTool] Returning ${founders.length} founders`);
+            if (founders.length <= 5) {
+                console.log('🔍 [queryFoundersTool] First few founders:', founders.slice(0, 5).map(f => ({ name: f.name, yearsOfXp: f.yearsOfXp })));
+            }
+
             return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-name search',
+                founders,
+                count: founders.length,
+                message:
+                    founders.length === 0
+                        ? `No founders found${searchTerm ? ` matching "${searchTerm}"` : ''}`
+                        : `Found ${founders.length} founder(s)${searchTerm ? ` matching "${searchTerm}"` : ''}`,
             };
-          }
-          rawFounders = await getFoundersByName(searchTerm);
-          break;
-
-        case 'by-skills':
-          if (!searchTerm) {
+        } catch (error: any) {
             return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-skills search',
+                founders: [],
+                count: 0,
+                message: `Database error: ${error.message}`,
             };
-          }
-          rawFounders = await getFoundersBySkills(searchTerm);
-          break;
-
-        case 'by-batch':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-batch search',
-            };
-          }
-          rawFounders = await getFoundersByBatch(searchTerm);
-          break;
-
-        case 'by-industry':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-industry search',
-            };
-          }
-          rawFounders = await getFoundersByIndustry(searchTerm);
-          break;
-
-        case 'by-company':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-company search',
-            };
-          }
-          rawFounders = await getFoundersByCompany(searchTerm);
-          break;
-
-        case 'by-nationality':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message:
-                'Error: searchTerm is required for by-nationality search',
-            };
-          }
-          rawFounders = await getFoundersByNationality(searchTerm);
-          break;
-
-        case 'by-education':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-education search',
-            };
-          }
-          rawFounders = await getFoundersByEducation(searchTerm);
-          break;
-
-        case 'by-project':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for by-project search',
-            };
-          }
-          rawFounders = await getFoundersByProject(searchTerm);
-          break;
-
-        case 'global-search':
-          if (!searchTerm) {
-            return {
-              founders: [],
-              count: 0,
-              message: 'Error: searchTerm is required for global-search',
-            };
-          }
-          rawFounders = await searchFoundersGlobal(searchTerm);
-          break;
-
-        default:
-          return {
-            founders: [],
-            count: 0,
-            message: `Error: Unknown search type "${searchType}"`,
-          };
-      }
-
-      // Map database results to output schema format
-      const founders = rawFounders.map((founder) => ({
-        id: founder.id,
-        founder: founder.founder,
-        name: founder.name,
-        whatsapp: founder.whatsapp,
-        email: founder.email,
-        yourPhoto: founder.yourPhoto,
-        education: founder.education,
-        nationality: founder.nationality,
-        gender: founder.gender,
-        yearsOfXp: founder.yearsOfXp,
-        degree: founder.degree,
-        academicField: founder.academicField,
-        linkedin: founder.linkedin,
-        introduction: founder.introduction,
-        techSkills: founder.techSkills,
-        industries: founder.industries,
-        rolesICouldTake: null, // Not in database schema, set to null
-        companiesWorked: founder.companiesWorked,
-        batch: founder.batch,
-      }));
-
-      // Debug logging to see what we're returning
-      console.log(`🔍 [queryFoundersTool] Returning ${founders.length} founders`);
-      if (founders.length <= 5) {
-        console.log('🔍 [queryFoundersTool] First few founders:', founders.slice(0, 5).map(f => ({ name: f.name, yearsOfXp: f.yearsOfXp })));
-      }
-
-      return {
-        founders,
-        count: founders.length,
-        message:
-          founders.length === 0
-            ? `No founders found${searchTerm ? ` matching "${searchTerm}"` : ''}`
-            : `Found ${founders.length} founder(s)${searchTerm ? ` matching "${searchTerm}"` : ''}`,
-      };
-    } catch (error: any) {
-      return {
-        founders: [],
-        count: 0,
-        message: `Database error: ${error.message}`,
-      };
-    }
-  },
+        }
+    },
 });
